@@ -1,0 +1,11 @@
+body{
+  margin: 0;
+}
+
+.product-card{
+  max-width: 18rem;
+}
+
+.navbar-content{
+  max-width: 1300px;
+}
