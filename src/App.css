@@ -2,10 +2,21 @@ body{
   margin: 0;
 }
 
+.main-content{
+  max-width: 1300px;
+  padding-top: 5rem;
+  margin: auto;
+}
+
 .product-card{
   max-width: 18rem;
 }
 
 .navbar-content{
   max-width: 1300px;
+}
+
+.login-form{
+  max-width: 30rem;
+  margin:auto;
 }

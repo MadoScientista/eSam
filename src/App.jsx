@@ -5,6 +5,9 @@ import viteLogo from './assets/vite.svg'
 import './App.css'
 import { ProductCard } from './components/ProductCard'
 import { NavBar } from './components/layout/NavBar'
+import { LoginForm } from './components/LoginForm'
+import { Login } from './pages/Login'
+
 
 function App() {
   const [count, setCount] = useState(0)
@@ -12,7 +15,10 @@ function App() {
   return (
     <>
       <NavBar/>
-      <ProductCard/>
+      <main className='main-content'>
+        <Login/>
+      </main>
+      
     </>
     
   )
