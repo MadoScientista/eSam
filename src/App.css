@@ -10,7 +10,7 @@ body{
 }
 
 .product-card{
-  max-width: 18rem;
+  max-width: 12rem;
 }
 
 .navbar-content{
@@ -26,3 +26,4 @@ body{
   max-width: 35rem;
   margin:auto;
 }
+

@@ -1,17 +1,25 @@
 import { ProductCard } from "./ProductCard"
 
 
-export function ProductList({products, rows, cols}){
+export function ProductList({products, cols}){
 
+    let row = []
+    let productList = []
 
-    const productList = products.map((p)=>{
+    for(let n = 0 ; n < products.length; n += cols){
+        row = []
+        for(let nCol = 0; nCol < cols; nCol++){
+            row.push(<ProductCard product={products[n]} key={products[n].nombre}/>)
 
+            if(n == products.length){
+                break
+            }
+        }
         
-        return (
-            <ProductCard product={p} key={p.nombre}/>
-        )
-    })
+        productList.push(row)
+    }
 
+    
     return (
         productList
     )
