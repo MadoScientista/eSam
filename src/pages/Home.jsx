@@ -1,5 +1,8 @@
 import { ProductCard } from '../components/ProductCard'
 import { Banner } from '../components/Banner'
+import { ProductList } from '../components/ProductList'
+
+import {products} from '../const/products'
 
 export function Home(){
     return <>
@@ -7,9 +10,7 @@ export function Home(){
         <div className='container p-0'>
             <h2 className='mb-3'>Productos destacados</h2>
             <div className="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-4">
-                <div className="col">
-                    <ProductCard/>
-                </div>
+                <ProductList products={products}/>
             </div>
         </div>
     </>
