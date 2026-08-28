@@ -1,12 +1,13 @@
 import { Outlet } from "react-router-dom";
 import { NavBar } from "./NavBar";
+import { Footer } from "./Footer";
 
-export function PageLayout(){
+export function MainLayout(){
     return(
         <>
         <NavBar/>
         <main>
-            <div className="main-content">
+            <div className="container mt-4">
                 <Outlet/>
             </div>
         </main>

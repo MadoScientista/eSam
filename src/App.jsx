@@ -1,27 +1,70 @@
-import { useState } from 'react'
-import heroImg from './assets/hero.png'
-import reactLogo from './assets/react.svg'
-import viteLogo from './assets/vite.svg'
 import './App.css'
-import { ProductCard } from './components/ProductCard'
-import { NavBar } from './components/layout/NavBar'
-import { LoginForm } from './components/LoginForm'
+import { createBrowserRouter, RouterProvider } from 'react-router-dom'
+import { MainLayout } from './components/layout/MainLayout'
+
+import { AboutUs } from './pages/AboutUs'
+import { AdminProfile } from './pages/AdminProfile'
+import { Blogs } from './pages/Blogs'
+import { Contact } from './pages/Contact'
+import { Home } from './pages/Home'
 import { Login } from './pages/Login'
+import { ProductDetails } from './pages/ProductDetails'
+import { Products } from './pages/Products'
+import { Register } from './pages/Register'
+import { UserProfile } from './pages/UserProfile'
 
+const router = createBrowserRouter([
+  {
+    path: "/",
+    element: <MainLayout/>,
+    children: [
+      {
+        index: true,
+        element: <Home/>
+      },
+      {
+        path:"nosotros",
+        element: <AboutUs/>
+      },
+      {
+        path:"admin",
+        element:<AdminProfile/>
+      },
+      {
+        path:"blogs",
+        element:<Blogs/>
+      },
+      {
+        path:"contacto",
+        element:<Contact/>
+      },
+      {
+        path:"login",
+        element:<Login/>
+      },
+      {
+        path:"detalleProducto",
+        element:<ProductDetails/>
+      },
+      {
+        path:"productos",
+        element: <Products/>
+      },
+      {
+        path:"registro",
+        element:<Register/>
+      },
+      {
+        path:"usuario",
+        element:<UserProfile/>
+      }
+    ]
+  }
+])
 
-function App() {
-  const [count, setCount] = useState(0)
+function App() {  
 
-  return (
-    <>
-      <NavBar/>
-      <main className='main-content'>
-        <Login/>
-      </main>
-      
-    </>
-    
-  )
+  return <RouterProvider router={router}/>
 }
 
 export default App
