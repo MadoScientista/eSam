@@ -2,7 +2,7 @@
 
 export function LoginForm(){
     return (
-        <div className="login-form border p-5 rounded-2">
+        <div className="login-form border p-5 rounded-2 mb-5">
             <form>
                 <div className="h3">Inicio de Sesión</div>
                 <div className="mb-3">
