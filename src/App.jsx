@@ -12,6 +12,8 @@ import { ProductDetails } from './pages/ProductDetails'
 import { Products } from './pages/Products'
 import { Register } from './pages/Register'
 import { UserProfile } from './pages/UserProfile'
+import { BlogArticle } from './pages/BlogArticle'
+import { Cart } from './pages/Cart'
 
 const router = createBrowserRouter([
   {
@@ -35,15 +37,23 @@ const router = createBrowserRouter([
         element:<Blogs/>
       },
       {
+        path:"entradaBlog/:idEntrada",
+        element:<BlogArticle/>
+      },
+      {
         path:"contacto",
         element:<Contact/>
+      },
+      {
+        path:"carrito",
+        element:<Cart/>
       },
       {
         path:"login",
         element:<Login/>
       },
       {
-        path:"detalleProducto",
+        path:"detalleProducto/:sku",
         element:<ProductDetails/>
       },
       {
