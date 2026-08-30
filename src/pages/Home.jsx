@@ -1,17 +1,15 @@
-import { ProductCard } from '../components/ProductCard'
+
 import { Banner } from '../components/Banner'
 import { ProductList } from '../components/ProductList'
-
+import { Carousel } from '../components/Carousel'
 import {products} from '../const/products'
 
 export function Home(){
     return <>
-        <Banner/>
+        <Banner><Carousel/></Banner>
         <div className='container p-0'>
-            <h2 className='mb-3'>Productos destacados</h2>
-            <div className="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-4">
-                <ProductList products={products} cols={2}/>
-            </div>
+            <h2 className='mb-4'>Productos destacados</h2>
+            <ProductList products={products.slice(0,5)} cols={5}/>
         </div>
     </>
 }
