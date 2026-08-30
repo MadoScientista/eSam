@@ -6,10 +6,8 @@ export function MainLayout(){
     return(
         <>
         <NavBar/>
-        <main>
-            <div className="container mt-4">
-                <Outlet/>
-            </div>
+        <main style={{minHeight:"90vh"}}>
+            <Outlet/>
         </main>
         <Footer/>
         </>

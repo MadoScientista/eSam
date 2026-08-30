@@ -11,19 +11,19 @@ export function NavBar(){
                 <div className="collapse navbar-collapse" id="navbarNav">
                 <ul className="navbar-nav">
                     <li className="nav-item">
-                    <NavLink className="nav-link" aria-current="page" to="/">Inicio</NavLink>
+                        <NavLink className="nav-link" aria-current="page" to="/">Inicio</NavLink>
                     </li>
                     <li className="nav-item">
-                    <NavLink className="nav-link" to="productos">Productos</NavLink>
+                        <NavLink className="nav-link" to="productos">Productos</NavLink>
                     </li>
                     <li className="nav-item">
-                    <NavLink className="nav-link"  to="nosotros">Nosotros</NavLink>
+                        <NavLink className="nav-link"  to="nosotros">Nosotros</NavLink>
                     </li>
                     <li className="nav-item">
-                    <NavLink className="nav-link" to="contacto">Contacto</NavLink>
+                        <NavLink className="nav-link" to="contacto">Contacto</NavLink>
                     </li>
                     <li className="nav-item">
-                    <NavLink className="nav-link"  to="blogs">Blog</NavLink>
+                        <NavLink className="nav-link"  to="blogs">Blog</NavLink>
                     </li>
                 </ul>
 
@@ -31,27 +31,28 @@ export function NavBar(){
                 {/* Iconos a la derecha */}
                 <ul className="navbar-nav ms-auto">
                     <li className="nav-item">
-                    <NavLink className="nav-link"  to="login">Inicia Sesión</NavLink>
-                    </li>
-                    <li className="nav-item">
-                    <NavLink className="nav-link"  to="registro">Regístrate</NavLink>
-                    </li>
-                    <li className="nav-item">
-                    <a className="nav-link" href="/buscar" title="Buscar">
-                        <i className="bi bi-search"></i>
-                    </a>
+                        <NavLink className="nav-link"  to="login">Inicia Sesión</NavLink>
                     </li>
 
                     <li className="nav-item">
-                    <a className="nav-link" href="/notificaciones" title="Notificaciones">
-                        <i className="bi bi-bell"></i>
-                    </a>
+                        <NavLink className="nav-link"  to="registro">Regístrate</NavLink>
                     </li>
 
                     <li className="nav-item">
-                    <a className="nav-link" href="/perfil" title="Perfil">
-                        <i className="bi bi-person-circle"></i>
-                    </a>
+                        <a className="nav-link" href="/perfil" title="Perfil">
+                            <i className="bi bi-person-circle"></i>
+                        </a>
+                    </li>
+
+                    <li className="nav-item">
+                        <NavLink className="nav-link" to="carrito">
+                            <i className="bi bi-cart position-relative">
+                            <span className="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                                1
+                                <span className="visually-hidden">unread messages</span>
+                            </span>
+                            </i>
+                        </NavLink>
                     </li>
                 </ul>
                 </div>
