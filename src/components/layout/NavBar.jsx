@@ -1,4 +1,5 @@
 import { NavLink } from "react-router-dom"
+import {cartProducts} from "../../const/cartProducts"
 
 export function NavBar(){
     return <>
@@ -39,18 +40,20 @@ export function NavBar(){
                     </li>
 
                     <li className="nav-item">
-                        <a className="nav-link" href="/perfil" title="Perfil">
+                        <NavLink className="nav-link" to="admin" title="Perfil">
                             <i className="bi bi-person-circle"></i>
-                        </a>
+                        </NavLink>
                     </li>
 
                     <li className="nav-item">
                         <NavLink className="nav-link" to="carrito">
                             <i className="bi bi-cart position-relative">
-                            <span className="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
-                                1
-                                <span className="visually-hidden">unread messages</span>
-                            </span>
+                                {
+                                    cartProducts.length>0 && 
+                                    <span className="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                                        {cartProducts.length}
+                                    </span>
+                                }
                             </i>
                         </NavLink>
                     </li>
