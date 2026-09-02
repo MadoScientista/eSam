@@ -10,7 +10,7 @@ export function Cart(){
     const [subtotal, setSubTotal] = useState(calcularTotal())
 
     function calcularTotal(){
-        const t = 0
+        let t = 0
 
         for(let i=0; i < cartProducts.length; i++){
             t += (cartProducts[i]["precio"]*cartProducts[i]["cantidad"])
@@ -20,7 +20,7 @@ export function Cart(){
     }
 
     function calcularNProductos(){
-        const n = 0
+        let n = 0
 
         for(let i=0; i < cartProducts.length; i++){
             n += cartProducts[i]["cantidad"]

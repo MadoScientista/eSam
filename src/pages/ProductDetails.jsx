@@ -1,17 +1,45 @@
 import { useParams } from "react-router-dom"
 import { ProductList } from "../components/ProductList"
-import { products } from "../const/products"
-import { useEffect } from "react"
+import { useEffect, useState } from "react"
+import { obtenerProductos, obtenerProductoSku } from "../services/productoService"
 
 export function ProductDetails(){
     
     const { sku } = useParams()
 
+    const [product, setProduct] = useState([])
+    const [products, setProducts] = useState([])
+
+
     useEffect(()=>{
         window.scrollTo(0,0)
+
+        const cargarProducto = async (sku) =>{
+            try{
+                const data = await obtenerProductoSku(sku)
+                setProduct(data)
+            }catch(error){
+                console.error("Error al cargar producto", error)
+            }
+        }
+
+        cargarProducto(sku)
     },[sku])
     
-    const product = products.find((p)=> p.sku === sku)
+
+    useEffect(()=>{
+ 
+        const cargarProductos = async () =>{
+            try{
+                const data = await obtenerProductos()
+                setProducts(data)
+            }catch(error){
+                console.error("Error al cargar producto", error)
+            }
+        }
+
+        cargarProductos()
+    },[])
 
     return (
     <div className="container mt-5">
@@ -23,6 +51,7 @@ export function ProductDetails(){
                 <div className="h3">{product.nombre}</div>
                 <p>{product.descripcion}</p>
                 <p>${product.precio}</p>
+                <p>Quedan: {product.stock}</p>
                 <button className="btn btn-dark"><i class="bi bi-cart"></i> Añadir</button>
             </div>
         </div>

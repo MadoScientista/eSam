@@ -2,9 +2,26 @@
 import { Banner } from '../components/Banner'
 import { ProductList } from '../components/ProductList'
 import { Carousel } from '../components/Carousel'
-import {products} from '../const/products'
+import { obtenerProductos } from '../services/productoService'
+import { useEffect, useState } from 'react'
 
 export function Home(){
+    
+    const [products, setProducts] = useState([])
+
+    useEffect(() => {
+        const cargarProductos = async () =>{
+            try{
+                const data = await obtenerProductos();
+                setProducts(data)
+            }catch(error){
+                console.error("Error al cargar productos", error)
+            }
+        }
+
+        cargarProductos()
+    }, [])
+
     return <>
         <Banner><Carousel/></Banner>
         <div className='container p-0'>

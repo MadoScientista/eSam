@@ -1,19 +1,44 @@
-# React + Vite
+# eSam - Tienda de Útiles Escolares
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## Resumen
 
-Currently, two official plugins are available:
+eSam es una aplicación web de comercio electrónico dedicada a la venta de útiles escolares en Chile. Permite a estudiantes, profesores y familias navegar un catálogo de productos (cuadernos, lápices, estuches, pinturas, etc.), consultar detalles, gestionar un carrito de compras y leer artículos de un blog. La interfaz está íntegramente en español y incluye funcionalidades específicas para Chile, como la selección de región y comuna en el formulario de registro.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+## Stack Tecnológico
 
-## React Compiler
+| Tecnología | Versión | Uso |
+|---|---|---|
+| React | ^19.2.8 | Librería de interfaces |
+| Vite | ^8.2.2 | Herramienta de build y servidor de desarrollo |
+| react-router-dom | ^7.18.2 | Enrutamiento del lado del cliente |
+| Bootstrap | ^5.3.8 | Framework CSS |
+| Bootstrap Icons | ^1.13.1 | Librería de íconos |
+| React Compiler | ^1.0.0 | Optimización de rendimiento (memoización automática) |
+| ESLint | ^10.9.0 | Linting |
+| Babel | ^7.29.7 | Compilación de código |
 
-The React Compiler is enabled on this template. See [this documentation](https://react.dev/learn/react-compiler) for more information.
+## Rutas
 
-Note: This will impact Vite dev & build performances.
-You can also try [the experimental native React Compiler support in plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md#rust-react-compiler) by using `compiler: true` in the plugin options instead of using the Babel plugin.
+### Públicas (MainLayout)
 
-## Expanding the ESLint configuration
+| Ruta | Componente | Descripción |
+|---|---|---|
+| `/` | Home | Página de inicio con carrusel y productos destacados |
+| `/nosotros` | AboutUs | Información de la empresa |
+| `/productos` | Products | Catálogo completo de productos |
+| `/detalleProducto/:sku` | ProductDetails | Detalle de un producto por su SKU |
+| `/blogs` | Blogs | Listado de artículos del blog |
+| `/entradaBlog/:idEntrada` | BlogArticle | Artículo completo del blog |
+| `/contacto` | Contact | Formulario de contacto |
+| `/carrito` | Cart | Carrito de compras con resumen y subtotal |
+| `/login` | Login | Inicio de sesión |
+| `/registro` | Register | Registro de usuario con regiones/comunas de Chile |
+| `/usuario` | UserProfile | Perfil del usuario (en desarrollo) |
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+### Administración (AdminLayout)
+
+| Ruta | Componente | Descripción |
+|---|---|---|
+| `/admin` | AdminProfile | Panel de administración (perfil) |
+| `/admin/productos` | AdminControlProduct | Gestión de productos |
+| `/admin/usuarios` | AdminControlUser | Gestión de usuarios |
