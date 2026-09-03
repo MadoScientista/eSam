@@ -1,9 +1,7 @@
 import './App.css'
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 import { MainLayout } from './components/layout/MainLayout'
-
 import { AboutUs } from './pages/AboutUs'
-import { AdminProfile } from './pages/AdminProfile'
 import { Blogs } from './pages/Blogs'
 import { Contact } from './pages/Contact'
 import { Home } from './pages/Home'
@@ -14,9 +12,12 @@ import { Register } from './pages/Register'
 import { UserProfile } from './pages/UserProfile'
 import { BlogArticle } from './pages/BlogArticle'
 import { Cart } from './pages/Cart'
+
 import { AdminLayout } from './components/layout/AdminLayout'
-import { AdminControlProduct } from './pages/AdminControlProduct'
-import { AdminControlUser } from './pages/AdminControlUser'
+import { AdminProfile } from './pages/admin/AdminProfile'
+import { AdminControlProduct } from './pages/admin/AdminControlProduct'
+import { AdminProductForm } from './pages/admin/AdminProductForm'
+import { AdminControlUser } from './pages/admin/AdminControlUser'
 
 const router = createBrowserRouter([
   {
@@ -31,6 +32,8 @@ const router = createBrowserRouter([
         children:[
           {index: true, element:<AdminProfile/>},
           {path: "productos", element:<AdminControlProduct/>},
+          {path: "productos/:sku", element: <AdminProductForm/>},
+          {path: "productos/nuevo", element: <AdminProductForm/>},
           {path: "usuarios", element: <AdminControlUser/>}
         ] 
       },
@@ -48,7 +51,7 @@ const router = createBrowserRouter([
 ])
 
 function App() {  
-
+  
   return <RouterProvider router={router}/>
 }
 

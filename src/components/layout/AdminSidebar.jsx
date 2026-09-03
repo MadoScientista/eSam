@@ -8,9 +8,9 @@ const ADMIN_MENU_ITEMS = [
 
 export function AdminSidebar() {
     return (
-        <nav className="col-md-3 col-lg-2 d-md-block bg-black sidebar collapse">
+        <nav className="col-md-3 col-lg-2 d-md-block pt-5 collapse text-end border-end align-items-center">
             <div className="position-sticky pt-3">
-                <h6 className="text-white-50 text-uppercase px-3 mb-2">
+                <h6 className="text-black text-uppercase px-3 mb-2">
                     Administración
                 </h6>
                 <ul className="nav flex-column">
@@ -20,7 +20,7 @@ export function AdminSidebar() {
                                 to={path}
                                 end={path === "/admin"}
                                 className={({ isActive }) =>
-                                    `nav-link ${isActive ? "active text-white fw-bold" : "text-white-50"}`
+                                    `nav-link ${isActive ? "fw-bold active" : "text-black"}`
                                 }
                             >
                                 {label}

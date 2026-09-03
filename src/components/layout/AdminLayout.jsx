@@ -6,9 +6,9 @@ export function AdminLayout() {
         <div className="container-fluid">
             <div className="row" style={{ minHeight: "90vh" }}>
                 <AdminSidebar />
-                <main className="col-md-9 col-lg-10 p-4">
+                <section className="col-md-9 col-lg-10 p-4">
                     <Outlet />
-                </main>
+                </section>
             </div>
         </div>
     );

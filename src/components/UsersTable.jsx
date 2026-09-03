@@ -1,11 +1,10 @@
 
 
 export function UsersTable({dataUser}){
-    console.log("Creando tabla")
-    console.log(dataUser)
+
     return(
         <div className="container">
-            <table className="table table-striped table-hover">
+            <table className="table table-hover">
                 <thead>
                     <tr>
                         <th scope="col">ID</th>
@@ -20,7 +19,7 @@ export function UsersTable({dataUser}){
                         return (
                             <tr key={u.id} style={{cursor:"pointer"}}>
                             <td>{u.id}</td>
-                            <td>{u.nombre}</td>
+                            <td>{u.nombres}</td>
                             <td>{u.correo}</td>
                             <td>{u.region}</td>
                             <td>{u.comuna}</td>

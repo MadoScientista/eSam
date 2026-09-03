@@ -1,8 +1,29 @@
-import { useState } from "react"
-import { regionesComunas } from "../const/regionesComunas"
+import { useEffect, useState } from "react"
+import { obtenerRegionesComunas } from "../services/regionComunaService"
 
 
 export function RegisterForm(){
+
+    const [regionesComunas, setRegionesComunas] = useState([])
+    const [mensajeFormulario, setMensajeFormulario] = useState("")
+    const dominiosPermitidos = ["duoc.cl", "gmail.com", "profesor.duoc.cl"]
+
+    useEffect(()=>{
+
+        const loadRegionesComunas = async () =>{
+            try{
+                const data = await obtenerRegionesComunas()
+                setRegionesComunas(data)
+            }catch(error){
+                console.error("Error al cargar comunas de regiones", error)
+            }
+        }
+
+        loadRegionesComunas()
+    },[])
+
+    const [comunas, setComunas] = useState([])
+
     const [formulario, setFormulario] = useState({
         nombre:"",
         email:"",
@@ -14,8 +35,6 @@ export function RegisterForm(){
         selectComuna:"",
     })
 
-    const [comunas, setComunas] = useState([])
-
     const handleChange = (e)=>{
         const {name, value} = e.target
 
@@ -26,10 +45,11 @@ export function RegisterForm(){
 
         if(name === "selectRegion"){
             if(value != ""){
-                const listaComunas = regionesComunas[value]["comunas"]
+
+                const listaComunas = regionesComunas.find((item) => item.idRegion == value).comunas
                 setComunas(
-                    listaComunas.map((c,i)=>{
-                        return <option value={i} key={`c${i}`}>{c}</option>
+                    listaComunas.map((c)=>{
+                        return <option value={c.idComuna} key={c.idComuna}>{c.nombre}</option>
                     })
                 )
             }
@@ -38,66 +58,100 @@ export function RegisterForm(){
 
     const handleSubmit = (e)=>{
         e.preventDefault()
+        setMensajeFormulario("")
+
         console.log(formulario)
+        console.log(formulario.email.split("@")[1])
+
+        // Validación dominios permitidos
+        if(!dominiosPermitidos.includes(formulario.email.split("@")[1])){
+            setMensajeFormulario("Dominio de correo no permitido")
+            return
+        }
+
+        // Mensajes de error
+        if(formulario.email != formulario.emailConfirm){
+            setMensajeFormulario("Los correos no coinciden")
+            return
+        }
+
+        if(formulario.password != formulario.passwordConfirm){
+            setMensajeFormulario("Las contraseñas no coinciden")
+            return
+        }
+
+        if(formulario.selectRegion === ""){
+            setMensajeFormulario("Seleccione una región")
+            return
+        }
+
+        if(formulario.selectComuna === ""){
+            setMensajeFormulario("Seleccione una comuna")
+            return
+        }
     }
 
 
     return(
-        <div className="register-form border p-5 rounded-2">
+        <div className="register-form border border-black p-5 rounded-2 shadow">
             <form onSubmit={handleSubmit}>
                 <div className="h3 mb-5 text-center">Formulario de Registro</div>
                 <div className="mb-3">
                     <label htmlFor="nombre" className="form-label">Nombre completo</label>
                     <input 
                         type="text" 
-                        className="form-control" 
+                        className="form-control border-black" 
                         name="nombre"
                         maxLength={100} 
                         onChange={handleChange}/>
                 </div>
                 <div className="mb-3">
-                    <label htmlFor="email" className="form-label">Correo</label>
+                    <label htmlFor="email" className="form-label">Correo*</label>
                     <input 
                         type="email" 
-                        className="form-control" 
+                        className="form-control border-black" 
                         name="email" 
                         maxLength={100}
-                        onChange={handleChange}/>
+                        onChange={handleChange}
+                        required/>
                 </div>
                 <div className="mb-3">
-                    <label htmlFor="emailConfirm" className="form-label">Confirme correo</label>
+                    <label htmlFor="emailConfirm" className="form-label">Confirme correo*</label>
                     <input 
                         type="email" 
-                        className="form-control" 
+                        className="form-control border-black" 
                         name="emailConfirm"
                         maxLength={100} 
-                        onChange={handleChange}/>
+                        onChange={handleChange}
+                        required/>
                 </div>
                 <div className="mb-3">
-                    <label htmlFor="password" className="form-label">Contraseña</label>
+                    <label htmlFor="password" className="form-label">Contraseña*</label>
                     <input 
                         type="password" 
-                        className="form-control" 
+                        className="form-control border-black" 
                         name="password"
                         minLength={4}
                         maxLength={10}
-                        onChange={handleChange}/>
+                        onChange={handleChange}
+                        required/>
                 </div>
                 <div className="mb-3">
-                    <label htmlFor="passwordConfirm" className="form-label">Confirme Contraseña</label>
+                    <label htmlFor="passwordConfirm" className="form-label">Confirme Contraseña*</label>
                     <input 
                         type="password" 
-                        className="form-control" 
+                        className="form-control border-black" 
                         name="passwordConfirm"
                         minLength={4}
                         maxLength={10}
-                        onChange={handleChange}/>
+                        onChange={handleChange}
+                        required/>
                 </div>
                 <div className="mb-3">
                     <label htmlFor="telefono" className="form-label">Teléfono</label>
                     <input 
                         type="text" 
-                        className="form-control" 
+                        className="form-control border-black" 
                         name="telefono"
                         maxLength={9}
                         onChange={handleChange}/>
@@ -105,20 +159,20 @@ export function RegisterForm(){
                 <div className="mb-3">
                     <div className="row">
                         <div className="col">
-                            <label htmlFor="selectRegion" className="form-label">Region</label>
-                            <select name="selectRegion" className="form-select" onChange={handleChange}>
+                            <label htmlFor="selectRegion" className="form-label">Region*</label>
+                            <select name="selectRegion" className="form-select border-black" onChange={handleChange}>
                                 <option value="">-- Seleccione Región --</option>
                                 {
-                                    regionesComunas.map((r, i)=>{
-                                        return <option value={i} key={`r${i}`}>{r.region}</option>
+                                    regionesComunas.map((r)=>{
+                                        return <option value={r.idRegion} key={r.idRegion}>{r.region}</option>
                                     })
                                     
                                 }
                             </select>
                         </div>
                         <div className="col">
-                            <label htmlFor="selectComuna" className="form-label">Comuna</label>
-                            <select name="selectComuna" className="form-select" onChange={handleChange}>
+                            <label htmlFor="selectComuna" className="form-label">Comuna*</label>
+                            <select name="selectComuna" className="form-select border-black" onChange={handleChange}>
                                 <option value="">-- Seleccione Comuna --</option>
                                 {comunas}
                             </select>
@@ -126,6 +180,12 @@ export function RegisterForm(){
                     </div>
                     
                 </div>
+
+                {
+                /* Mensaje de validación de campos */
+                mensajeFormulario != "" && <p className="text-danger">{mensajeFormulario}</p>
+                }
+                
                 <button type="submit" className="btn btn-dark mt-4">Registrar</button>
             </form>
         </div>
