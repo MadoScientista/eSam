@@ -1,7 +1,28 @@
-import { NavLink } from "react-router-dom"
+import { NavLink, useLocation } from "react-router-dom"
+import { useEffect } from "react"
 import {cartProducts} from "../../const/cartProducts"
+import { useCart } from "../../context/CartContext"
 
 export function NavBar(){
+
+    const { cart } = useCart()
+    const location = useLocation()
+
+    useEffect(() => {
+        const navbarCollapse = document.getElementById('navbarNav')
+        if (navbarCollapse) {
+            navbarCollapse.classList.remove('show')
+        }
+
+        window.scrollTo(0,0)
+    }, [location])
+
+    let nProducts = 0
+
+    cart.forEach((item) => {
+        nProducts += item.units
+    });
+
     return <>
         <nav className="navbar navbar-expand-lg bg-dark navbar-dark sticky-top">
             <div className="container">
@@ -49,9 +70,9 @@ export function NavBar(){
                         <NavLink className="nav-link" to="carrito">
                             <i className="bi bi-cart position-relative">
                                 {
-                                    cartProducts.length>0 && 
+                                    nProducts > 0 && 
                                     <span className="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
-                                        {cartProducts.length}
+                                        {nProducts}
                                     </span>
                                 }
                             </i>

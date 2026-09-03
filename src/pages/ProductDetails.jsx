@@ -2,6 +2,7 @@ import { useParams } from "react-router-dom"
 import { ProductList } from "../components/ProductList"
 import { useEffect, useState } from "react"
 import { obtenerProductos, obtenerProductoSku } from "../services/productoService"
+import { useCart } from "../context/CartContext"
 
 export function ProductDetails(){
     
@@ -9,6 +10,8 @@ export function ProductDetails(){
 
     const [product, setProduct] = useState([])
     const [products, setProducts] = useState([])
+
+    const { addProduct } = useCart()
 
 
     useEffect(()=>{
@@ -52,7 +55,9 @@ export function ProductDetails(){
                 <p>{product.descripcion}</p>
                 <p>${product.precio}</p>
                 <p>Quedan: {product.stock}</p>
-                <button className="btn btn-dark"><i class="bi bi-cart"></i> Añadir</button>
+                <button className="btn btn-dark" onClick={() => addProduct(product)}>
+                    <i className="bi bi-cart"></i> Añadir
+                </button>
             </div>
         </div>
         <div className="container">

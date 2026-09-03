@@ -1,33 +1,36 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { ProductCardH } from "../components/ProductCardH"
 import { ProductList } from "../components/ProductList"
-import { cartProducts } from "../const/cartProducts"
-import { products } from "../const/products"
+import { useCart } from "../context/CartContext"
+import { obtenerProductos } from "../services/productoService"
 
 export function Cart(){
 
-    const [nProductos, setNProductos] = useState(calcularNProductos())
-    const [subtotal, setSubTotal] = useState(calcularTotal())
+    const { cart, addProduct, increaseUnits, decreaseUnits, removeProduct } = useCart()
+    const [products, setProducts ] = useState([])
 
-    function calcularTotal(){
-        let t = 0
-
-        for(let i=0; i < cartProducts.length; i++){
-            t += (cartProducts[i]["precio"]*cartProducts[i]["cantidad"])
+    
+    useEffect(()=>{
+        const cargarProductos = async () => {
+            try{
+                const data = await obtenerProductos()
+                setProducts(data)
+            }catch(error){
+                console.error("Error al cargar productos", error)
+            }
         }
-
-        return t
-    }
-
-    function calcularNProductos(){
-        let n = 0
-
-        for(let i=0; i < cartProducts.length; i++){
-            n += cartProducts[i]["cantidad"]
+        cargarProductos()
         }
+    ,[])
 
-        return n
-    }
+
+    let nProducts = 0
+    let subtotal = 0
+
+    cart.forEach((item)=>{
+        nProducts += item.units
+        subtotal += (item.units * item.product.precio)
+    })
 
 
     return (
@@ -36,17 +39,27 @@ export function Cart(){
                 <h2 className="mb-5">Carrito de compras</h2>
                 <div className="row">
                     <div className="col border-end me-5">
-                        {cartProducts.map((p)=>{
-                            return <div className="row"><ProductCardH product={p}/></div>
+                        {cart.map((item)=>{
+                            return (
+                                <div className="row" key={item.product.sku}>
+                                    <ProductCardH 
+                                        item={item}
+                                        handleClickPlus={()=>{increaseUnits(item.product.sku)}}
+                                        handleClicklMinus={()=>{decreaseUnits(item.product.sku)}}
+                                        handleTrash={()=>{removeProduct(item.product.sku)}}
+                                    />
+                                </div>)
                         })}
                     </div>
                     <div className="col">
                         <h3>Resumen</h3>
                         <hr />
-                        <p>Productos en el carro: {nProductos}</p>
+                        <p>Productos en el carro: {nProducts}</p>
                         {
-                            cartProducts.map((p)=>{
-                                return <p>{p.cantidad} x {p.nombre}</p>
+                            cart.map((item)=>{
+                                return <p key={item.product.sku}>
+                                            {item.units} x {item.product.nombre}
+                                        </p>
                             })
                         }
                         <hr />
