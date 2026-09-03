@@ -28,13 +28,15 @@ export function AdminControlProduct(){
 
     return(
         <>
-            <h2 className="mb-5">Administración Productos</h2>
-            <button 
-                className="btn btn-dark"
-                onClick={()=>{navigate("nuevo")}}
-            >   
-                Nuevo producto
-            </button>
+            <div className="d-flex justify-content-between align-items-center mb-5">
+                <h2 className="mb-0">Administración Productos</h2>
+                <button 
+                    className="btn btn-dark"
+                    onClick={()=>{navigate("nuevo")}}
+                >   
+                    Nuevo producto
+                </button>
+            </div>
             <ProductTable products={products} handleClick={handleClick}/>
         </>
     )
