@@ -24,7 +24,7 @@ export function NavBar(){
     });
 
     return <>
-        <nav className="navbar navbar-expand-lg bg-dark navbar-dark sticky-top">
+        <nav className="navbar navbar-expand-lg bg-black navbar-dark sticky-top">
             <div className="container">
                 <NavLink className="navbar-brand" to="/">ESam</NavLink>
                 <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
