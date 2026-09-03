@@ -47,14 +47,14 @@ export function LoginForm(){
     }
 
     return (
-        <div className="login-form border p-5 rounded-2 mb-5">
+        <div className="login-form border border-black p-5 rounded-2 mb-5 shadow">
             <form onSubmit={handleSubmit}>
                 <div className="h3">Inicio de Sesión</div>
                 <div className="mb-3">
                     <label htmlFor="email" className="form-label">Correo</label>
                     <input 
                         type="email" 
-                        className="form-control" 
+                        className="form-control border-black" 
                         name="email" 
                         maxLength={100} // Longitud máxma 100 caracteres
                         required        // Correo requerido
@@ -65,7 +65,7 @@ export function LoginForm(){
                     <label htmlFor="exampleInputPassword1" className="form-label">Contraseña</label>
                     <input 
                         type="password" 
-                        className="form-control" 
+                        className="form-control border-black" 
                         name="password" 
                         minLength={4}   // Longitud mínima 4 caracteres
                         maxLength={10}  // Longitud máxima 10 caracteres
