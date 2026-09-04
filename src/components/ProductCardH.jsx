@@ -12,7 +12,7 @@ export function ProductCardH({item, handleClickPlus, handleClicklMinus, handleTr
                         <p className="card-text">${item.product.precio}</p>
                         
                         
-                        <div className="d-flex">
+                        <div className="d-flex flex-row justify-content-start">
                             <div className="input-group input-group-sm" style={{maxWidth: "10rem"}}>
                                 <button 
                                     className="btn btn-outline-secondary" 
@@ -22,7 +22,8 @@ export function ProductCardH({item, handleClickPlus, handleClicklMinus, handleTr
                                 >−</button>
                                 <input 
                                     type="number" 
-                                    className="form-control" 
+                                    className="form-control text-center"
+                                    style={{maxWidth:"3rem"}} 
                                     value={item.units} 
                                     readOnly
                                     key={"input"+item.product.sku}

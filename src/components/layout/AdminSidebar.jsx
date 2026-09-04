@@ -75,7 +75,7 @@ function SubMenu({ item }) {
 
 export function AdminSidebar() {
     return (
-        <nav className="col-md-3 col-lg-2 d-md-block pt-5 collapse text-end border-end align-items-center">
+        <nav className="col-md-3 col-lg-2 d-md-block pt-5 collapse text-end border-end shadow-sm align-items-center">
             <div className="position-sticky pt-3">
                 <h6 className="text-black text-uppercase px-3 mb-2">
                     Administración

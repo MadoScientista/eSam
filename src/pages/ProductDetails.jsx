@@ -48,7 +48,7 @@ export function ProductDetails(){
     <div className="container mt-5">
         <div className="row mb-4">
             <div className="col border me-5" style={{maxWidth:'35rem', padding:'2rem'}}>
-                <img src={product.img} alt="" style={{maxWidth:'30rem', padding:'2rem'}} className="figure-img img-fluid rounded"/>
+                <img src={product.img} alt="" style={{maxWidth:'30rem', maxHeight:"30rem", padding:'2rem'}} className="figure-img img-fluid rounded"/>
             </div>
             <div className="col pt-5" style={{maxWidth:'30rem'}}>
                 <div className="h3">{product.nombre}</div>
