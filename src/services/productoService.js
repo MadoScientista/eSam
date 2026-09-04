@@ -16,10 +16,18 @@ export const obtenerProductoSku = async (sku) => {
     return response.data
 }
 
+// Eliminar producto por sku
+export const eliminarProducto = async (sku) => {
+    const response = await api.delete("/productos/" + sku)
+
+    return response.data
+}
+
 
 // Post para guardar un producto
 export const crearProductoSku = async (producto) => {
-    const response = await api.post("/productos/", producto)
+    console.log("Producto enviado", producto)
+    const response = await api.post("/productos", producto)
 
     return response.data
 }
