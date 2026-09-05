@@ -10,7 +10,7 @@ export function Carousel(){
         const element = carouselRef.current
         if (!element) return
 
-        const instancia = new BootstrapCarousel(element, { ride: "carousel", interval: 3000 })
+        const instancia = new BootstrapCarousel(element, { ride: "carousel", interval: 2500 })
 
         return () => instancia.dispose()
     }, [])

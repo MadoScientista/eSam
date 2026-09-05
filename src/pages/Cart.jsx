@@ -1,12 +1,12 @@
 import { useEffect, useState } from "react"
 import { ProductCardH } from "../components/ProductCardH"
 import { ProductList } from "../components/ProductList"
-import { useCart } from "../context/CartContext"
+import { useCart } from "../context/cartContext"
 import { obtenerProductos } from "../services/productoService"
 
 export function Cart(){
 
-    const { cart, addProduct, increaseUnits, decreaseUnits, removeProduct } = useCart()
+    const { cart, increaseUnits, decreaseUnits, removeProduct } = useCart()
     const [products, setProducts ] = useState([])
 
     

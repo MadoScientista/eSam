@@ -1,8 +1,7 @@
 import { NavLink, useLocation } from "react-router-dom"
 import { useEffect } from "react"
-import {cartProducts} from "../../const/cartProducts"
-import { useCart } from "../../context/CartContext"
-import { useAuth } from "../../context/AuthContext"
+import { useCart } from "../../../context/cartContext"
+import { useAuth } from "../../../context/authContext"
 
 export function NavBar(){
 

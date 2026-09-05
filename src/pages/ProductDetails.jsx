@@ -2,7 +2,7 @@ import { useParams } from "react-router-dom"
 import { ProductList } from "../components/ProductList"
 import { useEffect, useState } from "react"
 import { obtenerProductos, obtenerProductoSku } from "../services/productoService"
-import { useCart } from "../context/CartContext"
+import { useCart } from "../context/cartContext"
 import { Toast } from "../components/Toast"
 
 export function ProductDetails(){

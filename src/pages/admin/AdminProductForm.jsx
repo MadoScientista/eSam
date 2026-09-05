@@ -21,6 +21,14 @@ export function AdminProductForm(){
     const [mensajeFormulario, setMensajeFormulario] = useState("")
     const [marcas, setMarcas] = useState([])
 
+    // Al cambiar de ruta (sku) se limpia el formulario (patrón oficial de React:
+    // ajustar estado durante el render cuando un prop cambia)
+    const [prevSku, setPrevSku] = useState(sku)
+    if (sku !== prevSku) {
+        setPrevSku(sku)
+        setFormulario({})
+    }
+
     // Cargar marcas al montar
     useEffect(()=>{
         const cargarMarcas = async () =>{
@@ -48,8 +56,6 @@ export function AdminProductForm(){
                 }
             }
             cargarProducto()
-        }else if(!sku){
-            setFormulario({})
         }
     },[sku, marcas])
 

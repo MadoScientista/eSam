@@ -1,6 +1,6 @@
 import { NavLink, useLocation, useNavigate } from "react-router-dom";
 import { useState } from "react";
-import { useAuth } from "../../context/AuthContext";
+import { useAuth } from "../../../context/authContext";
 
 const ADMIN_MENU_ITEMS = [
     { label: "Perfil", path: "/admin" },

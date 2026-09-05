@@ -1,7 +1,7 @@
 import { RegisterForm } from "../components/RegisterForm"
-import { useAuth } from "../context/AuthContext"
+import { useAuth } from "../context/authContext"
 
-export function UserProfile() {
+export function CustomerProfile() {
     const { usuario } = useAuth()
 
     return (

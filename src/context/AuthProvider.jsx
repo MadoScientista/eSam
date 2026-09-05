@@ -1,8 +1,6 @@
-import { createContext, useContext, useState } from "react"
+import { useState } from "react"
+import { AuthContext } from "./authContext"
 import { iniciarSesion } from "../services/usuarioService"
-
-
-const AuthContext = createContext()
 
 export function AuthProvider({children}){
 
@@ -41,9 +39,4 @@ export function AuthProvider({children}){
             {children}
         </AuthContext.Provider>
     )
-}
-
-
-export function useAuth(){
-    return useContext(AuthContext)
 }
