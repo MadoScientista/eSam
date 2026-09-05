@@ -2,10 +2,12 @@ import { NavLink, useLocation } from "react-router-dom"
 import { useEffect } from "react"
 import {cartProducts} from "../../const/cartProducts"
 import { useCart } from "../../context/CartContext"
+import { useAuth } from "../../context/AuthContext"
 
 export function NavBar(){
 
     const { cart } = useCart()
+    const { usuario } = useAuth()
     const location = useLocation()
 
     useEffect(() => {
@@ -52,22 +54,28 @@ export function NavBar(){
                 
                 {/* Iconos a la derecha */}
                 <ul className="navbar-nav ms-auto">
-                    <li className="nav-item">
-                        <NavLink className="nav-link"  to="login">Inicia Sesión</NavLink>
-                    </li>
+                    {
+                        !usuario
+                        ?
+                        <>
+                            <li className="nav-item">
+                                <NavLink className="nav-link" to="/login">Inicia Sesión</NavLink>
+                            </li>
+
+                            <li className="nav-item">
+                                <NavLink className="nav-link" to="/registro">Regístrate</NavLink>
+                            </li>
+                        </>
+                        :
+                        <li className="nav-item">
+                            <NavLink className="nav-link" to={usuario.rol?.nombre === "admin" ? "/admin" : "/usuario"} title="Perfil">
+                                <i className="bi bi-person-circle"></i>
+                            </NavLink>
+                        </li>
+                    }
 
                     <li className="nav-item">
-                        <NavLink className="nav-link"  to="registro">Regístrate</NavLink>
-                    </li>
-
-                    <li className="nav-item">
-                        <NavLink className="nav-link" to="admin" title="Perfil">
-                            <i className="bi bi-person-circle"></i>
-                        </NavLink>
-                    </li>
-
-                    <li className="nav-item">
-                        <NavLink className="nav-link" to="carrito">
+                        <NavLink className="nav-link" to="/carrito">
                             <i className="bi bi-cart position-relative">
                                 {
                                     nProducts > 0 && 

@@ -22,6 +22,20 @@ export const obtenerRolesUsuario = async () => {
     return response.data
 }
 
+// Eliminar un usuario por id
+export const eliminarUsuario = async (id) => {
+    const response = await api.delete("/usuarios/" + id)
+
+    return response.data
+}
+
+// Iniciar sesión
+export const iniciarSesion = async (nombreUsuario, password) => {
+    const response = await api.post("/usuarios/login", { nombreUsuario, password })
+
+    return response.data
+}
+
 // Crear un usuario
 export const crearUsuario = async (usuario) => {
     console.log(usuario)
