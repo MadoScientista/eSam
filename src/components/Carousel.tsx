@@ -1,9 +1,23 @@
 
 
+import { useEffect, useRef } from "react"
+import { Carousel as BootstrapCarousel } from "bootstrap"
+
 export function Carousel(){
+    const carouselRef = useRef<HTMLDivElement>(null)
+
+    useEffect(() => {
+        const element = carouselRef.current
+        if (!element) return
+
+        const instancia = new BootstrapCarousel(element, { ride: "carousel", interval: 3000 })
+
+        return () => instancia.dispose()
+    }, [])
+
     return(
         <>
-        <div id="carouselExampleIndicators" className="carousel slide" data-bs-ride="carousel"  data-bs-interval="3000">
+        <div ref={carouselRef} id="carouselExampleIndicators" className="carousel slide">
         <div className="carousel-indicators">
             <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="0" className="active" aria-current="true" aria-label="Slide 1"></button>
             <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="1" aria-label="Slide 2"></button>
@@ -12,7 +26,7 @@ export function Carousel(){
         <div className="carousel-inner">
             <div className="carousel-item active">
             <img 
-                src="https://dimeiggsschl.vtexassets.com/arquivos/ids/174150-800-auto?v=638580423950430000&width=800&height=auto&aspect=true" 
+                src="https://www.papelaria.cl/cdn/shop/files/9781441321343_1800x1800_7ef6ffe9-83df-40a8-b6cd-193bd5d311f2.jpg?v=1756996325&width=1000" 
                 className="d-block w-100" 
                 style={{ height: "400px", objectFit: "cover" }}
                 alt="..."/>
