@@ -3,6 +3,7 @@ import { ProductList } from "../components/ProductList"
 import { useEffect, useState } from "react"
 import { obtenerProductos, obtenerProductoSku } from "../services/productoService"
 import { useCart } from "../context/CartContext"
+import { Toast } from "../components/Toast"
 
 export function ProductDetails(){
     
@@ -10,6 +11,7 @@ export function ProductDetails(){
 
     const [product, setProduct] = useState([])
     const [products, setProducts] = useState([])
+    const [toastTrigger, setToastTrigger] = useState(0)
 
     const { addProduct } = useCart()
 
@@ -55,7 +57,7 @@ export function ProductDetails(){
                 <p>{product.descripcion}</p>
                 <p>${product.precio}</p>
                 <p>Quedan: {product.stock}</p>
-                <button className="btn btn-dark" onClick={() => addProduct(product)}>
+                <button className="btn btn-dark" onClick={() => { addProduct(product); setToastTrigger(t => t + 1) }}>
                     <i className="bi bi-cart"></i> Añadir
                 </button>
             </div>
@@ -64,6 +66,7 @@ export function ProductDetails(){
             <h3 className="mb-4">Productos relacionados</h3>
             <ProductList products={products.slice(0,4)} cols={4}/>
         </div>
+        <Toast trigger={toastTrigger} message={`${product.nombre} agregado al carrito.`} />
     </div>
     )
 }
