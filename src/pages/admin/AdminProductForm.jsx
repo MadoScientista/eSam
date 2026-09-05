@@ -110,7 +110,7 @@ export function AdminProductForm(){
                 await crearProductoSku(formulario)
                 setMensajeAlerta({type: "success", message: "Producto creado correctamente."})
             }else if(accion === "actualizar"){
-                await actualizarProductoSku(sku, payload)
+                await actualizarProductoSku(sku, formulario)
                 setMensajeAlerta({type: "success", message: `Producto ${sku} actualizado correctamente.`})
             }else if(accion === "eliminar"){
                 await eliminarProducto(sku)
