@@ -1,5 +1,6 @@
 import { NavLink, useLocation, useNavigate } from "react-router-dom";
 import { useState } from "react";
+import { useAuth } from "../../context/AuthContext";
 
 const ADMIN_MENU_ITEMS = [
     { label: "Perfil", path: "/admin" },
@@ -11,7 +12,14 @@ const ADMIN_MENU_ITEMS = [
             { label: "Nuevo producto", path: "/admin/productos/nuevo" },
         ],
     },
-    { label: "Usuarios", path: "/admin/usuarios" },
+    {
+        label: "Usuarios",
+        path: "/admin/usuarios",
+        children: [
+            { label: "Todos", path: "/admin/usuarios" },
+            { label: "Nuevo usuario", path: "/admin/usuarios/nuevo" },
+        ],
+    },
 ];
 
 function SubMenu({ item }) {
@@ -74,6 +82,14 @@ function SubMenu({ item }) {
 }
 
 export function AdminSidebar() {
+    const { logout } = useAuth();
+    const navigate = useNavigate();
+
+    const handleLogout = () => {
+        logout();
+        navigate("/");
+    };
+
     return (
         <nav className="col-md-3 col-lg-2 d-md-block pt-5 collapse text-end border-end shadow-sm align-items-center">
             <div className="position-sticky pt-3">
@@ -84,6 +100,15 @@ export function AdminSidebar() {
                     {ADMIN_MENU_ITEMS.map((item) => (
                         <SubMenu key={item.path} item={item} />
                     ))}
+                    <li className="nav-item">
+                        <button
+                            type="button"
+                            className="nav-link text-black border-0 bg-transparent text-end w-100"
+                            onClick={handleLogout}
+                        >
+                            Cerrar sesión
+                        </button>
+                    </li>
                 </ul>
             </div>
         </nav>

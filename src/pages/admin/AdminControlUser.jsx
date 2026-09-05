@@ -1,36 +1,41 @@
-
 import { useEffect, useState } from "react"
+import { useNavigate } from "react-router-dom"
 import { UsersTable } from "../../components/UsersTable"
-
 import { obtenerUsuarios } from "../../services/usuarioService"
 
-
-export function AdminControlUser(){
-
+export function AdminControlUser() {
+    const navigate = useNavigate()
     const [users, setUsers] = useState([])
 
-    // Cargar usuarios
-    useEffect(()=>{
-        const loadUsers = async ()=>{
-            try{
+    useEffect(() => {
+        const cargarUsuarios = async () => {
+            try {
                 const data = await obtenerUsuarios()
                 setUsers(data)
-                console.log("Usuarios cargados", users)
-            }catch(error){
+            } catch (error) {
                 console.error("Error al cargar usuarios", error)
             }
         }
-        loadUsers()
-    },[])
 
-    return(
-        <div className="container mb-5">
-            <h2 className="mb-5">Adminitración Usuarios</h2>
-            <UsersTable dataUser={users}/>
-            <div>
-                <button className="btn btn-dark">Editar</button>
+        cargarUsuarios()
+    }, [])
+
+    const handleClick = (id) => {
+        navigate(`${id}`)
+    }
+
+    return (
+        <>
+            <div className="d-flex justify-content-between align-items-center mb-5">
+                <h2 className="mb-0">Administración Usuarios</h2>
+                <button
+                    className="btn btn-dark"
+                    onClick={() => { navigate("nuevo") }}
+                >
+                    Nuevo usuario
+                </button>
             </div>
-        </div>
-        
+            <UsersTable dataUser={users} handleClick={handleClick} />
+        </>
     )
 }

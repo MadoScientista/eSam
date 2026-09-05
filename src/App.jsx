@@ -1,5 +1,6 @@
 import './App.css'
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
+import { Navigate, useLocation } from 'react-router-dom'
 import { MainLayout } from './components/layout/MainLayout'
 import { AboutUs } from './pages/AboutUs'
 import { Blogs } from './pages/Blogs'
@@ -14,10 +15,25 @@ import { BlogArticle } from './pages/BlogArticle'
 import { Cart } from './pages/Cart'
 
 import { AdminLayout } from './components/layout/AdminLayout'
+import { CustomerLayout } from './components/layout/customer/CustomerLayout'
 import { AdminProfile } from './pages/admin/AdminProfile'
 import { AdminControlProduct } from './pages/admin/AdminControlProduct'
 import { AdminProductForm } from './pages/admin/AdminProductForm'
 import { AdminControlUser } from './pages/admin/AdminControlUser'
+import { AdminUserForm } from './pages/admin/AdminUserForm'
+
+import { useAuth } from './context/AuthContext'
+
+function RequireAuth({ children }) {
+    const { usuario } = useAuth()
+    const location = useLocation()
+
+    if (!usuario) {
+        return <Navigate to="/login" replace state={{ from: location }} />
+    }
+
+    return children
+}
 
 const router = createBrowserRouter([
   {
@@ -34,7 +50,9 @@ const router = createBrowserRouter([
           {path: "productos", element:<AdminControlProduct/>},
           {path: "productos/:sku", element: <AdminProductForm/>},
           {path: "productos/nuevo", element: <AdminProductForm/>},
-          {path: "usuarios", element: <AdminControlUser/>}
+          {path: "usuarios", element: <AdminControlUser/>},
+          {path: "usuarios/:id", element: <AdminUserForm/>},
+          {path: "usuarios/nuevo", element: <AdminUserForm/>}
         ] 
       },
       { path:"blogs",element:<Blogs/> },
@@ -45,7 +63,14 @@ const router = createBrowserRouter([
       { path:"detalleProducto/:sku",element:<ProductDetails/> },
       { path:"productos",element: <Products/> },
       { path:"registro",element:<Register/> },
-      { path:"usuario",element:<UserProfile/> }
+      {
+        path:"usuario",
+        element:<RequireAuth><CustomerLayout/></RequireAuth>,
+        children:[
+          {index: true, element:<UserProfile/>},
+          {path: "carrito", element:<Cart/>}
+        ]
+      }
     ]
   }
 ])
