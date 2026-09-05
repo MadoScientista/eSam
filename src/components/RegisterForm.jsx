@@ -1,11 +1,10 @@
 import { useEffect, useState } from "react"
+import { useNavigate } from "react-router-dom"
 import { obtenerRegionesComunas } from "../services/regionComunaService"
 import { crearUsuario, actualizarUsuario, obtenerUsuarioId, obtenerRolesUsuario } from "../services/usuarioService"
 import { validarRut, descomponerRut } from "../utils/rut"
 import { AlertMessage } from "./AlertMessage"
 
-
-const ID_ROL_CLIENTE = 3
 
 const formularioVacio = {
     nombres: "",
@@ -24,12 +23,14 @@ const formularioVacio = {
     idRolUsuario: ""
 }
 
-const dominiosPermitidos = ["duoc.cl", "gmail.com", "profesor.duoc.cl"]
+const dominiosPermitidos = ["duoc.cl", "gmail.com", "profesor.duoc.cl", "duocuc.cl"]
 
-export function RegisterForm({ modo = "cliente", idUsuario }){
+export function RegisterForm({ modo = "cliente", idUsuario, onSubmit, onDelete }){
 
     const esAdmin = modo === "admin"
+    const esPerfil = modo === "perfil"
     const esEdicion = Boolean(idUsuario)
+    const navigate = useNavigate()
 
     const [regionesComunas, setRegionesComunas] = useState([])
     const [roles, setRoles] = useState([])
@@ -51,18 +52,16 @@ export function RegisterForm({ modo = "cliente", idUsuario }){
     },[])
 
     useEffect(()=>{
-        if(esAdmin){
-            const loadRoles = async () =>{
-                try{
-                    const data = await obtenerRolesUsuario()
-                    setRoles(data)
-                }catch(error){
-                    console.error("Error al cargar roles", error)
-                }
+        const loadRoles = async () =>{
+            try{
+                const data = await obtenerRolesUsuario()
+                setRoles(data)
+            }catch(error){
+                console.error("Error al cargar roles", error)
             }
-            loadRoles()
         }
-    },[esAdmin])
+        loadRoles()
+    },[])
 
     // Carga los datos del usuario para edición
     useEffect(()=>{
@@ -212,6 +211,14 @@ export function RegisterForm({ modo = "cliente", idUsuario }){
             return
         }
 
+        // Rol cliente por defecto (registro público)
+        const rolCliente = roles.find((r) => r.nombre === "cliente")
+
+        if(!esAdmin && !esEdicion && !rolCliente){
+            setMensajeAlerta({type: "danger", message: "No se pudo determinar el rol de cliente."})
+            return
+        }
+
         const {rut, dv} = descomponerRut(rutLimpio)
 
         const payload = {
@@ -225,7 +232,7 @@ export function RegisterForm({ modo = "cliente", idUsuario }){
             correo:formulario.correo,
             telefono: Number(formulario.telefono),
             nombreUsuario: formulario.correo,
-            idRolUsuario: esAdmin ? Number(formulario.idRolUsuario) : ID_ROL_CLIENTE,
+            idRolUsuario: esAdmin ? Number(formulario.idRolUsuario) : esPerfil ? Number(formulario.idRolUsuario) : rolCliente.idRolUsuario,
             idRegion: Number(formulario.idRegion),
             idComuna: Number(formulario.idComuna)
         }
@@ -237,14 +244,16 @@ export function RegisterForm({ modo = "cliente", idUsuario }){
         }
 
         try{
-            if(esEdicion){
+            if(onSubmit){
+                onSubmit(payload)
+            }else if(esEdicion){
                 await actualizarUsuario(idUsuario, payload)
                 setMensajeAlerta({type: "success", message: "Usuario actualizado correctamente."})
             }else{
                 await crearUsuario(payload)
-                setMensajeAlerta({type: "success", message: "Usuario registrado correctamente."})
                 setFormulario(formularioVacio)
                 setComunas([])
+                navigate("/login")
             }
         }catch(error){
             console.error("Error al guardar usuario", error)
@@ -256,8 +265,22 @@ export function RegisterForm({ modo = "cliente", idUsuario }){
         <div className="register-form border border-black p-5 rounded-2 shadow">
             <form onSubmit={handleSubmit}>
                 <div className="h3 mb-5 text-center">
-                    {esEdicion ? "Editar Usuario" : esAdmin ? "Nuevo Usuario" : "Formulario de Registro"}
+                    {esPerfil ? "Editar Perfil" : esEdicion ? "Editar Usuario" : esAdmin ? "Nuevo Usuario" : "Formulario de Registro"}
                 </div>
+
+                {
+                    esAdmin && esEdicion &&
+                    <div className="mb-3">
+                        <label htmlFor="idUsuario" className="form-label">ID Usuario</label>
+                        <input
+                            type="text"
+                            className="form-control border-black"
+                            name="idUsuario"
+                            value={idUsuario}
+                            disabled
+                            readOnly/>
+                    </div>
+                }
 
                 <div className="mb-3">
                     <label htmlFor="nombres" className="form-label">Nombres*</label>
@@ -307,8 +330,10 @@ export function RegisterForm({ modo = "cliente", idUsuario }){
                         maxLength={9}
                         value={formulario.rut}
                         onChange={handleChangeRut}
+                        disabled={(esAdmin || esPerfil) && esEdicion}
+                        readOnly={(esAdmin || esPerfil) && esEdicion}
                         required/>
-                    <small className="text-secondary">Sin puntos ni guión.</small>
+                    <small className="text-secondary">{(esAdmin || esPerfil) && esEdicion ? "El RUN no es editable." : "Sin puntos ni guión."}</small>
                 </div>
 
                 <div className="row mb-3">
@@ -445,9 +470,13 @@ export function RegisterForm({ modo = "cliente", idUsuario }){
                     </textarea>
                 </div>
 
-                <div className="mt-4">
+                <div className="mt-4 d-flex justify-content-between align-items-center">
+                    {
+                        esAdmin && esEdicion &&
+                        <button type="button" className="btn btn-danger" onClick={onDelete}>Eliminar</button>
+                    }
                     <button type="submit" className="btn btn-dark">
-                        {esEdicion ? "Guardar Cambios" : esAdmin ? "Guardar Usuario" : "Registrar"}
+                        {esPerfil ? "Guardar Perfil" : esEdicion ? "Guardar Cambios" : esAdmin ? "Guardar Usuario" : "Registrar"}
                     </button>
                 </div>
 

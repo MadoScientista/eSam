@@ -1,5 +1,15 @@
+import { RegisterForm } from "../../components/RegisterForm"
+import { useAuth } from "../../context/AuthContext"
+
 export function AdminProfile() {
+    const { usuario } = useAuth()
+
     return (
-        <h2>Perfil</h2>
+        <div className="container">
+            <RegisterForm
+                modo="perfil"
+                idUsuario={usuario?.id}
+            />
+        </div>
     )
 }
