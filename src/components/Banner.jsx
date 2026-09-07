@@ -9,7 +9,7 @@ export function Banner( {children} ){
                 <div className="row">
                     <div className="col">
                     <div className='h1'>Bienvenido a ESam</div>
-                    <p>Encuentra todos los productos escolares que necesitas.
+                    <p className="lead">Encuentra todos los productos escolares que necesitas.
                         <br/>Artículos de librería y papelería para tu estudio, oficina 
                         <br/>y creatividad.
                     </p>

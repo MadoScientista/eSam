@@ -52,7 +52,7 @@ export function LoginForm(){
     }
 
     return (
-        <div className="login-form border border-black p-5 rounded-2 mb-5 shadow">
+        <div className="login-form border border-black p-5 rounded-2 mb-5 shadow-sm">
             <form onSubmit={handleSubmit}>
                 <div className="h3">Inicio de Sesión</div>
                 <div className="mb-3">

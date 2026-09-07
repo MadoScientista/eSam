@@ -44,7 +44,7 @@ export function RegisterForm({ idUsuario }) {
     }
 
     return (
-        <div className="register-form border border-black p-5 rounded-2 shadow">
+        <div className="register-form border border-black p-5 rounded-2 shadow-sm">
             <form onSubmit={handleSubmit}>
                 <div className="h3 mb-5 text-center">
                     {esEdicion ? "Editar Perfil" : "Formulario de Registro"}
