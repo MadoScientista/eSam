@@ -1,6 +1,6 @@
 import { useState } from "react"
 import { useParams, useNavigate } from "react-router-dom"
-import { RegisterForm } from "../../components/RegisterForm"
+import { AdminUsuarioForm } from "../../components/AdminUsuarioForm"
 import { crearUsuario, actualizarUsuario, eliminarUsuario } from "../../services/usuarioService"
 import { ConfirmModal } from "../../components/ConfirmModal"
 import { AlertMessage } from "../../components/AlertMessage"
@@ -77,8 +77,7 @@ export function AdminUserForm() {
             <div className="container">
                 <h2 className="mb-4">{id ? "Editar usuario" : "Nuevo Usuario"}</h2>
 
-                <RegisterForm
-                    modo="admin"
+                <AdminUsuarioForm
                     idUsuario={id}
                     onSubmit={handleSubmit}
                     onDelete={handleEliminar}

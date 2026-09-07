@@ -7,7 +7,6 @@ export function CustomerProfile() {
     return (
         <div className="container">
             <RegisterForm
-                modo="perfil"
                 idUsuario={usuario?.id}
             />
         </div>

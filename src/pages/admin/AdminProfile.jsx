@@ -7,7 +7,6 @@ export function AdminProfile() {
     return (
         <div className="container">
             <RegisterForm
-                modo="perfil"
                 idUsuario={usuario?.id}
             />
         </div>
