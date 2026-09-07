@@ -1,5 +1,8 @@
 
 
+import { formatearPrecio } from "../utils/moneda"
+
+
 export function ProductTable({products, handleClick}){
     return(
         <div className="container" style={{maxWidth:"70%"}}>
@@ -19,7 +22,7 @@ export function ProductTable({products, handleClick}){
                             <tr key={p.sku} style={{cursor:"pointer"}}>
                                 <td>{p.sku}</td>
                                 <td>{p.nombre}</td>
-                                <td>{p.precio}</td>
+                                <td>{formatearPrecio(p.precio)}</td>
                                 <td>{p.stock}</td>
                                 <td>
                                     <button 

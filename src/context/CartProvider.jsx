@@ -17,7 +17,7 @@ export function CartProvider({children}){
     },[cart])
 
     // Agregar producto
-    const addProduct = (p) =>{
+    const addProduct = (p, n = 1) =>{
         setCart((currentCart)=>{
             const productFound = currentCart.find((item)=>{
                 return item.product.sku == p.sku
@@ -25,14 +25,14 @@ export function CartProvider({children}){
 
             if(productFound){
               return currentCart.map((item)=>{
-                return item.product.sku == p.sku ? {...item, units: item.units + 1}: item
+                return item.product.sku == p.sku ? {...item, units: item.units + n}: item
               })  
             }
             
             return [...currentCart, 
                 {
                     product: p,
-                    units: 1
+                    units: n
                 }]
         })
     }

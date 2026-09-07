@@ -3,6 +3,7 @@ import { ProductCardH } from "../components/ProductCardH"
 import { ProductList } from "../components/ProductList"
 import { useCart } from "../context/cartContext"
 import { obtenerProductos } from "../services/productoService"
+import { formatearPrecio } from "../utils/moneda"
 
 export function Cart(){
 
@@ -63,7 +64,7 @@ export function Cart(){
                             })
                         }
                         <hr />
-                        <p>Sub total: ${subtotal}</p>
+                        <p>Sub total: {formatearPrecio(subtotal)}</p>
                         <button className="btn btn-dark">Pagar</button>
                     </div>
                 </div>

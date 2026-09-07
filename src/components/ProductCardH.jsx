@@ -1,3 +1,5 @@
+import { formatearPrecio } from "../utils/moneda"
+
 export function ProductCardH({item, handleClickPlus, handleClicklMinus, handleTrash}){
 
     return (
@@ -9,11 +11,11 @@ export function ProductCardH({item, handleClickPlus, handleClicklMinus, handleTr
                 <div className="col-md-8">
                     <div className="card-body">
                         <h6 className="card-title">{item.product.nombre}</h6>
-                        <p className="card-text">${item.product.precio}</p>
+                        <p className="card-text">{formatearPrecio(item.product.precio)}</p>
                         
                         
-                        <div className="d-flex flex-row justify-content-start">
-                            <div className="input-group input-group-sm" style={{maxWidth: "10rem"}}>
+                        <div className="d-flex flex-row align-items-center gap-2">
+                            <div className="input-group input-group-sm" style={{width:"auto", flexWrap:"nowrap"}}>
                                 <button 
                                     className="btn btn-outline-secondary" 
                                     type="button"
@@ -22,21 +24,21 @@ export function ProductCardH({item, handleClickPlus, handleClicklMinus, handleTr
                                 >−</button>
                                 <input 
                                     type="number" 
-                                    className="form-control text-center"
-                                    style={{maxWidth:"3rem"}} 
+                                    className="form-control qty-input"
+                                    style={{width:"3rem"}} 
                                     value={item.units} 
                                     readOnly
                                     key={"input"+item.product.sku}
                                 />
                                 <button 
-                                    className="btn btn-outline-secondary me-2" 
+                                    className="btn btn-outline-secondary" 
                                     type="button"
                                     onClick={handleClickPlus} 
                                     key={"btnPlus" + item.product.sku}   
                                 >+</button>
                             </div>
 
-                            <button className="btn btn-danger" onClick={handleTrash}>
+                            <button className="btn btn-danger btn-sm" onClick={handleTrash}>
                                 <i className="bi bi-trash3-fill"></i>
                             </button>
                         </div>

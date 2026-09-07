@@ -4,6 +4,7 @@ import { useEffect, useState } from "react"
 import { obtenerProductos, obtenerProductoSku } from "../services/productoService"
 import { useCart } from "../context/cartContext"
 import { Toast } from "../components/Toast"
+import { formatearPrecio } from "../utils/moneda"
 
 export function ProductDetails(){
     
@@ -46,6 +47,11 @@ export function ProductDetails(){
         cargarProductos()
     },[])
 
+    const handleClick = () => {
+        addProduct(product)
+        setToastTrigger(t => t + 1) 
+    }
+    
     return (
     <div className="container mt-5">
         <div className="row mb-4">
@@ -55,9 +61,9 @@ export function ProductDetails(){
             <div className="col pt-5" style={{maxWidth:'30rem'}}>
                 <div className="h3">{product.nombre}</div>
                 <p>{product.descripcion}</p>
-                <p>${product.precio}</p>
+                <p>{formatearPrecio(product.precio)}</p>
                 <p>Quedan: {product.stock}</p>
-                <button className="btn btn-dark" onClick={() => { addProduct(product); setToastTrigger(t => t + 1) }}>
+                <button className="btn btn-dark" onClick={handleClick}>
                     <i className="bi bi-cart"></i> Añadir
                 </button>
             </div>

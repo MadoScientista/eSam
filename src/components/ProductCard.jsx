@@ -1,10 +1,10 @@
-
+import { formatearPrecio } from "../utils/moneda"
 
 export function ProductCard({ product, handleClick }) {
 
     return (
         <div
-            className="card mb-4 p-3"
+            className="card h-100 w-100 d-flex flex-column mb-4 p-3 card-hover"
             id={product.sku}
             onClick={handleClick}
             style={{ cursor: "pointer" }}
@@ -29,10 +29,12 @@ export function ProductCard({ product, handleClick }) {
                 />
             </div>
 
-            <div className="card-body d-flex flex-column">
+            <div className="card-body d-flex flex-column flex-grow-1">
                 <h6 className="card-title">{product.nombre}</h6>
-                <p className="card-text">${product.precio}</p>
-                <p className="card-text">Quedan: {product.stock}u</p>
+                <div className="mt-auto">
+                    <p className="card-text mb-0">{formatearPrecio(product.precio)}</p>
+                    <p className="card-text mb-0">Quedan: {product.stock}u</p>
+                </div>
             </div>
 
         </div>

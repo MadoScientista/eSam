@@ -4,6 +4,7 @@ import { obtenerProductoSku, crearProductoSku, actualizarProductoSku, eliminarPr
 import { obtenerMarcas } from "../../services/marcaService"
 import { ConfirmModal } from "../../components/ConfirmModal"
 import { AlertMessage } from "../../components/AlertMessage"
+import { formatearPrecio } from "../../utils/moneda"
 
 export function AdminProductForm(){
     
@@ -206,7 +207,7 @@ export function AdminProductForm(){
                                     onChange={handleChange}
                                     required/>
                             </div>
-                            {formulario.precio && <small className="text-secondary">${formulario.precio}</small>}
+                            {formulario.precio && <small className="text-secondary">{formatearPrecio(formulario.precio)}</small>}
                         </div>
 
                         <div className="mb-3">
