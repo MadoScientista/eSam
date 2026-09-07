@@ -24,11 +24,11 @@ import { AdminUserForm } from './pages/admin/AdminUserForm'
 
 import { useAuth } from './context/authContext'
 
-function RequireAuth({ children }) {
+function RequireAuth({ children, rol }) {
     const { usuario } = useAuth()
     const location = useLocation()
 
-    if (!usuario) {
+    if (!usuario || (rol && usuario.rol?.nombre !== rol)) {
         return <Navigate to="/login" replace state={{ from: location }} />
     }
 
@@ -44,7 +44,7 @@ const router = createBrowserRouter([
       { path:"nosotros",element: <AboutUs/> },
       { 
         path:"admin",
-        element:<AdminLayout/>,
+        element:<RequireAuth rol="admin"><AdminLayout/></RequireAuth>,
         children:[
           {index: true, element:<AdminProfile/>},
           {path: "productos", element:<AdminControlProduct/>},
@@ -65,7 +65,7 @@ const router = createBrowserRouter([
       { path:"registro",element:<Register/> },
       {
         path:"usuario",
-        element:<RequireAuth><CustomerLayout/></RequireAuth>,
+        element:<RequireAuth rol="cliente"><CustomerLayout/></RequireAuth>,
         children:[
           {index: true, element:<CustomerProfile/>},
           {path: "carrito", element:<Cart/>}
