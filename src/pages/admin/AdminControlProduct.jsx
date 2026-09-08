@@ -8,6 +8,7 @@ export function AdminControlProduct(){
     
     const navigate = useNavigate()
     const [products, setProducts] = useState([])
+    const [busqueda, setBusqueda] = useState("")
 
     useEffect(() => {
         const cargarProductos = async () =>{
@@ -26,10 +27,25 @@ export function AdminControlProduct(){
         navigate(`${sku}`)
     }
 
+    const productosFiltrados = products.filter(p =>
+        p.nombre.toLowerCase().includes(busqueda.toLowerCase()) ||
+        p.sku.toString().toLowerCase().includes(busqueda.toLowerCase())
+    )
+
     return(
         <>
-            <div className="d-flex justify-content-between align-items-center mb-5">
-                <h2 className="mb-0">Administración Productos</h2>
+            <h2 className="mb-5 mt-3 text-center">Administración Productos</h2>
+            <div className="d-flex justify-content-center align-items-center gap-3 mb-4">
+                <div className="input-group" style={{ maxWidth: "25rem" }}>
+                    <span className="input-group-text border-black"><i className="bi bi-search"></i></span>
+                    <input
+                        type="text"
+                        className="form-control border-black"
+                        placeholder="Buscar por nombre o ID"
+                        value={busqueda}
+                        onChange={(e) => setBusqueda(e.target.value)}
+                    />
+                </div>
                 <button 
                     className="btn btn-dark"
                     onClick={()=>{navigate("nuevo")}}
@@ -37,7 +53,7 @@ export function AdminControlProduct(){
                     Nuevo producto
                 </button>
             </div>
-            <ProductTable products={products} handleClick={handleClick}/>
+            <ProductTable products={productosFiltrados} handleClick={handleClick}/>
         </>
     )
 }

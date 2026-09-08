@@ -23,7 +23,10 @@ export function Toast({ trigger = 0, message, title = "Carrito", delay = 3000 })
     }, [trigger])
 
     return (
-        <div className="toast-container position-fixed top-0 end-0 p-3">
+        <div
+            className="toast-container position-fixed top-0 end-0 p-3"
+            onClick={(e) => e.stopPropagation()}
+        >
             <div
                 ref={toastRef}
                 className="toast align-items-center text-bg-success border-0"

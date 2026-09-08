@@ -120,6 +120,38 @@
   }
 }
 
+.product-cart-btn {
+  position: absolute;
+  top: 0.5rem;
+  right: 0.5rem;
+  width: 2.5rem;
+  height: 2.5rem;
+  border: none;
+  border-radius: 5px;
+  background-color: #212529;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity 0.2s ease, background-color 0.2s ease;
+  z-index: 2;
+}
+
+.card-hover:hover .product-cart-btn {
+  opacity: 1;
+}
+
+.product-cart-btn:hover {
+  background-color: #0d6efd;
+}
+
+@media (hover: none) {
+  .product-cart-btn {
+    opacity: 1;
+  }
+}
+
 .carousel-arrow {
   position: absolute;
   top: 50%;

@@ -26,19 +26,19 @@ export function Carousel(){
         <div className="carousel-inner">
             <div className="carousel-item active">
             <img 
-                src="https://www.papelaria.cl/cdn/shop/files/9781441321343_1800x1800_7ef6ffe9-83df-40a8-b6cd-193bd5d311f2.jpg?v=1756996325&width=1000" 
+                src="https://www.papelaria.cl/cdn/shop/files/9781441321343_1800x1800_7ef6ffe9-83df-40a8-b6cd-193bd5d311f2.jpg" 
+                className="d-block w-100" 
+                style={{ height: "400px", objectFit: "cover" }}
+                alt="..."/>
+            </div>
+            <div className="carousel-item">
+            <img src="https://www.ekiz.cl/cdn/shop/products/97.MLCuadernodeHarryPotter-CasadeRavenclaw_Separadoratono.jpg?v=1680060899" 
                 className="d-block w-100" 
                 style={{ height: "400px", objectFit: "cover" }}
                 alt="..."/>
             </div>
             <div className="carousel-item">
             <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRtjboPUMEqo9re7Hkk6YnT9uKxBIbNaPidtjvWarXtQCkhf1mAH84A2lDP&s=10" 
-                className="d-block w-100" 
-                style={{ height: "400px", objectFit: "cover" }}
-                alt="..."/>
-            </div>
-            <div className="carousel-item">
-            <img src="https://dimeiggsschl.vtexassets.com/arquivos/ids/172314-800-auto?v=638448973001900000&width=800&height=auto&aspect=true" 
                 className="d-block w-100" 
                 style={{ height: "400px", objectFit: "cover" }}
                 alt="..."/>
