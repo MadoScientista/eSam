@@ -103,7 +103,7 @@ export function ContactForm() {
                     rows="5"
                     value={formulario.mensaje}
                     onChange={handleChange}
-                    placeholder="Contanos en qué podemos ayudarte..."
+                    placeholder="Dinos en qué te podemos ayudar"
                     required
                 ></textarea>
             </div>

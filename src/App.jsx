@@ -1,28 +1,17 @@
 import './App.css'
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 import { Navigate, useLocation } from 'react-router-dom'
-import { MainLayout } from './components/layout/main/MainLayout'
-import { AboutUs } from './pages/AboutUs'
-import { Blogs } from './pages/Blogs'
-import { Contact } from './pages/Contact'
-import { Home } from './pages/Home'
-import { Login } from './pages/Login'
-import { ProductDetails } from './pages/ProductDetails'
-import { Products } from './pages/Products'
-import { Register } from './pages/Register'
-import { CustomerProfile } from './pages/CustomerProfile'
-import { BlogArticle } from './pages/BlogArticle'
-import { Cart } from './pages/Cart'
 
-import { AdminLayout } from './components/layout/admin/AdminLayout'
-import { CustomerLayout } from './components/layout/customer/CustomerLayout'
-import { AdminProfile } from './pages/admin/AdminProfile'
-import { AdminControlProduct } from './pages/admin/AdminControlProduct'
-import { AdminProductForm } from './pages/admin/AdminProductForm'
-import { AdminControlUser } from './pages/admin/AdminControlUser'
-import { AdminUserForm } from './pages/admin/AdminUserForm'
+import { MainLayout, AdminLayout, CustomerLayout } from './components'
+import {
+  AboutUs, Blogs, Contact, Home, Login, ProductDetails, Products,
+  Register, CustomerProfile, BlogArticle, Cart,
+  AdminProfile, AdminControlProduct, AdminProductForm,
+  AdminControlUser, AdminUserForm
+} from './pages'
 
 import { useAuth } from './context/authContext'
+
 
 function RequireAuth({ children, rol }) {
     const { usuario } = useAuth()
