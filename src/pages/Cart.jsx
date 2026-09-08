@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react"
 import { ProductCardH } from "../components/ProductCardH"
-import { ProductList } from "../components/ProductList"
+import { ProductCarousel } from "../components/ProductCarousel"
 import { useCart } from "../context/cartContext"
 import { obtenerProductos } from "../services/productoService"
 import { formatearPrecio } from "../utils/moneda"
@@ -70,8 +70,8 @@ export function Cart(){
                 </div>
             </div>
             <h3 className="mb-5">Productos relacionados</h3>
-            <div className="container p-0">
-                <ProductList products={products.slice(0,5)} cols={5}/>
+            <div className="container mb-5">
+                <ProductCarousel products={products.slice(3,10)}/>
             </div>
         </div>
     )

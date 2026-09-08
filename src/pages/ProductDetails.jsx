@@ -1,5 +1,5 @@
 import { useParams } from "react-router-dom"
-import { ProductList } from "../components/ProductList"
+import { ProductCarousel } from "../components/ProductCarousel"
 import { useEffect, useState } from "react"
 import { obtenerProductos, obtenerProductoSku } from "../services/productoService"
 import { useCart } from "../context/cartContext"
@@ -70,7 +70,7 @@ export function ProductDetails(){
         </div>
         <div className="container">
             <h3 className="mb-4">Productos relacionados</h3>
-            <ProductList products={products.slice(0,4)} cols={4}/>
+            <ProductCarousel products={products.slice(5,12)}/>
         </div>
         <Toast trigger={toastTrigger} message={`${product.nombre} agregado al carrito.`} />
     </div>
