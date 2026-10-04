@@ -7,22 +7,23 @@ import {
   AboutUs, Blogs, Contact, Home, Login, ProductDetails, Products,
   Register, CustomerProfile, BlogArticle, Cart,
   AdminProfile, AdminControlProduct, AdminProductForm,
-  AdminControlUser, AdminUserForm
+  AdminControlUser, AdminUserForm,
+  AdminControlCategoria, AdminCategoriaForm
 } from './pages'
 
 import { useAuth, tieneRol } from './context/authContext'
 
 
 function RequireAuth({ children, rol }) {
-    const { estaAutenticado, usuario } = useAuth()
+    const { estaAutenticado, usuario, sesionCerrada } = useAuth()
     const location = useLocation()
 
     if (!estaAutenticado) {
-        return <Navigate to="/login" replace state={{ from: location }} />
+        return <Navigate to="/login" replace state={{ from: location, sesionCerrada }} />
     }
 
     if (rol && !tieneRol(usuario, rol)) {
-        return <Navigate to="/login" replace state={{ from: location }} />
+        return <Navigate to="/login" replace state={{ from: location, sesionCerrada }} />
     }
 
     return children
@@ -45,7 +46,10 @@ const router = createBrowserRouter([
           {path: "productos/nuevo", element: <AdminProductForm/>},
           {path: "usuarios", element: <AdminControlUser/>},
           {path: "usuarios/:id", element: <AdminUserForm/>},
-          {path: "usuarios/nuevo", element: <AdminUserForm/>}
+          {path: "usuarios/nuevo", element: <AdminUserForm/>},
+          {path: "categorias", element: <AdminControlCategoria/>},
+          {path: "categorias/:idCategoria", element: <AdminCategoriaForm/>},
+          {path: "categorias/nuevo", element: <AdminCategoriaForm/>}
         ] 
       },
       { path:"blogs",element:<Blogs/> },

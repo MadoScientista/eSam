@@ -13,12 +13,18 @@ export function AuthProvider({children}){
 
     const [token, setToken] = useState(()=>localStorage.getItem("eSamToken"))
 
+    // Por qué se terminó la sesión. El interceptor de api.js avisa cuando el
+    // backend rechaza el token; se distingue de un cierre de sesión voluntary
+    // para poder explicarle al usuario qué pasó en vez de solo rebotarlo.
+    const [sesionCerrada, setSesionCerrada] = useState(null)
+
     // Cuando el interceptor detecta un 401 limpia el token y avisa; aquí se
     // sincroniza el estado de React para sacar al usuario de las rutas privadas.
     useEffect(()=>{
         return onSesionExpirada(()=>{
             setUsuario(null)
             setToken(null)
+            setSesionCerrada("rechazada")
         })
     },[])
 
@@ -32,6 +38,7 @@ export function AuthProvider({children}){
         guardarToken(data.token)
         setToken(data.token)
         setUsuario(data.usuario)
+        setSesionCerrada(null)
         localStorage.setItem("eSamSession", JSON.stringify(data.usuario))
 
         return { ok: true, usuario: data.usuario }
@@ -41,6 +48,7 @@ export function AuthProvider({children}){
         limpiarToken()
         setToken(null)
         setUsuario(null)
+        setSesionCerrada(null)
         localStorage.removeItem("eSamSession")
     }
 
@@ -50,6 +58,7 @@ export function AuthProvider({children}){
                 usuario,
                 token,
                 estaAutenticado: Boolean(usuario && token),
+                sesionCerrada,
                 login,
                 logout
             }}

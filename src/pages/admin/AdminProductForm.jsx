@@ -4,6 +4,8 @@ import { obtenerProductoPorId, crearProducto, actualizarProducto, eliminarProduc
 import { obtenerMarcas } from "../../services/marcaService"
 import { obtenerCategorias } from "../../services/categoriaService"
 import { ConfirmModal } from "../../components/ConfirmModal"
+import { CategoriasSelector } from "../../components/CategoriasSelector"
+import { ProductoImagenesAdmin } from "../../components/ProductoImagenesAdmin"
 import { AlertMessage } from "../../components/AlertMessage"
 import { formatearPrecio } from "../../utils/moneda"
 import { imagenPrincipalProducto } from "../../utils/producto"
@@ -73,7 +75,8 @@ export function AdminProductForm(){
                         precio: data.precio ?? "",
                         stock: data.stock ?? "",
                         idMarca: data.idMarca ?? "",
-                        idCategorias: data.categorias?.map(c => c.idCategoria) ?? data.idCategorias ?? []
+                        idCategorias: data.categorias?.map(c => c.idCategoria) ?? data.idCategorias ?? [],
+                        imagenes: Array.isArray(data.imagenes) ? data.imagenes : []
                     })
                 }catch(error){
                     console.error("Error al cargar producto", error)
@@ -96,10 +99,7 @@ export function AdminProductForm(){
         )
     }
 
-    const handleChangeCategorias = (e) => {
-        const { selectedOptions } = e.target
-        const seleccion = Array.from(selectedOptions).map(o => Number(o.value))
-
+    const handleChangeCategorias = (seleccion) => {
         setFormulario((prev) => ({ ...prev, idCategorias: seleccion }))
     }
 
@@ -165,8 +165,25 @@ export function AdminProductForm(){
         setCargando(true)
         try{
             if(accion === "crear"){
-                await crearProducto(construirPayload())
-                setMensajeAlerta({type: "success", message: "Producto creado correctamente."})
+                const creado = await crearProducto(construirPayload())
+
+                setMostrarConfirmacion(false)
+
+                // La respuesta de alta trae el idProducto generado. Sin él no hay
+                // forma de subir imágenes, porque el endpoint de imagenes es
+                // /productos/{idProducto}/imagenes y sólo existe para productos
+                // ya persistidos.
+                if(creado?.idProducto != null){
+                    setMensajeAlerta({
+                        type: "success",
+                        message: `Producto ${creado.idProducto} creado correctamente. Ya puede subir sus imágenes.`
+                    })
+                    navigate(`/admin/productos/${creado.idProducto}`, { replace: true })
+                }else{
+                    setMensajeAlerta({type: "success", message: "Producto creado correctamente."})
+                }
+
+                return
             }else if(accion === "actualizar"){
                 await actualizarProducto(idProducto, construirPayload())
                 setMensajeAlerta({type: "success", message: `Producto ${idProducto} actualizado correctamente.`})
@@ -318,22 +335,12 @@ export function AdminProductForm(){
                         </div>
 
                         <div className="mb-3">
-                            <label htmlFor="idCategorias" className="form-label fw-bold">Categorías</label>
-                            <select
-                                multiple
-                                className="form-select border-black"
-                                name="idCategorias"
-                                value={(formulario.idCategorias ?? []).map(String)}
-                                onChange={handleChangeCategorias}
-                                style={{ minHeight: "8rem" }}
-                                required>
-                                {categorias.map(categoria => (
-                                    <option key={categoria.idCategoria} value={categoria.idCategoria}>
-                                        {categoria.nombre}
-                                    </option>
-                                ))}
-                            </select>
-                            <small className="text-secondary">Mantén Ctrl para seleccionar varias.</small>
+                            <label htmlFor="categorias" className="form-label fw-bold">Categorías</label>
+                            <CategoriasSelector
+                                categorias={categorias}
+                                seleccionadas={formulario.idCategorias ?? []}
+                                onChange={handleChangeCategorias}/>
+                            {categorias.length === 0 && <small className="text-danger">No hay categorías disponibles. Crea una en Categorías del panel de administración.</small>}
                         </div>
 
                         {
@@ -350,6 +357,20 @@ export function AdminProductForm(){
                     </div>
                 </div>
             </form>
+
+            <div className="mb-4">
+                {
+                    esEdicion
+                    ? <ProductoImagenesAdmin
+                        idProducto={idProducto}
+                        imagenes={formulario.imagenes ?? []}
+                        onSincronizar={(imagenes)=>setFormulario((prev)=>({ ...prev, imagenes }))}/>
+                    : <p className="text-secondary mb-0">
+                        <i className="bi bi-info-circle me-1"></i>
+                        Guarda el producto para poder subirle imágenes.
+                    </p>
+                }
+            </div>
 
             <div className="mb-3">
                 <AlertMessage type={mensajeAlerta?.type} message={mensajeAlerta?.message} onClose={()=>setMensajeAlerta(null)}/>

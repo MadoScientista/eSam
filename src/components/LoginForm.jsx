@@ -1,5 +1,5 @@
 import { useState } from "react"
-import { useNavigate } from "react-router-dom"
+import { Link, useLocation, useNavigate } from "react-router-dom"
 import { useAuth, tieneRol } from "../context/authContext"
 import { AlertMessage } from "./AlertMessage"
 
@@ -7,12 +7,23 @@ export function LoginForm(){
 
     const { login } = useAuth()
     const navigate = useNavigate()
+    const location = useLocation()
 
     const [ formulario, setFormulario ] = useState({
         email: "",
         password: ""
     })
-    const [mensajeAlerta, setMensajeAlerta] = useState(null)
+
+    // Si el backend rechazó el token, RequireAuth rebotó acá y borró la sesión.
+    // Sin esto el usuario solo veía un parpadeo y ningún motivo.
+    const [mensajeAlerta, setMensajeAlerta] = useState(
+        location.state?.sesionCerrada === "rechazada"
+            ? {
+                type: "danger",
+                message: "El servidor rechazó tu sesión y se cerró. Vuelve a iniciar sesión."
+            }
+            : null
+    )
     const [cargando, setCargando] = useState(false)
 
     const handleChange = (e)=>{
@@ -83,6 +94,14 @@ export function LoginForm(){
                         onChange={handleChange}/>
                 </div>
                 <button type="submit" className="btn btn-dark" disabled={cargando}>Entrar</button>
+
+                {/* RequireAuth rebota a /login cuando no hay sesión, así que el
+                    login es la puerta de entrada habitual al registro. */}
+                <p className="text-center mt-3 mb-0">
+                    ¿No tienes cuenta?{" "}
+                    <Link to="/registro">Regístrate</Link>
+                </p>
+
                 <div className="mt-3">
                     <AlertMessage type={mensajeAlerta?.type} message={mensajeAlerta?.message} onClose={()=>setMensajeAlerta(null)}/>
                 </div>

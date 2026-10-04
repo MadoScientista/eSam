@@ -20,6 +20,14 @@ const ADMIN_MENU_ITEMS = [
             { label: "Nuevo usuario", path: "/admin/usuarios/nuevo" },
         ],
     },
+    {
+        label: "Categorías",
+        path: "/admin/categorias",
+        children: [
+            { label: "Todas", path: "/admin/categorias" },
+            { label: "Nueva categoría", path: "/admin/categorias/nuevo" },
+        ],
+    },
 ];
 
 function SubMenu({ item }) {
