@@ -20,12 +20,12 @@ export function CartProvider({children}){
     const addProduct = (p, n = 1) =>{
         setCart((currentCart)=>{
             const productFound = currentCart.find((item)=>{
-                return item.product.sku == p.sku
+                return item.product.idProducto == p.idProducto
             })
 
             if(productFound){
               return currentCart.map((item)=>{
-                return item.product.sku == p.sku ? {...item, units: item.units + n}: item
+                return item.product.idProducto == p.idProducto ? {...item, units: item.units + n}: item
               })  
             }
             
@@ -38,20 +38,20 @@ export function CartProvider({children}){
     }
 
     // Aumentar cantidad
-    const increaseUnits = (sku) => {
+    const increaseUnits = (idProducto) => {
         setCart((currentCart) => {
             return currentCart.map((item)=>{
-                return item.product.sku == sku? {...item, units: item.units + 1}:item
+                return item.product.idProducto == idProducto? {...item, units: item.units + 1}:item
             })
         })
     }
 
     // Disminuir cantidad hasta un mínimo de 1
     // Para llegar a 0 se debe eliminar el producto
-    const decreaseUnits = (sku) =>{
+    const decreaseUnits = (idProducto) =>{
         setCart((currentCart) => {
             return currentCart.map((item) => {
-                if(item.product.sku === sku && item.units > 1){
+                if(item.product.idProducto === idProducto && item.units > 1){
                     return {...item, units: item.units - 1}
                 }else{
                     return item
@@ -61,10 +61,10 @@ export function CartProvider({children}){
     }
 
     // Eliminar producto
-    const removeProduct = (sku) => {
+    const removeProduct = (idProducto) => {
         setCart((currentCart) => {
             return currentCart.filter((item) => {
-                return item.product.sku != sku
+                return item.product.idProducto != idProducto
             })
         })
     }

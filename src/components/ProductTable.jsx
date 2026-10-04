@@ -1,5 +1,3 @@
-
-
 import { formatearPrecio } from "../utils/moneda"
 
 
@@ -10,6 +8,7 @@ export function ProductTable({products, handleClick}){
                 <thead>
                     <tr>
                         <th scope="col">ID</th>
+                        <th scope="col">SKU</th>
                         <th scope="col">Nombre</th>
                         <th scope="col">Precio</th>
                         <th scope="col">Stock</th>
@@ -19,15 +18,17 @@ export function ProductTable({products, handleClick}){
                 <tbody>
                     {products.map(p => {
                         return (
-                            <tr key={p.sku} style={{cursor:"pointer"}}>
+                            <tr key={p.idProducto} style={{cursor:"pointer"}}>
+                                <td>{p.idProducto}</td>
                                 <td>{p.sku}</td>
                                 <td>{p.nombre}</td>
                                 <td>{formatearPrecio(p.precio)}</td>
                                 <td>{p.stock}</td>
                                 <td>
-                                    <button 
+                                    <button
                                         className="btn btn-dark"
-                                        onClick={() => {handleClick(p.sku)}}
+                                        onClick={() => {handleClick(p.idProducto)}}
+                                        aria-label={`Editar ${p.nombre}`}
                                     >
                                         <i className="bi bi-pencil-square"></i>
                                     </button>
@@ -38,5 +39,5 @@ export function ProductTable({products, handleClick}){
                 </tbody>
             </table>
         </div>
-    ) 
+    )
 }

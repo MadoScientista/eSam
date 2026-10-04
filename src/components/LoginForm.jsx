@@ -1,6 +1,6 @@
 import { useState } from "react"
 import { useNavigate } from "react-router-dom"
-import { useAuth } from "../context/authContext"
+import { useAuth, tieneRol } from "../context/authContext"
 import { AlertMessage } from "./AlertMessage"
 
 export function LoginForm(){
@@ -38,14 +38,18 @@ export function LoginForm(){
             const res = await login(formulario.email, formulario.password)
 
             if(res.ok){
-                const esAdmin = res.usuario?.rol?.nombre === "admin"
-                navigate(esAdmin ? "/admin" : "/usuario")
+                navigate(tieneRol(res.usuario, "admin") ? "/admin" : "/usuario")
             }else{
                 setMensajeAlerta({type: "danger", message: "Correo o contraseña incorrectos."})
             }
         } catch(error) {
             console.error("Error al iniciar sesión", error)
-            setMensajeAlerta({type: "danger", message: "No se pudo iniciar sesión."})
+
+            const mensaje = error?.status === 401
+                ? "Correo o contraseña incorrectos."
+                : error?.message || "No se pudo iniciar sesión."
+
+            setMensajeAlerta({type: "danger", message: mensaje})
         } finally {
             setCargando(false)
         }
@@ -72,8 +76,8 @@ export function LoginForm(){
                         type="password"
                         className="form-control border-black"
                         name="password"
-                        minLength={4}   // Longitud mínima 4 caracteres
-                        maxLength={10}  // Longitud máxima 10 caracteres
+                        minLength={8}   // El DTO exige entre 8 y 72 caracteres
+                        maxLength={72}
                         required        // Contraseña requerida
                         value={formulario.password}
                         onChange={handleChange}/>

@@ -42,12 +42,12 @@ export function Cart(){
                     <div className="col border-end me-5">
                         {cart.map((item)=>{
                             return (
-                                <div className="row" key={item.product.sku}>
+                                <div className="row" key={item.product.idProducto}>
                                     <ProductCardH 
                                         item={item}
-                                        handleClickPlus={()=>{increaseUnits(item.product.sku)}}
-                                        handleClicklMinus={()=>{decreaseUnits(item.product.sku)}}
-                                        handleTrash={()=>{removeProduct(item.product.sku)}}
+                                        handleClickPlus={()=>{increaseUnits(item.product.idProducto)}}
+                                        handleClicklMinus={()=>{decreaseUnits(item.product.idProducto)}}
+                                        handleTrash={()=>{removeProduct(item.product.idProducto)}}
                                     />
                                 </div>)
                         })}
@@ -58,7 +58,7 @@ export function Cart(){
                         <p>Productos en el carro: {nProducts}</p>
                         {
                             cart.map((item)=>{
-                                return <p key={item.product.sku}>
+                                return <p key={item.product.idProducto}>
                                             {item.units} x {item.product.nombre}
                                         </p>
                             })

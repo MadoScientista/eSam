@@ -64,11 +64,14 @@ export function useUsuarioForm({ idUsuario, esAdmin = false }) {
             try{
                 const data = await obtenerUsuarioId(idUsuario)
 
+                const idRegion = data.region?.idRegion ?? data.comuna?.idRegion ?? null
+                const idRolUsuario = data.rolDetalle?.idRolUsuario ?? data.rol?.idRolUsuario ?? null
+
                 setFormulario({
                     nombres: data.nombres || "",
                     aPaterno: data.aPaterno || "",
                     aMaterno: data.aMaterno || "",
-                    rut: `${data.rut}${data.dv}`,
+                    rut: data.rut != null ? `${data.rut}${data.dv ?? ""}` : "",
                     correo: data.correo || "",
                     correoConfirm: data.correo || "",
                     password: "",
@@ -76,12 +79,12 @@ export function useUsuarioForm({ idUsuario, esAdmin = false }) {
                     telefono: data.telefono != null ? String(data.telefono) : "",
                     fechaNacimiento: data.fechaNacimiento || "",
                     direccion: data.direccion || "",
-                    idRegion: data.region?.idRegion != null ? String(data.region.idRegion) : "",
+                    idRegion: idRegion != null ? String(idRegion) : "",
                     idComuna: data.comuna?.idComuna != null ? String(data.comuna.idComuna) : "",
-                    idRolUsuario: data.rol?.idRolUsuario != null ? String(data.rol.idRolUsuario) : ""
+                    idRolUsuario: idRolUsuario != null ? String(idRolUsuario) : ""
                 })
 
-                const region = regionesComunas.find((r) => r.idRegion == data.region?.idRegion)
+                const region = regionesComunas.find((r) => r.idRegion == idRegion)
                 setComunas(region ? region.comunas : [])
             }catch(error){
                 console.error("Error al cargar usuario", error)
@@ -154,6 +157,11 @@ export function useUsuarioForm({ idUsuario, esAdmin = false }) {
         }
 
         // Correo
+        if(!formulario.correo.trim()){
+            setMensajeAlerta({type: "danger", message: "El correo es obligatorio."})
+            return null
+        }
+
         if(!dominiosPermitidos.includes(formulario.correo.split("@")[1])){
             setMensajeAlerta({type: "danger", message: "Solo se permiten correos @duoc.cl, @profesor.duoc.cl y @gmail.com."})
             return null
@@ -164,20 +172,29 @@ export function useUsuarioForm({ idUsuario, esAdmin = false }) {
             return null
         }
 
-        // Contraseña
+        // Contraseña. El DTO la marca como obligatoria siempre y el servicio
+        // reemplaza la contraseña por la recibida, también al editar el perfil.
+        if(!formulario.password){
+            setMensajeAlerta({type: "danger", message: "La contraseña es obligatoria."})
+            return null
+        }
+
+        if(formulario.password.length < 8 || formulario.password.length > 72){
+            setMensajeAlerta({type: "danger", message: "La contraseña debe tener entre 8 y 72 caracteres."})
+            return null
+        }
+
         if(formulario.password !== formulario.passwordConfirm){
             setMensajeAlerta({type: "danger", message: "Las contraseñas no coinciden."})
             return null
         }
 
         // Teléfono
-        if(formulario.telefono){
-            if(!/^\d{8,9}$/.test(formulario.telefono)){
+        if(formulario.telefono && !/^\+?\d{8,9}$/.test(formulario.telefono.trim())){
             setMensajeAlerta({type: "danger", message: "El teléfono no es válido."})
             return null
-            }
         }
-        
+
 
         // Dirección
         if(!formulario.direccion.trim()){
@@ -207,36 +224,33 @@ export function useUsuarioForm({ idUsuario, esAdmin = false }) {
             return null
         }
 
-        // Rol cliente por defecto (registro público)
-        const rolCliente = roles.find((r) => r.nombre === "cliente")
-
-        if(!esAdmin && !esEdicion && !rolCliente){
-            setMensajeAlerta({type: "danger", message: "No se pudo determinar el rol de cliente."})
-            return null
-        }
-
         const {rut, dv} = descomponerRut(rutLimpio)
+        const correo = formulario.correo.trim()
 
+        // UsuarioDTORequest exige nombre, apellido y email por validación, y el
+        // servicio persiste nombres, aPaterno, aMaterno y correo.
         const payload = {
-            nombres: formulario.nombres,
-            aPaterno: formulario.aPaterno,
-            aMaterno: formulario.aMaterno,
+            nombre: formulario.nombres.trim(),
+            apellido: formulario.aPaterno.trim(),
+            email: correo,
+            nombres: formulario.nombres.trim(),
+            aPaterno: formulario.aPaterno.trim(),
+            aMaterno: formulario.aMaterno.trim(),
             rut,
             dv,
             fechaNacimiento: formulario.fechaNacimiento || null,
-            direccion: formulario.direccion,
-            correo: formulario.correo,
-            telefono: formulario.telefono ? Number(formulario.telefono) : null,
-            nombreUsuario: formulario.correo,
-            idRolUsuario: esAdmin ? Number(formulario.idRolUsuario) : esEdicion ? Number(formulario.idRolUsuario) : rolCliente.idRolUsuario,
+            direccion: formulario.direccion.trim(),
+            correo,
+            telefono: formulario.telefono ? formulario.telefono.trim() : null,
+            password: formulario.password,
             idRegion: Number(formulario.idRegion),
             idComuna: Number(formulario.idComuna)
         }
 
-        if(!esEdicion){
-            payload.password = formulario.password
-        }else if(formulario.password !== ""){
-            payload.password = formulario.password
+        // El registro público no permite elegir rol y el servicio tampoco lo
+        // cambia al actualizar el perfil, así que sólo admin lo envía.
+        if(esAdmin){
+            payload.idRolUsuario = Number(formulario.idRolUsuario)
         }
 
         return payload

@@ -1,17 +1,20 @@
 import { useEffect, useState } from "react"
 import { useParams, useNavigate } from "react-router-dom"
-import { obtenerProductoSku, crearProductoSku, actualizarProductoSku, eliminarProducto } from "../../services/productoService"
+import { obtenerProductoPorId, crearProducto, actualizarProducto, eliminarProducto } from "../../services/productoService"
 import { obtenerMarcas } from "../../services/marcaService"
+import { obtenerCategorias } from "../../services/categoriaService"
 import { ConfirmModal } from "../../components/ConfirmModal"
 import { AlertMessage } from "../../components/AlertMessage"
 import { formatearPrecio } from "../../utils/moneda"
+import { imagenPrincipalProducto } from "../../utils/producto"
 
 export function AdminProductForm(){
-    
-    const {sku} = useParams()
+
+    const { idProducto } = useParams()
     const navigate = useNavigate()
     const [formulario, setFormulario] = useState({})
-    
+    const [categorias, setCategorias] = useState([])
+
     // Esstados para modales de confirmación y alertas
     const [mostrarConfirmacion, setMostrarConfirmacion] = useState(false)
     const [eliminado, setEliminado] = useState(false)
@@ -22,17 +25,19 @@ export function AdminProductForm(){
     const [mensajeFormulario, setMensajeFormulario] = useState("")
     const [marcas, setMarcas] = useState([])
 
-    // Al cambiar de ruta (sku) se limpia el formulario (patrón oficial de React:
+    // Al cambiar de ruta (idProducto) se limpia el formulario (patrón oficial de React:
     // ajustar estado durante el render cuando un prop cambia)
-    const [prevSku, setPrevSku] = useState(sku)
-    if (sku !== prevSku) {
-        setPrevSku(sku)
+    const [prevIdProducto, setPrevIdProducto] = useState(idProducto)
+    if (idProducto !== prevIdProducto) {
+        setPrevIdProducto(idProducto)
         setFormulario({})
     }
 
-    // Cargar marcas al montar
+    const esEdicion = Boolean(idProducto)
+
+    // Cargar marcas y categorías al montar. Las categorías requieren token.
     useEffect(()=>{
-        const cargarMarcas = async () =>{
+        const cargarMarcas = async ()=>{
             try{
                 const data = await obtenerMarcas()
                 setMarcas(data)
@@ -41,24 +46,43 @@ export function AdminProductForm(){
             }
         }
         cargarMarcas()
+
+        const cargarCategorias = async ()=>{
+            try{
+                const data = await obtenerCategorias()
+                setCategorias(data)
+            }catch(error){
+                console.error("Error al cargar categorías", error)
+            }
+        }
+        cargarCategorias()
     },[])
 
-    // En caso de existir un sku en la ruta
+    // En caso de existir un idProducto en la ruta
     // carga los datos en el formulario (espera a que marcas estén cargadas)
     useEffect(()=>{
-        if(sku && marcas.length > 0){
-            const cargarProducto = async () =>{
+        if(idProducto && marcas.length > 0){
+            const cargarProducto = async ()=>{
                 try{
-                    const data = await obtenerProductoSku(sku)
-                    const marcaEncontrada = marcas.find(m => m.nombre === data.marca)
-                    setFormulario({ ...data, idMarca: marcaEncontrada?.idMarca || "" })
+                    const data = await obtenerProductoPorId(idProducto)
+
+                    setFormulario({
+                        sku: data.sku ?? "",
+                        nombre: data.nombre ?? "",
+                        descripcion: data.descripcion ?? "",
+                        precio: data.precio ?? "",
+                        stock: data.stock ?? "",
+                        idMarca: data.idMarca ?? "",
+                        idCategorias: data.categorias?.map(c => c.idCategoria) ?? data.idCategorias ?? []
+                    })
                 }catch(error){
                     console.error("Error al cargar producto", error)
+                    setMensajeAlerta({type: "danger", message: error?.message || "No se pudo cargar el producto."})
                 }
             }
             cargarProducto()
         }
-    },[sku, marcas])
+    },[idProducto, marcas])
 
     // Guarda los cambios en los inputs
     const handleChange = (e) => {
@@ -72,16 +96,43 @@ export function AdminProductForm(){
         )
     }
 
+    const handleChangeCategorias = (e) => {
+        const { selectedOptions } = e.target
+        const seleccion = Array.from(selectedOptions).map(o => Number(o.value))
+
+        setFormulario((prev) => ({ ...prev, idCategorias: seleccion }))
+    }
+
+    // El DTO sólo acepta estos campos; el resto de la respuesta no se envía.
+    const construirPayload = () => {
+        const payload = {
+            sku: (formulario.sku ?? "").trim(),
+            nombre: (formulario.nombre ?? "").trim(),
+            descripcion: (formulario.descripcion ?? "").trim(),
+            precio: Number(formulario.precio),
+            stock: Number(formulario.stock),
+            idMarca: Number(formulario.idMarca),
+            idCategorias: (formulario.idCategorias ?? []).map(Number)
+        }
+
+        return payload
+    }
+
     // Muestra modal de confirmación
-    // La acción de actualizar o crear depende del sku en la ruta
+    // La acción de actualizar o crear depende del idProducto en la ruta
     const handleSubmit = (e) => {
         e.preventDefault()
 
-        const camposRequeridos = ["nombre", "descripcion", "precio", "stock", "idMarca", "img"]
+        const camposRequeridos = ["sku", "nombre", "descripcion", "precio", "stock", "idMarca"]
         const camposFaltantes = camposRequeridos.filter(campo => !formulario[campo])
 
         if(camposFaltantes.length > 0){
             setMensajeFormulario("Todos los campos son obligatorios.")
+            return
+        }
+
+        if((formulario.idCategorias ?? []).length === 0){
+            setMensajeFormulario("Debes seleccionar al menos una categoría.")
             return
         }
 
@@ -99,7 +150,7 @@ export function AdminProductForm(){
         }
 
         setMensajeFormulario("")
-        setAccion(sku ? "actualizar" : "crear")
+        setAccion(esEdicion ? "actualizar" : "crear")
         setMostrarConfirmacion(true)
     }
 
@@ -114,13 +165,13 @@ export function AdminProductForm(){
         setCargando(true)
         try{
             if(accion === "crear"){
-                await crearProductoSku(formulario)
+                await crearProducto(construirPayload())
                 setMensajeAlerta({type: "success", message: "Producto creado correctamente."})
             }else if(accion === "actualizar"){
-                await actualizarProductoSku(sku, formulario)
-                setMensajeAlerta({type: "success", message: `Producto ${sku} actualizado correctamente.`})
+                await actualizarProducto(idProducto, construirPayload())
+                setMensajeAlerta({type: "success", message: `Producto ${idProducto} actualizado correctamente.`})
             }else if(accion === "eliminar"){
-                await eliminarProducto(sku)
+                await eliminarProducto(idProducto)
                 setEliminado(true)
                 setMostrarConfirmacion(true)
                 return
@@ -130,7 +181,9 @@ export function AdminProductForm(){
             console.error("Error al guardar producto", error)
             setMensajeAlerta({
                 type: "danger",
-                message: accion === "eliminar" ? "No se pudo eliminar el producto." : "No se pudo guardar el producto."
+                message: accion === "eliminar"
+                    ? error?.message || "No se pudo eliminar el producto."
+                    : error?.message || "No se pudo guardar el producto."
             })
             setMostrarConfirmacion(false)
         }finally{
@@ -145,50 +198,67 @@ export function AdminProductForm(){
         }
     }
 
+    const imagen = imagenPrincipalProducto({ imagenes: formulario.imagenes })
+
     return(
         <>
         <div className="container">
-            {sku ?
-                <h2 className="mb-4">Detalle producto sku: {sku}</h2>:
-                <h2 className="mb-4">Nuevo Producto</h2>
+            {
+                esEdicion
+                ? <h2 className="mb-4">Detalle producto id: {idProducto}</h2>
+                : <h2 className="mb-4">Nuevo Producto</h2>
             }
 
             <form onSubmit={handleSubmit}>
                 <div className="row mb-4">
                     <div className="col border me-5" style={{maxWidth:'35rem', padding:'2rem'}}>
-                        {!formulario.img=="" ?
-                            <img
-                                src={formulario.img}
-                                alt=""
+                        {
+                            imagen
+                            ? <img
+                                src={imagen}
+                                alt={formulario.nombre ?? ""}
                                 className="figure-img img-fluid rounded"
                                 style={{maxWidth:'30rem', padding:'2rem'}}
-                            />:
-                            <i className="bi bi-image"></i>
+                            />
+                            : <i className="bi bi-image fs-1 text-secondary"></i>
                         }
                     </div>
 
                     <div className="col" style={{maxWidth:'30rem'}}>
                         <div className="mb-3">
+                            <label htmlFor="sku" className="form-label fw-bold">SKU</label>
+                            <input
+                                type="text"
+                                className="form-control border-black"
+                                name="sku"
+                                maxLength={50}
+                                placeholder="CUAD-001"
+                                value={formulario.sku ?? ""}
+                                onChange={handleChange}
+                                required/>
+                        </div>
+
+                        <div className="mb-3">
                             <label htmlFor="nombre" className="form-label fw-bold">Nombre</label>
-                            <input 
-                                type="text" 
-                                className="form-control border-black" 
+                            <input
+                                type="text"
+                                className="form-control border-black"
                                 name="nombre"
                                 maxLength={100}
                                 placeholder="Nombre producto"
-                                value={formulario.nombre || ""}
+                                value={formulario.nombre ?? ""}
                                 onChange={handleChange}
                                 required/>
                         </div>
 
                         <div className="mb-3">
                             <label htmlFor="descripcion" className="form-label fw-bold">Descripción</label>
-                            <textarea 
+                            <textarea
                                 className="form-control border-black"
-                                name="descripcion" 
+                                name="descripcion"
                                 rows="3"
                                 placeholder="Descripción de producto"
-                                value={formulario.descripcion || ""}
+                                value={formulario.descripcion ?? ""}
                                 onChange={handleChange}
                                 required>
                             </textarea>
@@ -197,42 +267,44 @@ export function AdminProductForm(){
                         <div className="mb-3">
                             <label htmlFor="precio" className="form-label fw-bold">Precio</label>
                             <div className="w-50">
-                                <input 
-                                    type="text" 
-                                    className="form-control border-black" 
+                                <input
+                                    type="text"
+                                    className="form-control border-black"
                                     name="precio"
                                     maxLength={10}
                                     placeholder="1000"
-                                    value={formulario.precio || ""}
+                                    value={formulario.precio ?? ""}
                                     onChange={handleChange}
                                     required/>
                             </div>
-                            {formulario.precio && <small className="text-secondary">{formatearPrecio(formulario.precio)}</small>}
+                            {formulario.precio ? <small className="text-secondary">{formatearPrecio(formulario.precio)}</small> : null}
                         </div>
 
                         <div className="mb-3">
                             <label htmlFor="stock" className="form-label fw-bold">Stock</label>
                             <div className="w-50">
-                                <input 
-                                    type="text" 
+                                <input
+                                    type="text"
                                     className="form-control border-black"
                                     name="stock"
                                     maxLength={10}
                                     placeholder="10"
-                                    value={formulario.stock || ""}
+                                    value={formulario.stock ?? ""}
                                     onChange={handleChange}
                                     required/>
                             </div>
-                            {formulario.stock && <small className="text-secondary">Quedan: {formulario.stock}</small>}
+                            {formulario.stock !== "" && formulario.stock != null
+                                ? <small className="text-secondary">Quedan: {formulario.stock}</small>
+                                : null}
                         </div>
 
                         <div className="mb-3">
                             <label htmlFor="idMarca" className="form-label fw-bold">Marca</label>
                             <div className="w-50">
-                                <select 
+                                <select
                                     className="form-select border-black"
                                     name="idMarca"
-                                    value={formulario.idMarca || ""}
+                                    value={formulario.idMarca ?? ""}
                                     onChange={handleChange}
                                     required>
                                     <option value="">Seleccionar marca</option>
@@ -245,29 +317,36 @@ export function AdminProductForm(){
                             </div>
                         </div>
 
-                        <div className="mb-3 mt-3">
-                            <label htmlFor="img" className="form-label fw-bold">Ruta imagen</label>
-                            <input 
-                                type="text" 
-                                className="form-control border-black" 
-                                name="img"
-                                placeholder="https://imagen.com"
-                                value={formulario.img || ""}
-                                onChange={handleChange}
-                                required/>
+                        <div className="mb-3">
+                            <label htmlFor="idCategorias" className="form-label fw-bold">Categorías</label>
+                            <select
+                                multiple
+                                className="form-select border-black"
+                                name="idCategorias"
+                                value={(formulario.idCategorias ?? []).map(String)}
+                                onChange={handleChangeCategorias}
+                                style={{ minHeight: "8rem" }}
+                                required>
+                                {categorias.map(categoria => (
+                                    <option key={categoria.idCategoria} value={categoria.idCategoria}>
+                                        {categoria.nombre}
+                                    </option>
+                                ))}
+                            </select>
+                            <small className="text-secondary">Mantén Ctrl para seleccionar varias.</small>
                         </div>
 
                         {
                             /* Mensaje de validación de campos */
                             mensajeFormulario != "" && <p className="text-danger">{mensajeFormulario}</p>
                         }
-                        
+
                         <div className="mt-4">
                             <button type="submit" className="btn btn-dark me-3">Guardar</button>
-                            
-                            {sku && <button type="button" className="btn btn-danger" onClick={handleEliminar}>Eliminar</button>}
+
+                            {esEdicion && <button type="button" className="btn btn-danger" onClick={handleEliminar}>Eliminar</button>}
                         </div>
-                        
+
                     </div>
                 </div>
             </form>
@@ -286,10 +365,10 @@ export function AdminProductForm(){
                         accion === "actualizar" ? "Actualizar producto" : "Eliminar producto"
                     }
                     message={
-                        eliminado ? `El producto ${sku} fue eliminado.` :
+                        eliminado ? `El producto ${idProducto} fue eliminado.` :
                         accion === "crear" ? "¿Estás seguro de guardar el nuevo producto?" :
-                        accion === "actualizar" ? `¿Estás seguro de actualizar el producto ${sku}?` :
-                        `¿Estás seguro de eliminar el producto ${sku}?`
+                        accion === "actualizar" ? `¿Estás seguro de actualizar el producto ${idProducto}?` :
+                        `¿Estás seguro de eliminar el producto ${idProducto}?`
                     }
                     confirmText={
                         accion === "crear" || accion === "actualizar" ? "Guardar" : "Eliminar"

@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react"
 import {obtenerProductos} from "../../services/productoService"
 import { ProductTable } from "../../components/ProductTable"
+import { AlertMessage } from "../../components/AlertMessage"
 import { useNavigate } from "react-router-dom"
 
 
@@ -9,6 +10,7 @@ export function AdminControlProduct(){
     const navigate = useNavigate()
     const [products, setProducts] = useState([])
     const [busqueda, setBusqueda] = useState("")
+    const [mensajeAlerta, setMensajeAlerta] = useState(null)
 
     useEffect(() => {
         const cargarProductos = async () =>{
@@ -17,19 +19,21 @@ export function AdminControlProduct(){
                 setProducts(data)
             }catch(error){
                 console.error("Error al cargar productos", error)
+                setMensajeAlerta({ type: "danger", message: error?.message || "No se pudieron cargar los productos." })
             }
         }
 
         cargarProductos()
     }, [])
         
-    const handleClick = (sku) =>{
-        navigate(`${sku}`)
+    const handleClick = (idProducto) =>{
+        navigate(`${idProducto}`)
     }
 
     const productosFiltrados = products.filter(p =>
         p.nombre.toLowerCase().includes(busqueda.toLowerCase()) ||
-        p.sku.toString().toLowerCase().includes(busqueda.toLowerCase())
+        String(p.sku).toLowerCase().includes(busqueda.toLowerCase()) ||
+        String(p.idProducto).includes(busqueda)
     )
 
     return(
@@ -53,6 +57,7 @@ export function AdminControlProduct(){
                     Nuevo producto
                 </button>
             </div>
+            <AlertMessage type={mensajeAlerta?.type} message={mensajeAlerta?.message} onClose={() => setMensajeAlerta(null)} />
             <ProductTable products={productosFiltrados} handleClick={handleClick}/>
         </>
     )

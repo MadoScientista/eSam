@@ -23,10 +23,10 @@ export function ProductCarousel({ products }) {
         <div className="position-relative">
             <div className="product-carousel d-flex gap-3" ref={scrollRef}>
                 {products.map((p) => (
-                    <div className="product-carousel-item d-flex flex-shrink-0 pt-2" key={p.sku}>
+                    <div className="product-carousel-item d-flex flex-shrink-0 pt-2" key={p.idProducto}>
                         <ProductCard
                             product={p}
-                            handleClick={() => navigate(`/detalleProducto/${p.sku}`)}
+                            handleClick={() => navigate(`/detalleProducto/${p.idProducto}`)}
                         />
                     </div>
                 ))}

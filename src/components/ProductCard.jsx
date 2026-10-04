@@ -1,6 +1,7 @@
 import { useState } from "react"
 import { createPortal } from "react-dom"
 import { formatearPrecio } from "../utils/moneda"
+import { imagenPrincipalProducto } from "../utils/producto"
 import { useCart } from "../context/cartContext"
 import { Toast } from "./Toast"
 
@@ -8,6 +9,8 @@ export function ProductCard({ product, handleClick }) {
 
     const { addProduct } = useCart()
     const [toastTrigger, setToastTrigger] = useState(0)
+
+    const imagen = imagenPrincipalProducto(product)
 
     const handleAddToCart = (e) => {
         e.stopPropagation()
@@ -18,7 +21,7 @@ export function ProductCard({ product, handleClick }) {
     return (
         <div
             className="card h-100 w-100 d-flex flex-column mb-4 p-3 card-hover"
-            id={product.sku}
+            id={product.idProducto}
             onClick={handleClick}
             style={{ cursor: "pointer" }}
         >
@@ -33,15 +36,19 @@ export function ProductCard({ product, handleClick }) {
                     position: "relative"
                 }}
             >
-                <img
-                    src={product.img}
-                    alt={product.nombre}
-                    style={{
-                        maxHeight: "100%",
-                        maxWidth: "100%",
-                        objectFit: "contain"
-                    }}
-                />
+                {
+                    imagen
+                    ? <img
+                        src={imagen}
+                        alt={product.nombre}
+                        style={{
+                            maxHeight: "100%",
+                            maxWidth: "100%",
+                            objectFit: "contain"
+                        }}
+                    />
+                    : <i className="bi bi-image fs-1 text-secondary"></i>
+                }
                 <button
                     type="button"
                     className="product-cart-btn"

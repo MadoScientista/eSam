@@ -10,14 +10,18 @@ import {
   AdminControlUser, AdminUserForm
 } from './pages'
 
-import { useAuth } from './context/authContext'
+import { useAuth, tieneRol } from './context/authContext'
 
 
 function RequireAuth({ children, rol }) {
-    const { usuario } = useAuth()
+    const { estaAutenticado, usuario } = useAuth()
     const location = useLocation()
 
-    if (!usuario || (rol && usuario.rol?.nombre !== rol)) {
+    if (!estaAutenticado) {
+        return <Navigate to="/login" replace state={{ from: location }} />
+    }
+
+    if (rol && !tieneRol(usuario, rol)) {
         return <Navigate to="/login" replace state={{ from: location }} />
     }
 
@@ -37,7 +41,7 @@ const router = createBrowserRouter([
         children:[
           {index: true, element:<AdminProfile/>},
           {path: "productos", element:<AdminControlProduct/>},
-          {path: "productos/:sku", element: <AdminProductForm/>},
+          {path: "productos/:idProducto", element: <AdminProductForm/>},
           {path: "productos/nuevo", element: <AdminProductForm/>},
           {path: "usuarios", element: <AdminControlUser/>},
           {path: "usuarios/:id", element: <AdminUserForm/>},
@@ -49,7 +53,7 @@ const router = createBrowserRouter([
       { path:"contacto",element:<Contact/> },
       { path:"carrito",element:<Cart/> },
       { path:"login",element:<Login/> },
-      { path:"detalleProducto/:sku",element:<ProductDetails/> },
+      { path:"detalleProducto/:idProducto",element:<ProductDetails/> },
       { path:"productos",element: <Products/> },
       { path:"registro",element:<Register/> },
       {

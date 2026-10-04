@@ -1,7 +1,7 @@
 import { useState } from "react"
 import { useParams, useNavigate } from "react-router-dom"
 import { AdminUsuarioForm } from "../../components/AdminUsuarioForm"
-import { crearUsuario, actualizarUsuario, eliminarUsuario } from "../../services/usuarioService"
+import { crearUsuarioAdmin, actualizarUsuario, eliminarUsuario } from "../../services/usuarioService"
 import { ConfirmModal } from "../../components/ConfirmModal"
 import { AlertMessage } from "../../components/AlertMessage"
 
@@ -41,7 +41,7 @@ export function AdminUserForm() {
         setCargando(true)
         try {
             if (accion === "crear") {
-                await crearUsuario(payload)
+                await crearUsuarioAdmin(payload)
                 setMensajeAlerta({ type: "success", message: "Usuario creado correctamente." })
             } else if (accion === "actualizar") {
                 await actualizarUsuario(id, payload)
@@ -57,7 +57,7 @@ export function AdminUserForm() {
             console.error("Error al guardar usuario", error)
             setMensajeAlerta({
                 type: "danger",
-                message: accion === "eliminar" ? "No se pudo eliminar el usuario." : "No se pudo guardar el usuario."
+                message: accion === "eliminar" ? error?.message || "No se pudo eliminar el usuario." : error?.message || "No se pudo guardar el usuario."
             })
             setMostrarConfirmacion(false)
         } finally {

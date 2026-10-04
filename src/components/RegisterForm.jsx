@@ -1,12 +1,14 @@
 import { useNavigate } from "react-router-dom"
 import { useUsuarioForm } from "../hooks/useUsuarioForm"
-import { crearUsuario, actualizarUsuario } from "../services/usuarioService"
+import { useAuth } from "../context/authContext"
+import { crearUsuario, crearUsuarioAdmin, actualizarUsuario, actualizarPerfil } from "../services/usuarioService"
 import { CamposUsuario } from "./CamposUsuario"
 import { AlertMessage } from "./AlertMessage"
 
-export function RegisterForm({ idUsuario }) {
+export function RegisterForm({ idUsuario, esAdmin = false }) {
 
     const navigate = useNavigate()
+    const { usuario, estaAutenticado } = useAuth()
 
     const {
         esEdicion,
@@ -19,7 +21,11 @@ export function RegisterForm({ idUsuario }) {
         handleChangeRut,
         construirPayload,
         limpiarFormulario
-    } = useUsuarioForm({ idUsuario })
+    } = useUsuarioForm({ idUsuario, esAdmin })
+
+    // El usuario autenticado se edita a través de /usuarios/perfil; el resto de
+    // usuarios sólo puede editarlos un admin mediante /usuarios/{id}.
+    const esPropio = Boolean(estaAutenticado && usuario?.id === idUsuario)
 
     const handleSubmit = async (e) => {
         e.preventDefault()
@@ -30,16 +36,24 @@ export function RegisterForm({ idUsuario }) {
 
         try {
             if (esEdicion) {
-                await actualizarUsuario(idUsuario, payload)
+                if (esPropio) {
+                    await actualizarPerfil(payload)
+                } else {
+                    await actualizarUsuario(idUsuario, payload)
+                }
                 setMensajeAlerta({ type: "success", message: "Usuario actualizado correctamente." })
             } else {
-                await crearUsuario(payload)
+                if (esAdmin) {
+                    await crearUsuarioAdmin(payload)
+                } else {
+                    await crearUsuario(payload)
+                }
                 limpiarFormulario()
                 navigate("/login")
             }
         } catch (error) {
             console.error("Error al guardar usuario", error)
-            setMensajeAlerta({ type: "danger", message: "No se pudo guardar el usuario." })
+            setMensajeAlerta({ type: "danger", message: error?.message || "No se pudo guardar el usuario." })
         }
     }
 

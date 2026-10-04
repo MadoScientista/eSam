@@ -1,3 +1,5 @@
+import { nombreRol } from "../context/authContext"
+
 export function UsersTable({ dataUser, handleClick }) {
     return (
         <div className="container" style={{ maxWidth: "70%" }}>
@@ -16,7 +18,7 @@ export function UsersTable({ dataUser, handleClick }) {
                     {dataUser.map((u) => (
                         <tr key={u.id} style={{ cursor: "pointer" }}>
                             <td>{u.id}</td>
-                            <td>{u.rol?.nombre || u.rol}</td>
+                            <td>{nombreRol(u)}</td>
                             <td>{u.nombres}</td>
                             <td>{u.aPaterno}</td>
                             <td>{u.correo}</td>

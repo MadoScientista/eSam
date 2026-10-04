@@ -1,7 +1,7 @@
 import { NavLink, useLocation } from "react-router-dom"
 import { useEffect } from "react"
 import { useCart } from "../../../context/cartContext"
-import { useAuth } from "../../../context/authContext"
+import { useAuth, tieneRol } from "../../../context/authContext"
 
 export function NavBar(){
 
@@ -67,7 +67,7 @@ export function NavBar(){
                         </>
                         :
                         <li className="nav-item">
-                            <NavLink className="nav-link" to={usuario.rol?.nombre === "admin" ? "/admin" : "/usuario"} title="Perfil">
+                            <NavLink className="nav-link" to={tieneRol(usuario, "admin") ? "/admin" : "/usuario"} title="Perfil">
                                 <i className="bi bi-person-circle"></i>
                             </NavLink>
                         </li>

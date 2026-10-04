@@ -1,11 +1,13 @@
 import { useEffect, useState } from "react"
 import { useNavigate } from "react-router-dom"
 import { UsersTable } from "../../components/UsersTable"
+import { AlertMessage } from "../../components/AlertMessage"
 import { obtenerUsuarios } from "../../services/usuarioService"
 
 export function AdminControlUser() {
     const navigate = useNavigate()
     const [users, setUsers] = useState([])
+    const [mensajeAlerta, setMensajeAlerta] = useState(null)
 
     useEffect(() => {
         const cargarUsuarios = async () => {
@@ -14,6 +16,7 @@ export function AdminControlUser() {
                 setUsers(data)
             } catch (error) {
                 console.error("Error al cargar usuarios", error)
+                setMensajeAlerta({ type: "danger", message: error?.message || "No se pudieron cargar los usuarios." })
             }
         }
 
@@ -35,6 +38,7 @@ export function AdminControlUser() {
                     Nuevo usuario
                 </button>
             </div>
+            <AlertMessage type={mensajeAlerta?.type} message={mensajeAlerta?.message} onClose={() => setMensajeAlerta(null)} />
             <UsersTable dataUser={users} handleClick={handleClick} />
         </>
     )

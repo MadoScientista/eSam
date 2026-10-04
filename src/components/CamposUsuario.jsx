@@ -70,7 +70,7 @@ export function CamposUsuario({ formulario, handleChange, handleChangeRut, esEdi
                         type="tel"
                         className="form-control border-black"
                         name="telefono"
-                        maxLength={9}
+                        maxLength={15}
                         value={formulario.telefono}
                         onChange={handleChange}/>
                 </div>
@@ -102,17 +102,18 @@ export function CamposUsuario({ formulario, handleChange, handleChangeRut, esEdi
 
             <div className="mb-3">
                 <label htmlFor="password" className="form-label">
-                    {esEdicion ? "Contraseña (dejar en blanco para mantener)*" : "Contraseña*"}
+                    Contraseña*
                 </label>
                 <input
                     type="password"
                     className="form-control border-black"
                     name="password"
-                    minLength={4}
-                    maxLength={20}
+                    minLength={8}
+                    maxLength={72}
                     value={formulario.password}
                     onChange={handleChange}
-                    required={!esEdicion}/>
+                    required/>
+                <small className="text-secondary">Entre 8 y 72 caracteres.</small>
             </div>
 
             <div className="mb-3">
@@ -121,11 +122,11 @@ export function CamposUsuario({ formulario, handleChange, handleChangeRut, esEdi
                     type="password"
                     className="form-control border-black"
                     name="passwordConfirm"
-                    minLength={4}
-                    maxLength={20}
+                    minLength={8}
+                    maxLength={72}
                     value={formulario.passwordConfirm}
                     onChange={handleChange}
-                    required={!esEdicion}/>
+                    required/>
             </div>
 
             <div className="row mb-3">

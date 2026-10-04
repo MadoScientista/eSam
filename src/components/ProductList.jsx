@@ -9,10 +9,10 @@ export function ProductList({ products, cols }) {
   const cards = []
   for (let i = 0; i < products.length; i++) {
     cards.push(
-      <div className="col d-flex" key={i}>
-        <ProductCard 
-          product={products[i]} 
-          handleClick={() => {navigate(`/detalleProducto/${products[i].sku}`)}}
+      <div className="col d-flex" key={products[i].idProducto}>
+        <ProductCard
+          product={products[i]}
+          handleClick={() => {navigate(`/detalleProducto/${products[i].idProducto}`)}}
         />
       </div>
     )
