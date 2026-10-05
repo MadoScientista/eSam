@@ -592,113 +592,113 @@ export function AdminProductForm(){
                             mensajeFormulario != "" && <p className="text-danger">{mensajeFormulario}</p>
                         }
 
-                        <div className="mt-4">
-                            <button type="submit" className="btn btn-dark me-3">Guardar</button>
-
-                            {esEdicion && <button type="button" className="btn btn-danger" onClick={handleEliminar}>Eliminar</button>}
-                        </div>
-
                     </div>
                 </div>
-            </form>
 
-            <div className="mb-4">
-                <div className="mb-3">
-                    <label className="form-label fw-bold">Imágenes</label>
-                    <input
-                        type="file"
-                        className="form-control border-black"
-                        accept="image/*"
-                        multiple
-                        onChange={manejarSeleccionImagenesLocales}
-                        disabled={cargando}
-                    />
-                    <small className="text-muted">
-                        Selecciona imágenes (sin subir). Elige la imagen de portada. Los cambios se aplican al guardar.
-                    </small>
+                <div className="mb-4">
+                    <div className="mb-3">
+                        <label className="form-label fw-bold">Imágenes</label>
+                        <input
+                            type="file"
+                            className="form-control border-black"
+                            accept="image/*"
+                            multiple
+                            onChange={manejarSeleccionImagenesLocales}
+                            disabled={cargando}
+                        />
+                        <small className="text-muted">
+                            Selecciona imágenes (sin subir). Elige la imagen de portada. Los cambios se aplican al guardar.
+                        </small>
 
-                    {esEdicion && imagenesExistentes.length > 0 && (
-                        <div className="mt-3">
-                            <h6 className="small text-muted mb-2">Imágenes existentes</h6>
-                            <div className="row g-2">
-                                {imagenesExistentes.map((img) => {
-                                    if (img.marcadaEliminar) return null
-                                    const esPortadaActual = portadaPendiente.tipo === 'existente'
-                                        ? (portadaPendiente.valor === img.idImagenProducto)
-                                        : (img.principal === true)
-                                    return (
-                                        <div key={img.idImagenProducto} className="col-6 col-md-3">
-                                            <div className="card h-100 border-secondary">
-                                                <img src={img.url} className="card-img-top" style={{ objectFit: 'cover', height: 120 }} />
-                                                <div className="card-body p-2">
-                                                    <div className="form-check">
-                                                        <input
-                                                            type="radio"
-                                                            name="portada"
-                                                            className="form-check-input"
-                                                            checked={esPortadaActual}
-                                                            onChange={() => establecerPortadaExistente(img.idImagenProducto)}
+                        {esEdicion && imagenesExistentes.length > 0 && (
+                            <div className="mt-3">
+                                <h6 className="small text-muted mb-2">Imágenes existentes</h6>
+                                <div className="row g-2">
+                                    {imagenesExistentes.map((img) => {
+                                        if (img.marcadaEliminar) return null
+                                        const esPortadaActual = portadaPendiente.tipo === 'existente'
+                                            ? (portadaPendiente.valor === img.idImagenProducto)
+                                            : (img.principal === true)
+                                        return (
+                                            <div key={img.idImagenProducto} className="col-6 col-md-3">
+                                                <div className="card h-100 border-secondary">
+                                                    <img src={img.url} className="card-img-top" style={{ objectFit: 'cover', height: 120 }} />
+                                                    <div className="card-body p-2">
+                                                        <div className="form-check">
+                                                            <input
+                                                                type="radio"
+                                                                name="portada"
+                                                                className="form-check-input"
+                                                                checked={esPortadaActual}
+                                                                onChange={() => establecerPortadaExistente(img.idImagenProducto)}
+                                                                disabled={cargando}
+                                                            />
+                                                            <label className="form-check-label small">Portada</label>
+                                                        </div>
+                                                        <button
+                                                            type="button"
+                                                            className="btn btn-sm btn-outline-danger w-100 mt-1"
+                                                            onClick={() => marcarEliminarExistente(img.idImagenProducto)}
                                                             disabled={cargando}
-                                                        />
-                                                        <label className="form-check-label small">Portada</label>
+                                                        >
+                                                            Eliminar
+                                                        </button>
                                                     </div>
-                                                    <button
-                                                        type="button"
-                                                        className="btn btn-sm btn-outline-danger w-100 mt-1"
-                                                        onClick={() => marcarEliminarExistente(img.idImagenProducto)}
-                                                        disabled={cargando}
-                                                    >
-                                                        Eliminar
-                                                    </button>
                                                 </div>
                                             </div>
-                                        </div>
-                                    )
-                                })}
+                                        )
+                                    })}
+                                </div>
                             </div>
-                        </div>
-                    )}
+                        )}
 
-                    {imagenesLocales.length > 0 && (
-                        <div className="mt-3">
-                            <h6 className="small text-muted mb-2">Imágenes nuevas (por subir al guardar)</h6>
-                            <div className="row g-2">
-                                {imagenesLocales.map((img, idx) => {
-                                    const esPortadaNueva = portadaPendiente.tipo === 'nueva' && portadaPendiente.valor === idx
-                                    return (
-                                        <div key={idx} className="col-6 col-md-3">
-                                            <div className="card h-100">
-                                                <img src={img.previewUrl} className="card-img-top" style={{ objectFit: 'cover', height: 120 }} />
-                                                <div className="card-body p-2">
-                                                    <div className="form-check">
-                                                        <input
-                                                            type="radio"
-                                                            name="portada"
-                                                            className="form-check-input"
-                                                            checked={esPortadaNueva}
-                                                            onChange={() => establecerPortadaNueva(idx)}
+                        {imagenesLocales.length > 0 && (
+                            <div className="mt-3">
+                                <h6 className="small text-muted mb-2">Imágenes nuevas (por subir al guardar)</h6>
+                                <div className="row g-2">
+                                    {imagenesLocales.map((img, idx) => {
+                                        const esPortadaNueva = portadaPendiente.tipo === 'nueva' && portadaPendiente.valor === idx
+                                        return (
+                                            <div key={idx} className="col-6 col-md-3">
+                                                <div className="card h-100">
+                                                    <img src={img.previewUrl} className="card-img-top" style={{ objectFit: 'cover', height: 120 }} />
+                                                    <div className="card-body p-2">
+                                                        <div className="form-check">
+                                                            <input
+                                                                type="radio"
+                                                                name="portada"
+                                                                className="form-check-input"
+                                                                checked={esPortadaNueva}
+                                                                onChange={() => establecerPortadaNueva(idx)}
+                                                                disabled={cargando}
+                                                            />
+                                                            <label className="form-check-label small">Portada</label>
+                                                        </div>
+                                                        <button
+                                                            type="button"
+                                                            className="btn btn-sm btn-outline-danger w-100 mt-1"
+                                                            onClick={() => eliminarImagenLocal(idx)}
                                                             disabled={cargando}
-                                                        />
-                                                        <label className="form-check-label small">Portada</label>
+                                                        >
+                                                            Quitar
+                                                        </button>
                                                     </div>
-                                                    <button
-                                                        type="button"
-                                                        className="btn btn-sm btn-outline-danger w-100 mt-1"
-                                                        onClick={() => eliminarImagenLocal(idx)}
-                                                        disabled={cargando}
-                                                    >
-                                                        Quitar
-                                                    </button>
                                                 </div>
                                             </div>
-                                        </div>
-                                    )
-                                })}
+                                        )
+                                    })}
+                                </div>
                             </div>
-                        </div>
-                    )}
+                        )}
+                    </div>
                 </div>
-            </div>
+
+                <div className="mt-4">
+                    <button type="submit" className="btn btn-dark me-3" disabled={cargando}>Guardar</button>
+
+                    {esEdicion && <button type="button" className="btn btn-danger" onClick={handleEliminar} disabled={cargando}>Eliminar</button>}
+                </div>
+            </form>
 
             <div className="mb-3">
                 <AlertMessage type={mensajeAlerta?.type} message={mensajeAlerta?.message} onClose={()=>setMensajeAlerta(null)}/>

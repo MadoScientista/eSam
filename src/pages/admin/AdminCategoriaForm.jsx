@@ -223,25 +223,25 @@ export function AdminCategoriaForm() {
 
                 {mensajeFormulario != "" && <p className="text-danger">{mensajeFormulario}</p>}
 
+                <div className="mt-4 mb-3">
+                    {
+                        esEdicion
+                        ? <CategoriaImagenAdmin
+                            idCategoria={idCategoria}
+                            imagenUrl={imagenUrl}
+                            onSincronizar={setImagenUrl}/>
+                        : <p className="text-secondary mb-0">
+                            <i className="bi bi-info-circle me-1"></i>
+                            Guarda la categoría para poder subirle su imagen de portada.
+                        </p>
+                    }
+                </div>
+
                 <div className="mt-4">
-                    <button type="submit" className="btn btn-dark me-3">Guardar</button>
-                    {esEdicion && <button type="button" className="btn btn-danger" onClick={handleEliminar}>Eliminar</button>}
+                    <button type="submit" className="btn btn-dark me-3" disabled={cargando}>Guardar</button>
+                    {esEdicion && <button type="button" className="btn btn-danger" onClick={handleEliminar} disabled={cargando}>Eliminar</button>}
                 </div>
             </form>
-
-            <div className="mt-4 mb-3">
-                {
-                    esEdicion
-                    ? <CategoriaImagenAdmin
-                        idCategoria={idCategoria}
-                        imagenUrl={imagenUrl}
-                        onSincronizar={setImagenUrl}/>
-                    : <p className="text-secondary mb-0">
-                        <i className="bi bi-info-circle me-1"></i>
-                        Guarda la categoría para poder subirle su imagen de portada.
-                    </p>
-                }
-            </div>
 
             <div className="mt-3 mb-3">
                 <AlertMessage type={mensajeAlerta?.type} message={mensajeAlerta?.message} onClose={() => setMensajeAlerta(null)} />
