@@ -50,3 +50,22 @@ export const eliminarCategoria = async (idCategoria) => {
 
     return response.data
 }
+
+// Subir o reemplazar la imagen de portada de una categoría.
+// El backend espera multipart/form-data con el campo "file" y acepta JPEG,
+// PNG y WebP de hasta 5 MB. La respuesta es el CategoriaDTO actualizado.
+export const subirImagenCategoria = async (idCategoria, archivo) => {
+    const formData = new FormData()
+    formData.append("file", archivo)
+
+    const response = await api.post(`/categorias/${idCategoria}/imagen`, formData)
+
+    return response.data
+}
+
+// Eliminar la imagen de portada de una categoría
+export const eliminarImagenCategoria = async (idCategoria) => {
+    const response = await api.delete(`/categorias/${idCategoria}/imagen`)
+
+    return response.data
+}

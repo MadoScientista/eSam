@@ -2,7 +2,9 @@ import { useEffect, useMemo, useState } from "react"
 import { useParams, useNavigate } from "react-router-dom"
 import { AlertMessage } from "../../components/AlertMessage"
 import { ConfirmModal } from "../../components/ConfirmModal"
+import { CategoriaImagenAdmin } from "../../components/CategoriaImagenAdmin"
 import { obtenerCategorias, crearCategoria, actualizarCategoria, eliminarCategoria } from "../../services/categoriaService"
+import { validarNombreCategoria } from "../../utils/categoria"
 
 export function AdminCategoriaForm() {
 
@@ -13,6 +15,7 @@ export function AdminCategoriaForm() {
 
     const [formulario, setFormulario] = useState({ nombre: "", idCategoriaPadre: "" })
     const [categorias, setCategorias] = useState([])
+    const [imagenUrl, setImagenUrl] = useState(null)
     const [mensajeFormulario, setMensajeFormulario] = useState("")
     const [mensajeAlerta, setMensajeAlerta] = useState(null)
     const [mostrarConfirmacion, setMostrarConfirmacion] = useState(false)
@@ -47,6 +50,7 @@ export function AdminCategoriaForm() {
             nombre: propia.nombre ?? "",
             idCategoriaPadre: propia.idCategoriaPadre != null ? String(propia.idCategoriaPadre) : ""
         })
+        setImagenUrl(propia.imagenUrl ?? null)
     }
 
     // Recorrido hacia abajo desde la categoría en edición, para que no pueda
@@ -87,9 +91,10 @@ export function AdminCategoriaForm() {
 
     const construirPayload = () => {
         const nombre = formulario.nombre.trim()
+        const errorNombre = validarNombreCategoria(nombre)
 
-        if (!nombre) {
-            setMensajeFormulario("El nombre es obligatorio.")
+        if (errorNombre) {
+            setMensajeFormulario(errorNombre)
             return null
         }
 
@@ -117,12 +122,37 @@ export function AdminCategoriaForm() {
         setMostrarConfirmacion(true)
     }
 
+    const mensajeError = (error, porDefecto) => {
+        const detalles = error?.errores
+            ?.map(({ campo, mensaje }) => `${campo}: ${mensaje}`)
+            .join(" ")
+
+        return detalles || error?.message || porDefecto
+    }
+
     const handleConfirmar = async () => {
         setCargando(true)
         try {
             if (accion === "crear") {
-                await crearCategoria(construirPayload())
+                const creado = await crearCategoria(construirPayload())
+
                 setMensajeAlerta({ type: "success", message: "Categoría creada correctamente." })
+                setMostrarConfirmacion(false)
+
+                // La imagen de portada solo puede cargarse sobre una categoría ya
+                // persistida, porque el endpoint es /categorias/{id}/imagen. Sin el
+                // id generado no hay forma de gestionarla desde el alta. La nueva
+                // categoría se agrega al listado para que el formulario de edición
+                // la encuentre al cambiar de ruta.
+                if (creado?.idCategoria != null) {
+                    setCategorias((prev) =>
+                        prev.some((c) => c.idCategoria === creado.idCategoria) ? prev : [...prev, creado]
+                    )
+
+                    navigate(`/admin/categorias/${creado.idCategoria}`, { replace: true })
+                }
+
+                return
             } else if (accion === "actualizar") {
                 await actualizarCategoria(idCategoria, construirPayload())
                 setMensajeAlerta({ type: "success", message: `Categoría ${idCategoria} actualizada correctamente.` })
@@ -138,8 +168,8 @@ export function AdminCategoriaForm() {
             setMensajeAlerta({
                 type: "danger",
                 message: accion === "eliminar"
-                    ? error?.message || "No se pudo eliminar la categoría."
-                    : error?.message || "No se pudo guardar la categoría."
+                    ? mensajeError(error, "No se pudo eliminar la categoría.")
+                    : mensajeError(error, "No se pudo guardar la categoría.")
             })
             setMostrarConfirmacion(false)
         } finally {
@@ -169,6 +199,7 @@ export function AdminCategoriaForm() {
                         placeholder="Cuadernos"
                         value={formulario.nombre}
                         onChange={handleChange}
+                        maxLength={100}
                         required
                         autoFocus/>
                 </div>
@@ -197,6 +228,20 @@ export function AdminCategoriaForm() {
                     {esEdicion && <button type="button" className="btn btn-danger" onClick={handleEliminar}>Eliminar</button>}
                 </div>
             </form>
+
+            <div className="mt-4 mb-3">
+                {
+                    esEdicion
+                    ? <CategoriaImagenAdmin
+                        idCategoria={idCategoria}
+                        imagenUrl={imagenUrl}
+                        onSincronizar={setImagenUrl}/>
+                    : <p className="text-secondary mb-0">
+                        <i className="bi bi-info-circle me-1"></i>
+                        Guarda la categoría para poder subirle su imagen de portada.
+                    </p>
+                }
+            </div>
 
             <div className="mt-3 mb-3">
                 <AlertMessage type={mensajeAlerta?.type} message={mensajeAlerta?.message} onClose={() => setMensajeAlerta(null)} />

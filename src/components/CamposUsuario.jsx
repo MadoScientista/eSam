@@ -136,7 +136,7 @@ export function CamposUsuario({ formulario, handleChange, handleChangeRut, esEdi
                         <option value="">-- Seleccione Región --</option>
                         {
                             regionesComunas.map((r) => (
-                                <option value={r.idRegion} key={r.idRegion}>{r.region}</option>
+                                <option value={r.idRegion} key={r.idRegion}>{r.nombre ?? r.region}</option>
                             ))
                         }
                     </select>

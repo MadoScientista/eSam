@@ -1,5 +1,33 @@
 // Ordena las categorías para que cada una quede debajo de su padre, de modo que
 // la jerarquía (idCategoriaPadre) sea legible y se puedan elegir sin ctrl.
+
+const TIPOS_IMAGEN_CATEGORIA = ["image/jpeg", "image/png", "image/webp"]
+const TAMANO_MAXIMO_IMAGEN_CATEGORIA = 5 * 1024 * 1024
+const NOMBRE_MAXIMO = 100
+
+export function validarImagenCategoria(archivo) {
+    if (!archivo) return "Selecciona una imagen."
+
+    if (!TIPOS_IMAGEN_CATEGORIA.includes(archivo.type)) {
+        return "La imagen debe ser JPEG, PNG o WebP."
+    }
+
+    if (archivo.size > TAMANO_MAXIMO_IMAGEN_CATEGORIA) {
+        return "La imagen no puede superar los 5 MB."
+    }
+
+    return null
+}
+
+export function validarNombreCategoria(nombre) {
+    if (!nombre || nombre.trim().length === 0) return "El nombre es obligatorio."
+
+    if (nombre.trim().length > NOMBRE_MAXIMO) {
+        return `El nombre admite hasta ${NOMBRE_MAXIMO} caracteres.`
+    }
+
+    return null
+}
 export function aplanarCategorias(categorias) {
     const hijos = new Map()
 

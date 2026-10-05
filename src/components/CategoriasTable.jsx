@@ -15,6 +15,7 @@ export function CategoriasTable({ categorias, todas = [], handleClick }){
                         <th scope="col">ID</th>
                         <th scope="col">Nombre</th>
                         <th scope="col">Categoría padre</th>
+                        <th scope="col">Imagen</th>
                         <th scope="col"></th>
                     </tr>
                 </thead>
@@ -22,7 +23,7 @@ export function CategoriasTable({ categorias, todas = [], handleClick }){
                     {
                         categorias.length === 0
                         ? <tr>
-                            <td colSpan="4" className="text-secondary text-center py-4">
+                            <td colSpan="5" className="text-secondary text-center py-4">
                                 No hay categorías para mostrar.
                             </td>
                         </tr>
@@ -31,6 +32,17 @@ export function CategoriasTable({ categorias, todas = [], handleClick }){
                                 <td>{c.idCategoria}</td>
                                 <td>{c.nombre}</td>
                                 <td className="text-secondary">{nombrePadre(c.idCategoriaPadre) ?? "—"}</td>
+                                <td>
+                                    {
+                                        c.imagenUrl
+                                        ? <img
+                                            src={c.imagenUrl}
+                                            alt={`Imagen de ${c.nombre}`}
+                                            className="rounded border"
+                                            style={{width:"3.5rem", height:"3.5rem", objectFit:"cover"}}/>
+                                        : <span className="text-secondary">—</span>
+                                    }
+                                </td>
                                 <td>
                                     <button
                                         className="btn btn-dark"

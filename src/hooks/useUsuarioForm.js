@@ -64,7 +64,18 @@ export function useUsuarioForm({ idUsuario, esAdmin = false }) {
             try{
                 const data = await obtenerUsuarioId(idUsuario)
 
-                const idRegion = data.region?.idRegion ?? data.comuna?.idRegion ?? null
+                const idComuna = data.comuna?.idComuna ?? data.idComuna ?? null
+
+                // La respuesta de usuario trae la comuna (idComuna, nombre) pero no
+                // la región. Se intenta leerla y, si no viene, se deriva de la comuna:
+                // cada comuna de /regiones/comunas trae su propio idRegion.
+                let idRegion = data.region?.idRegion ?? data.comuna?.idRegion ?? null
+
+                if(idRegion == null && idComuna != null){
+                    const regionDeComuna = regionesComunas.find((r) => r.comunas?.some((c) => c.idComuna == idComuna))
+                    idRegion = regionDeComuna ? regionDeComuna.idRegion : null
+                }
+
                 const idRolUsuario = data.rolDetalle?.idRolUsuario ?? data.rol?.idRolUsuario ?? null
 
                 setFormulario({
@@ -80,12 +91,12 @@ export function useUsuarioForm({ idUsuario, esAdmin = false }) {
                     fechaNacimiento: data.fechaNacimiento || "",
                     direccion: data.direccion || "",
                     idRegion: idRegion != null ? String(idRegion) : "",
-                    idComuna: data.comuna?.idComuna != null ? String(data.comuna.idComuna) : "",
+                    idComuna: idComuna != null ? String(idComuna) : "",
                     idRolUsuario: idRolUsuario != null ? String(idRolUsuario) : ""
                 })
 
                 const region = regionesComunas.find((r) => r.idRegion == idRegion)
-                setComunas(region ? region.comunas : [])
+                setComunas(region?.comunas ?? [])
             }catch(error){
                 console.error("Error al cargar usuario", error)
             }

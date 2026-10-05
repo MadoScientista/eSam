@@ -111,3 +111,10 @@ export const disminuirStock = async (idProducto, unidades) => {
 
     return response.data
 }
+
+// Marcar una imagen como principal
+export const marcarImagenPrincipal = async (idProducto, idImagenProducto) => {
+    const response = await api.put(`/productos/${idProducto}/imagenes/${idImagenProducto}/principal`)
+
+    return response.data
+}
