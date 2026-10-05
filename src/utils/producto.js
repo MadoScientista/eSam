@@ -46,6 +46,18 @@ export function productosRecomendados(catalogo, idsCategoria, idsExcluidos = [],
     return [...enCategoria, ...destacados.slice(0, cantidad - enCategoria.length)]
 }
 
+// Productos que pertenecen a alguna de las categorías indicadas, en el orden en
+// que los entrega el catálogo.
+export function productosDeCategoria(catalogo, idsCategoria) {
+    const objetivo = new Set((idsCategoria ?? []).map(Number))
+
+    if (objetivo.size === 0) return []
+
+    return (catalogo ?? []).filter((p) =>
+        (p.categorias ?? []).some((c) => objetivo.has(c.idCategoria))
+    )
+}
+
 // Categoría que más se repite en una lista de productos. Cada producto vota una
 // vez por cada una de sus categorías, sin importar cuántas unidades se hayan
 // agregado al carrito; en caso de empate gana la primera que aparece.

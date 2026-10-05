@@ -5,7 +5,7 @@ import { Navigate, useLocation } from 'react-router-dom'
 import { MainLayout, AdminLayout, CustomerLayout } from './components'
 import {
   AboutUs, Blogs, Contact, Home, Login, ProductDetails, Products,
-  Register, CustomerProfile, BlogArticle, Cart,
+  Register, CustomerProfile, BlogArticle, Cart, Category,
   AdminProfile, AdminControlProduct, AdminProductForm,
   AdminControlUser, AdminUserForm,
   AdminControlCategoria, AdminCategoriaForm
@@ -59,6 +59,7 @@ const router = createBrowserRouter([
       { path:"login",element:<Login/> },
       { path:"detalleProducto/:idProducto",element:<ProductDetails/> },
       { path:"productos",element: <Products/> },
+      { path:"categorias",element: <Category/> },
       { path:"registro",element:<Register/> },
       {
         path:"usuario",

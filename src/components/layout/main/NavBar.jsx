@@ -40,6 +40,9 @@ export function NavBar(){
                         <NavLink className="nav-link" to="productos">Productos</NavLink>
                     </li>
                     <li className="nav-item">
+                        <NavLink className="nav-link" to="categorias">Categorías</NavLink>
+                    </li>
+                    <li className="nav-item">
                         <NavLink className="nav-link"  to="nosotros">Nosotros</NavLink>
                     </li>
                     <li className="nav-item">

@@ -3,8 +3,7 @@ export function CategoryCard({category, handleClick}){
     return(
         <>
             <div
-                className="card h-100 w-100 d-flex flex-column mb-4 p-3 card-hover"
-                id={category.idCategoria}
+                className="card h-100 w-100 d-flex flex-column p-3 card-hover"
                 onClick={handleClick}
                 style={{ cursor: "pointer" }}
             >
@@ -19,8 +18,9 @@ export function CategoryCard({category, handleClick}){
                         position: "relative"
                     }}
                 >
-                    {
-                        <img
+{
+                    category.imagenUrl
+                    ? <img
                             src={category.imagenUrl}
                             alt={category.nombre}
                             style={{
@@ -29,11 +29,12 @@ export function CategoryCard({category, handleClick}){
                                 objectFit: "contain"
                             }}
                         />
-                    }
-                </div>
-                <div className="card-body d-flex flex-column flex-grow-1">
-                    <h6 className="card-title">{category.nombre}</h6>
-                </div>
+                    : <i className="bi bi-tags fs-1 text-secondary"></i>
+                }
+            </div>
+            <div className="card-body d-flex flex-column flex-grow-1">
+                <h6 className="card-title text-capitalize">{category.nombre}</h6>
+            </div>
             </div>
         </>
     )

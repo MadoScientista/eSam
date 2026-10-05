@@ -1,3 +1,26 @@
+// Una categoría y todas sus descendientes. Sirve para que el bloque de una raíz
+// no deje fuera los productos que están asignados a una subcategoría.
+export function idsCategoriaConDescendientes(categorias, idCategoria) {
+    const ids = new Set([idCategoria])
+
+    // Se repite hasta que ya no aparezca ninguna subcategoría nueva, porque una
+    // descendiente puede venir varios niveles más abajo en el arreglo.
+    let sigueCreciendo = true
+
+    while (sigueCreciendo) {
+        sigueCreciendo = false
+
+        categorias.forEach((c) => {
+            if (ids.has(c.idCategoriaPadre) && !ids.has(c.idCategoria)) {
+                ids.add(c.idCategoria)
+                sigueCreciendo = true
+            }
+        })
+    }
+
+    return ids
+}
+
 // Ordena las categorías para que cada una quede debajo de su padre, de modo que
 // la jerarquía (idCategoriaPadre) sea legible y se puedan elegir sin ctrl.
 
