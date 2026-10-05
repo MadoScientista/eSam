@@ -1,11 +1,11 @@
 import { useParams } from "react-router-dom"
 import { ProductCarousel } from "../components/ProductCarousel"
-import { useEffect, useState } from "react"
+import { useEffect, useMemo, useState } from "react"
 import { obtenerProductos, obtenerProductoPorId } from "../services/productoService"
 import { useCart } from "../context/cartContext"
 import { Toast } from "../components/Toast"
 import { formatearPrecio } from "../utils/moneda"
-import { imagenPrincipalProducto } from "../utils/producto"
+import { imagenPrincipalProducto, productosRecomendados } from "../utils/producto"
 
 export function ProductDetails(){
 
@@ -53,6 +53,18 @@ export function ProductDetails(){
         setToastTrigger(t => t + 1)
     }
 
+    // Los relacionados salen de la categoría del producto que se está viendo. Si no
+    // llenan la fila, el resto se completa con los primeros del catálogo, que son
+    // los mismos destacados que muestra el home. El producto actual queda fuera y
+    // ningún producto se repite.
+    const relacionados = useMemo(() => {
+        if(!product) return []
+
+        const idsCategoria = (product.categorias ?? []).map((c) => c.idCategoria)
+
+        return productosRecomendados(products, idsCategoria, [product.idProducto])
+    },[product, products])
+
     const imagen = imagenPrincipalProducto(product)
 
     return (
@@ -77,7 +89,11 @@ export function ProductDetails(){
         </div>
         <div className="container">
             <h3 className="mb-4">Productos relacionados</h3>
-            <ProductCarousel products={products.slice(5,12)}/>
+            {
+                relacionados.length > 0
+                ? <ProductCarousel products={relacionados}/>
+                : <p className="text-secondary">No hay otros productos relacionados por ahora.</p>
+            }
         </div>
         <Toast trigger={toastTrigger} message={`${product?.nombre ?? ""} agregado al carrito.`} />
     </div>

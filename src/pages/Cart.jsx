@@ -1,9 +1,10 @@
-import { useEffect, useState } from "react"
+import { useEffect, useMemo, useState } from "react"
 import { ProductCardH } from "../components/ProductCardH"
 import { ProductCarousel } from "../components/ProductCarousel"
 import { useCart } from "../context/cartContext"
 import { obtenerProductos } from "../services/productoService"
 import { formatearPrecio } from "../utils/moneda"
+import { categoriaMasPresente, productosRecomendados } from "../utils/producto"
 
 export function Cart(){
 
@@ -32,6 +33,20 @@ export function Cart(){
         nProducts += item.units
         subtotal += (item.units * item.product.precio)
     })
+
+    // Los relacionados seguided desde la categoría que más se repite en el carrito.
+    // Los productos que ya están en el carrito quedan excluidos y, si no llenan la
+    // fila, el resto se completa con los primeros del catálogo (los destacados).
+    const relacionados = useMemo(()=>{
+        const enCarrito = cart.map((item)=>item.product)
+
+        if(enCarrito.length === 0) return []
+
+        const idCategoria = categoriaMasPresente(enCarrito)
+        const idsExcluidos = enCarrito.map((p)=>p.idProducto)
+
+        return productosRecomendados(products, idCategoria != null ? [idCategoria] : [], idsExcluidos)
+    },[cart, products])
 
 
     return (
@@ -69,10 +84,15 @@ export function Cart(){
                     </div>
                 </div>
             </div>
-            <h3 className="mb-5">Productos relacionados</h3>
-            <div className="container mb-5">
-                <ProductCarousel products={products.slice(3,10)}/>
-            </div>
+            {
+                relacionados.length > 0
+                && <>
+                    <h3 className="mb-5">Productos relacionados</h3>
+                    <div className="container mb-5">
+                        <ProductCarousel products={relacionados}/>
+                    </div>
+                </>
+            }
         </div>
     )
 }
