@@ -1,14 +1,15 @@
 import { Outlet } from "react-router-dom";
 import { AdminSidebar } from "./AdminSidebar";
+import "./admin.css";
 
 export function AdminLayout() {
     return (
-        <div className="container-fluid">
-            <div className="row" style={{ minHeight: "90vh" }}>
+        <div className="admin-shell">
+            <div className="admin-layout">
                 <AdminSidebar />
-                <section className="col-md-9 col-lg-10 p-4">
+                <main className="admin-main">
                     <Outlet />
-                </section>
+                </main>
             </div>
         </div>
     );

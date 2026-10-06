@@ -1,6 +1,6 @@
 import { useState } from "react"
 import { useParams, useNavigate } from "react-router-dom"
-import { AdminUsuarioForm } from "../../components/AdminUsuarioForm"
+import { AdminUsuarioForm } from "../../components/user-form/AdminUsuarioForm"
 import { crearUsuarioAdmin, actualizarUsuario, eliminarUsuario } from "../../services/usuarioService"
 import { ConfirmModal } from "../../components/ConfirmModal"
 import { AlertMessage } from "../../components/AlertMessage"
@@ -73,50 +73,54 @@ export function AdminUserForm() {
     }
 
     return (
-        <>
-            <div className="container">
-                <h2 className="mb-4">{id ? "Editar usuario" : "Nuevo Usuario"}</h2>
-
-                <AdminUsuarioForm
-                    idUsuario={id}
-                    onSubmit={handleSubmit}
-                    onDelete={handleEliminar}
-                />
-
-                <div className="mb-3 mt-3">
-                    <AlertMessage type={mensajeAlerta?.type} message={mensajeAlerta?.message} onClose={() => setMensajeAlerta(null)} />
+        <div className="admin-page admin-user-page">
+            <header className="admin-page-header">
+                <div>
+                    <span className="admin-eyebrow">GESTIÓN DE USUARIOS</span>
+                    <h1>{id ? "Editar usuario" : "Nuevo usuario"}</h1>
+                    <p>{id ? "Actualiza la información del usuario." : "Completa los datos para crear un usuario."}</p>
                 </div>
+            </header>
 
-                {
-                    mostrarConfirmacion &&
-                    <ConfirmModal
-                        show={mostrarConfirmacion}
-                        title={
-                            eliminado ? "Usuario eliminado" :
-                            accion === "crear" ? "Guardar usuario" :
-                            accion === "actualizar" ? "Actualizar usuario" : "Eliminar usuario"
-                        }
-                        message={
-                            eliminado ? `El usuario con id ${id} fue eliminado.` :
-                            accion === "crear" ? "¿Estás seguro de guardar el nuevo usuario?" :
-                            accion === "actualizar" ? `¿Estás seguro de actualizar el usuario ${id}?` :
-                            `¿Estás seguro de eliminar el usuario ${id}?`
-                        }
-                        confirmText={
-                            accion === "crear" || accion === "actualizar" ? "Guardar" : "Eliminar"
-                        }
-                        variant={accion === "eliminar" ? "danger" : "dark"}
-                        icon={
-                            eliminado ? "bi-check-circle" :
-                            accion === "eliminar" ? "bi-trash" : "bi-check2-circle"
-                        }
-                        success={eliminado}
-                        onConfirm={handleConfirmar}
-                        onCancel={cerrarModal}
-                        disabled={cargando}
-                    />
-                }
+            <AdminUsuarioForm
+                idUsuario={id}
+                onSubmit={handleSubmit}
+                onDelete={handleEliminar}
+            />
+
+            <div className="mb-3 mt-3">
+                <AlertMessage type={mensajeAlerta?.type} message={mensajeAlerta?.message} onClose={() => setMensajeAlerta(null)} />
             </div>
-        </>
+
+            {
+                mostrarConfirmacion &&
+                <ConfirmModal
+                    show={mostrarConfirmacion}
+                    title={
+                        eliminado ? "Usuario eliminado" :
+                        accion === "crear" ? "Guardar usuario" :
+                        accion === "actualizar" ? "Actualizar usuario" : "Eliminar usuario"
+                    }
+                    message={
+                        eliminado ? `El usuario con id ${id} fue eliminado.` :
+                        accion === "crear" ? "¿Estás seguro de guardar el nuevo usuario?" :
+                        accion === "actualizar" ? `¿Estás seguro de actualizar el usuario ${id}?` :
+                        `¿Estás seguro de eliminar el usuario ${id}?`
+                    }
+                    confirmText={
+                        accion === "crear" || accion === "actualizar" ? "Guardar" : "Eliminar"
+                    }
+                    variant={accion === "eliminar" ? "danger" : "dark"}
+                    icon={
+                        eliminado ? "bi-check-circle" :
+                        accion === "eliminar" ? "bi-trash" : "bi-check2-circle"
+                    }
+                    success={eliminado}
+                    onConfirm={handleConfirmar}
+                    onCancel={cerrarModal}
+                    disabled={cargando}
+                />
+            }
+        </div>
     )
 }

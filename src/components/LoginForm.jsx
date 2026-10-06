@@ -49,7 +49,11 @@ export function LoginForm(){
             const res = await login(formulario.email, formulario.password)
 
             if(res.ok){
-                navigate(tieneRol(res.usuario, "admin") ? "/admin" : "/usuario")
+                navigate(
+                    tieneRol(res.usuario, "admin") || tieneRol(res.usuario, "vendedor")
+                        ? "/admin"
+                        : "/usuario"
+                )
             }else{
                 setMensajeAlerta({type: "danger", message: "Correo o contraseña incorrectos."})
             }

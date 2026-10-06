@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react"
 import { obtenerRegionesComunas } from "../services/regionComunaService"
-import { obtenerRolesUsuario, obtenerUsuarioId } from "../services/usuarioService"
+import { obtenerPerfil, obtenerRolesUsuario, obtenerUsuarioId } from "../services/usuarioService"
 import { validarRut, descomponerRut } from "../utils/rut"
 
 
@@ -23,7 +23,7 @@ const formularioVacio = {
 
 const dominiosPermitidos = ["duoc.cl", "gmail.com", "profesor.duoc.cl", "duocuc.cl"]
 
-export function useUsuarioForm({ idUsuario, esAdmin = false }) {
+export function useUsuarioForm({ idUsuario, esAdmin = false, esPropio = false }) {
 
     const esEdicion = Boolean(idUsuario)
 
@@ -62,7 +62,9 @@ export function useUsuarioForm({ idUsuario, esAdmin = false }) {
     useEffect(()=>{
         const loadUsuario = async () =>{
             try{
-                const data = await obtenerUsuarioId(idUsuario)
+                const data = esPropio
+                    ? await obtenerPerfil()
+                    : await obtenerUsuarioId(idUsuario)
 
                 const idComuna = data.comuna?.idComuna ?? data.idComuna ?? null
 
@@ -105,7 +107,7 @@ export function useUsuarioForm({ idUsuario, esAdmin = false }) {
         if(esEdicion && regionesComunas.length > 0){
             loadUsuario()
         }
-    },[esEdicion, idUsuario, regionesComunas])
+    },[esEdicion, esPropio, idUsuario, regionesComunas])
 
     const handleChange = (e)=>{
         const {name, value} = e.target

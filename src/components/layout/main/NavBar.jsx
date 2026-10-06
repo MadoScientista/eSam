@@ -70,7 +70,11 @@ export function NavBar(){
                         </>
                         :
                         <li className="nav-item">
-                            <NavLink className="nav-link" to={tieneRol(usuario, "admin") ? "/admin" : "/usuario"} title="Perfil">
+                            <NavLink
+                                className="nav-link"
+                                to={tieneRol(usuario, "admin") || tieneRol(usuario, "vendedor") ? "/admin" : "/usuario"}
+                                title="Perfil"
+                            >
                                 <i className="bi bi-person-circle"></i>
                             </NavLink>
                         </li>

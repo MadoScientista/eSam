@@ -1,7 +1,9 @@
-export function CamposUsuario({ formulario, handleChange, handleChangeRut, esEdicion, regionesComunas, comunas }) {
+import "./user-form.css"
+
+export function CamposUsuario({ formulario, handleChange, handleChangeRut, esEdicion, regionesComunas, comunas, wideLayout = false }) {
     return (
-        <>
-            <div className="mb-3">
+        <div className={wideLayout ? "user-form-fields" : undefined}>
+            <div className={`mb-3${wideLayout ? " user-form-field user-form-field--full" : ""}`}>
                 <label htmlFor="nombres" className="form-label">Nombres*</label>
                 <input
                     type="text"
@@ -13,8 +15,8 @@ export function CamposUsuario({ formulario, handleChange, handleChangeRut, esEdi
                     required/>
             </div>
 
-            <div className="row mb-3">
-                <div className="col mb-3 mb-md-0">
+            <div className={`row mb-3${wideLayout ? " user-form-field-pair" : ""}`}>
+                <div className={`col mb-3 mb-md-0${wideLayout ? " user-form-field-cell" : ""}`}>
                     <label htmlFor="aPaterno" className="form-label">Apellido Paterno*</label>
                     <input
                         type="text"
@@ -25,7 +27,7 @@ export function CamposUsuario({ formulario, handleChange, handleChangeRut, esEdi
                         onChange={handleChange}
                         required/>
                 </div>
-                <div className="col">
+                <div className={`col${wideLayout ? " user-form-field-cell" : ""}`}>
                     <label htmlFor="aMaterno" className="form-label">Apellido Materno</label>
                     <input
                         type="text"
@@ -37,7 +39,7 @@ export function CamposUsuario({ formulario, handleChange, handleChangeRut, esEdi
                 </div>
             </div>
 
-            <div className="mb-3">
+            <div className={`mb-3${wideLayout ? " user-form-field" : ""}`}>
                 <label htmlFor="rut" className="form-label">RUN*</label>
                 <input
                     type="text"
@@ -54,8 +56,8 @@ export function CamposUsuario({ formulario, handleChange, handleChangeRut, esEdi
                 <small className="text-secondary">{esEdicion ? "El RUN no es editable." : "Sin puntos ni guión."}</small>
             </div>
 
-            <div className="row mb-3">
-                <div className="col mb-3 mb-md-0">
+            <div className={`row mb-3${wideLayout ? " user-form-field-pair" : ""}`}>
+                <div className={`col mb-3 mb-md-0${wideLayout ? " user-form-field-cell" : ""}`}>
                     <label htmlFor="fechaNacimiento" className="form-label">Fecha de Nacimiento</label>
                     <input
                         type="date"
@@ -64,7 +66,7 @@ export function CamposUsuario({ formulario, handleChange, handleChangeRut, esEdi
                         value={formulario.fechaNacimiento}
                         onChange={handleChange}/>
                 </div>
-                <div className="col">
+                <div className={`col${wideLayout ? " user-form-field-cell" : ""}`}>
                     <label htmlFor="telefono" className="form-label">Teléfono (Opcional)</label>
                     <input
                         type="tel"
@@ -76,7 +78,7 @@ export function CamposUsuario({ formulario, handleChange, handleChangeRut, esEdi
                 </div>
             </div>
 
-            <div className="mb-3">
+            <div className={`mb-3${wideLayout ? " user-form-field" : ""}`}>
                 <label htmlFor="correo" className="form-label">Correo*</label>
                 <input
                     type="email"
@@ -88,7 +90,7 @@ export function CamposUsuario({ formulario, handleChange, handleChangeRut, esEdi
                     required/>
             </div>
 
-            <div className="mb-3">
+            <div className={`mb-3${wideLayout ? " user-form-field" : ""}`}>
                 <label htmlFor="correoConfirm" className="form-label">Confirme correo*</label>
                 <input
                     type="email"
@@ -100,7 +102,7 @@ export function CamposUsuario({ formulario, handleChange, handleChangeRut, esEdi
                     required/>
             </div>
 
-            <div className="mb-3">
+            <div className={`mb-3${wideLayout ? " user-form-field" : ""}`}>
                 <label htmlFor="password" className="form-label">
                     Contraseña*
                 </label>
@@ -116,7 +118,7 @@ export function CamposUsuario({ formulario, handleChange, handleChangeRut, esEdi
                 <small className="text-secondary">Entre 8 y 72 caracteres.</small>
             </div>
 
-            <div className="mb-3">
+            <div className={`mb-3${wideLayout ? " user-form-field" : ""}`}>
                 <label htmlFor="passwordConfirm" className="form-label">Confirme Contraseña*</label>
                 <input
                     type="password"
@@ -129,8 +131,8 @@ export function CamposUsuario({ formulario, handleChange, handleChangeRut, esEdi
                     required/>
             </div>
 
-            <div className="row mb-3">
-                <div className="col mb-3 mb-md-0">
+            <div className={`row mb-3${wideLayout ? " user-form-field-pair" : ""}`}>
+                <div className={`col mb-3 mb-md-0${wideLayout ? " user-form-field-cell" : ""}`}>
                     <label htmlFor="idRegion" className="form-label">Región*</label>
                     <select name="idRegion" className="form-select border-black" value={formulario.idRegion} onChange={handleChange}>
                         <option value="">-- Seleccione Región --</option>
@@ -141,7 +143,7 @@ export function CamposUsuario({ formulario, handleChange, handleChangeRut, esEdi
                         }
                     </select>
                 </div>
-                <div className="col">
+                <div className={`col${wideLayout ? " user-form-field-cell" : ""}`}>
                     <label htmlFor="idComuna" className="form-label">Comuna*</label>
                     <select name="idComuna" className="form-select border-black" value={formulario.idComuna} onChange={handleChange}>
                         <option value="">-- Seleccione Comuna --</option>
@@ -154,7 +156,7 @@ export function CamposUsuario({ formulario, handleChange, handleChangeRut, esEdi
                 </div>
             </div>
 
-            <div className="mb-3">
+            <div className={`mb-3${wideLayout ? " user-form-field user-form-field--full" : ""}`}>
                 <label htmlFor="direccion" className="form-label">Dirección*</label>
                 <textarea
                     className="form-control border-black"
@@ -167,6 +169,6 @@ export function CamposUsuario({ formulario, handleChange, handleChangeRut, esEdi
                     required>
                 </textarea>
             </div>
-        </>
+        </div>
     )
 }

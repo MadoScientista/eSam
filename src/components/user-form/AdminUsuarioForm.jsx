@@ -1,6 +1,6 @@
-import { useUsuarioForm } from "../hooks/useUsuarioForm"
+import { useUsuarioForm } from "../../hooks/useUsuarioForm"
 import { CamposUsuario } from "./CamposUsuario"
-import { AlertMessage } from "./AlertMessage"
+import { AlertMessage } from "../AlertMessage"
 
 export function AdminUsuarioForm({ idUsuario, onSubmit, onDelete }) {
 
@@ -28,15 +28,15 @@ export function AdminUsuarioForm({ idUsuario, onSubmit, onDelete }) {
     }
 
     return (
-        <div className="register-form border border-black p-5 rounded-2 shadow-sm">
+        <div className="user-form-card">
             <form onSubmit={handleSubmit}>
-                <div className="h3 mb-5 text-center">
+                <div className="h3 user-form-title">
                     {esEdicion ? "Editar Usuario" : "Nuevo Usuario"}
                 </div>
 
                 {
                     esEdicion &&
-                    <div className="mb-3">
+                    <div className="mb-3 user-form-field user-form-field--full">
                         <label htmlFor="idUsuario" className="form-label">ID Usuario</label>
                         <input
                             type="text"
@@ -49,6 +49,7 @@ export function AdminUsuarioForm({ idUsuario, onSubmit, onDelete }) {
                 }
 
                 <CamposUsuario
+                    wideLayout
                     formulario={formulario}
                     handleChange={handleChange}
                     handleChangeRut={handleChangeRut}
@@ -57,7 +58,7 @@ export function AdminUsuarioForm({ idUsuario, onSubmit, onDelete }) {
                     comunas={comunas}
                 />
 
-                <div className="mb-3">
+                <div className="mb-3 user-form-field user-form-field--full admin-user-role">
                     <label htmlFor="idRolUsuario" className="form-label">Tipo de Usuario*</label>
                     <select
                         className="form-select border-black"
@@ -74,7 +75,7 @@ export function AdminUsuarioForm({ idUsuario, onSubmit, onDelete }) {
                     </select>
                 </div>
 
-                <div className="mt-4 d-flex justify-content-between align-items-center">
+                <div className="mt-4 d-flex justify-content-between align-items-center user-form-actions">
                     {
                         esEdicion && onDelete &&
                         <button type="button" className="btn btn-danger" onClick={onDelete}>Eliminar</button>

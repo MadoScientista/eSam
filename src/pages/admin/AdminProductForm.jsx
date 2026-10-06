@@ -8,11 +8,14 @@ import { CategoriasSelector } from "../../components/CategoriasSelector"
 import { AlertMessage } from "../../components/AlertMessage"
 import { formatearPrecio } from "../../utils/moneda"
 import { imagenPrincipalProducto } from "../../utils/producto"
+import { tieneRol, useAuth } from "../../context/authContext"
 
 export function AdminProductForm(){
 
     const { idProducto } = useParams()
     const navigate = useNavigate()
+    const { usuario } = useAuth()
+    const esAdmin = tieneRol(usuario, "admin")
 
     // Esstados para modales de confirmación y alertas
     const [mostrarConfirmacion, setMostrarConfirmacion] = useState(false)
@@ -343,18 +346,27 @@ export function AdminProductForm(){
                         }
                     }
 
-                    if (erroresImagenes.length > 0) {
-                        setMensajeAlerta({
+                    const alertaCreacion = erroresImagenes.length > 0
+                        ? {
                             type: "warning",
-                            message: `Producto ${idProdCreado} creado correctamente, pero no se pudieron subir algunas imágenes. Puedes gestionarlas desde la edición.`
-                        })
-                    } else {
-                        setMensajeAlerta({
+                            message: esAdmin
+                                ? `Producto ${idProdCreado} creado correctamente, pero no se pudieron subir algunas imágenes. Puedes gestionarlas desde la edición.`
+                                : `Producto ${idProdCreado} creado correctamente, pero no se pudieron subir algunas imágenes. Contacta a un administrador para gestionarlas.`
+                        }
+                        : {
                             type: "success",
                             message: `Producto ${idProdCreado} creado correctamente.`
+                        }
+
+                    if (esAdmin) {
+                        setMensajeAlerta(alertaCreacion)
+                        navigate(`/admin/productos/${idProdCreado}`, { replace: true })
+                    } else {
+                        navigate("/admin/productos", {
+                            replace: true,
+                            state: { mensajeAlerta: alertaCreacion }
                         })
                     }
-                    navigate(`/admin/productos/${idProdCreado}`, { replace: true })
                 } else {
                     setMensajeAlerta({type: "success", message: "Producto creado correctamente."})
                 }

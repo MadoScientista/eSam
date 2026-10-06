@@ -3,9 +3,12 @@ import { useNavigate } from "react-router-dom"
 import { CategoriasTable } from "../../components/CategoriasTable"
 import { AlertMessage } from "../../components/AlertMessage"
 import { obtenerCategorias } from "../../services/categoriaService"
+import { useAuth, tieneRol } from "../../context/authContext"
 
 export function AdminControlCategoria() {
     const navigate = useNavigate()
+    const { usuario } = useAuth()
+    const esAdmin = tieneRol(usuario, "admin")
     const [categorias, setCategorias] = useState([])
     const [busqueda, setBusqueda] = useState("")
     const [mensajeAlerta, setMensajeAlerta] = useState(null)
@@ -48,13 +51,20 @@ export function AdminControlCategoria() {
                         onChange={(e) => setBusqueda(e.target.value)}
                     />
                 </div>
-                <button className="btn btn-dark" onClick={() => { navigate("nuevo") }}>
-                    Nueva categoría
-                </button>
+                {esAdmin && (
+                    <button className="btn btn-dark" onClick={() => { navigate("nuevo") }}>
+                        Nueva categoría
+                    </button>
+                )}
             </div>
 
             <AlertMessage type={mensajeAlerta?.type} message={mensajeAlerta?.message} onClose={() => setMensajeAlerta(null)} />
-            <CategoriasTable categorias={filtradas} todas={categorias} handleClick={handleClick} />
+            <CategoriasTable
+                categorias={filtradas}
+                todas={categorias}
+                handleClick={handleClick}
+                editable={esAdmin}
+            />
         </>
     )
 }

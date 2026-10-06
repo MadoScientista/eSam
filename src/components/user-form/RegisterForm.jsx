@@ -1,14 +1,15 @@
 import { useNavigate } from "react-router-dom"
-import { useUsuarioForm } from "../hooks/useUsuarioForm"
-import { useAuth } from "../context/authContext"
-import { crearUsuario, crearUsuarioAdmin, actualizarUsuario, actualizarPerfil } from "../services/usuarioService"
+import { useUsuarioForm } from "../../hooks/useUsuarioForm"
+import { useAuth } from "../../context/authContext"
+import { crearUsuario, crearUsuarioAdmin, actualizarUsuario, actualizarPerfil } from "../../services/usuarioService"
 import { CamposUsuario } from "./CamposUsuario"
-import { AlertMessage } from "./AlertMessage"
+import { AlertMessage } from "../AlertMessage"
 
-export function RegisterForm({ idUsuario, esAdmin = false }) {
+export function RegisterForm({ idUsuario, esAdmin = false, wideLayout = false }) {
 
     const navigate = useNavigate()
     const { usuario, estaAutenticado } = useAuth()
+    const esPropio = Boolean(estaAutenticado && usuario?.id === idUsuario)
 
     const {
         esEdicion,
@@ -21,11 +22,7 @@ export function RegisterForm({ idUsuario, esAdmin = false }) {
         handleChangeRut,
         construirPayload,
         limpiarFormulario
-    } = useUsuarioForm({ idUsuario, esAdmin })
-
-    // El usuario autenticado se edita a través de /usuarios/perfil; el resto de
-    // usuarios sólo puede editarlos un admin mediante /usuarios/{id}.
-    const esPropio = Boolean(estaAutenticado && usuario?.id === idUsuario)
+    } = useUsuarioForm({ idUsuario, esAdmin, esPropio })
 
     const handleSubmit = async (e) => {
         e.preventDefault()
@@ -58,13 +55,14 @@ export function RegisterForm({ idUsuario, esAdmin = false }) {
     }
 
     return (
-        <div className="register-form border border-black p-5 rounded-2 shadow-sm">
+        <div className={`register-form ${wideLayout ? "user-form-card" : "border border-black p-5 rounded-2 shadow-sm"}`}>
             <form onSubmit={handleSubmit}>
-                <div className="h3 mb-5 text-center">
+                <div className={`h3 ${wideLayout ? "user-form-title" : "mb-5 text-center"}`}>
                     {esEdicion ? "Editar Perfil" : "Formulario de Registro"}
                 </div>
 
                 <CamposUsuario
+                    wideLayout={wideLayout}
                     formulario={formulario}
                     handleChange={handleChange}
                     handleChangeRut={handleChangeRut}

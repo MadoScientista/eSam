@@ -1,0 +1,75 @@
+.user-form-card {
+    max-width: 920px;
+    margin: 0;
+    padding: 32px;
+    border: 1px solid #4e4e4e;
+    border-radius: 15px;
+    background: #fff;
+    box-shadow: 0 3px 12px rgba(0, 0, 0, .035);
+}
+
+.user-form-title {
+    margin: 0 0 26px;
+    color: #222;
+    font-size: 20px;
+    font-weight: 700;
+}
+
+.user-form-fields {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    column-gap: 22px;
+    row-gap: 20px;
+    align-items: start;
+}
+
+.user-form-fields > .user-form-field,
+.user-form-fields > .user-form-field-pair { min-width: 0; margin: 0 !important; }
+.user-form-fields > .user-form-field--full { grid-column: 1 / -1; }
+.user-form-fields > .user-form-field-pair {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-column: 1 / -1;
+    gap: 22px;
+    padding: 0;
+}
+
+.user-form-fields > .user-form-field-pair > .user-form-field-cell {
+    width: auto;
+    min-width: 0;
+    margin: 0 !important;
+    padding: 0;
+}
+
+.user-form-card .form-label { margin-bottom: 7px; color: #444; font-size: inherit; font-weight: 700; }
+.user-form-card .form-control,
+.user-form-card .form-select { min-height: 46px; border-color: #dedede !important; border-radius: 8px; font-size: inherit; }
+.user-form-card textarea.form-control { min-height: auto; }
+.user-form-card .form-control:focus,
+.user-form-card .form-select:focus { border-color: #888 !important; box-shadow: 0 0 0 .2rem rgba(0, 0, 0, .08); }
+.user-form-card small.text-secondary { color: #888 !important; font-size: 13px; }
+.user-form-card .btn-dark { min-width: 150px; padding: 11px 18px; border-radius: 8px; font-size: inherit; font-weight: 600; }
+.user-form-actions { grid-column: 1 / -1; }
+
+.public-register-page {
+    min-height: 90vh;
+    padding: 48px 0;
+    background: var(--site-background);
+}
+
+.public-register-page .user-form-card {
+    max-width: 1000px;
+    margin: 0 auto;
+}
+
+@media (max-width: 1000px) {
+    .user-form-card { padding: 23px; }
+}
+
+@media (max-width: 540px) {
+    .user-form-card { padding: 18px; }
+    .user-form-fields { grid-template-columns: 1fr; }
+    .user-form-fields > .user-form-field--full,
+    .user-form-fields > .user-form-field-pair { grid-column: 1; }
+    .user-form-fields > .user-form-field-pair { grid-template-columns: 1fr; gap: 20px; }
+}

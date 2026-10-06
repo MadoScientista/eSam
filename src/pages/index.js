@@ -12,6 +12,8 @@ export { Cart } from "./Cart"
 export { Category } from "./Category"
 
 export { AdminProfile } from "./admin/AdminProfile"
+export { AdminDashboard } from "./admin/AdminDashboard"
+export { AdminOrders } from "./admin/AdminOrders"
 export { AdminControlProduct } from "./admin/AdminControlProduct"
 export { AdminProductForm } from "./admin/AdminProductForm"
 export { AdminControlUser } from "./admin/AdminControlUser"

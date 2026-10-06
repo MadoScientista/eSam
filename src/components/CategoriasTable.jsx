@@ -1,4 +1,4 @@
-export function CategoriasTable({ categorias, todas = [], handleClick }){
+export function CategoriasTable({ categorias, todas = [], handleClick, editable = true }){
 
     // idCategoriaPadre es nullable: null significa que la categoría es de primer nivel.
     const nombrePadre = (id) => {
@@ -16,14 +16,14 @@ export function CategoriasTable({ categorias, todas = [], handleClick }){
                         <th scope="col">Nombre</th>
                         <th scope="col">Categoría padre</th>
                         <th scope="col">Imagen</th>
-                        <th scope="col"></th>
+                        {editable && <th scope="col"></th>}
                     </tr>
                 </thead>
                 <tbody>
                     {
                         categorias.length === 0
                         ? <tr>
-                            <td colSpan="5" className="text-secondary text-center py-4">
+                            <td colSpan={editable ? "5" : "4"} className="text-secondary text-center py-4">
                                 No hay categorías para mostrar.
                             </td>
                         </tr>
@@ -43,15 +43,17 @@ export function CategoriasTable({ categorias, todas = [], handleClick }){
                                         : <span className="text-secondary">—</span>
                                     }
                                 </td>
-                                <td>
-                                    <button
-                                        className="btn btn-dark"
-                                        onClick={()=>{handleClick(c.idCategoria)}}
-                                        aria-label={`Editar ${c.nombre}`}
-                                    >
-                                        <i className="bi bi-pencil-square"></i>
-                                    </button>
-                                </td>
+                                {editable && (
+                                    <td>
+                                        <button
+                                            className="btn btn-dark"
+                                            onClick={()=>{handleClick(c.idCategoria)}}
+                                            aria-label={`Editar ${c.nombre}`}
+                                        >
+                                            <i className="bi bi-pencil-square"></i>
+                                        </button>
+                                    </td>
+                                )}
                             </tr>
                         ))
                     }

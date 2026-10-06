@@ -1,4 +1,4 @@
-import { RegisterForm } from "../components/RegisterForm"
+import { RegisterForm } from "../components/user-form/RegisterForm"
 import { useAuth } from "../context/authContext"
 
 export function CustomerProfile() {

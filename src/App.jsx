@@ -6,7 +6,7 @@ import { MainLayout, AdminLayout, CustomerLayout } from './components'
 import {
   AboutUs, Blogs, Contact, Home, Login, ProductDetails, Products,
   Register, CustomerProfile, BlogArticle, Cart, Category,
-  AdminProfile, AdminControlProduct, AdminProductForm,
+  AdminDashboard, AdminOrders, AdminProfile, AdminControlProduct, AdminProductForm,
   AdminControlUser, AdminUserForm,
   AdminControlCategoria, AdminCategoriaForm
 } from './pages'
@@ -17,16 +17,24 @@ import { useAuth, tieneRol } from './context/authContext'
 function RequireAuth({ children, rol }) {
     const { estaAutenticado, usuario, sesionCerrada } = useAuth()
     const location = useLocation()
+    const rolesPermitidos = Array.isArray(rol) ? rol : [rol]
 
     if (!estaAutenticado) {
         return <Navigate to="/login" replace state={{ from: location, sesionCerrada }} />
     }
 
-    if (rol && !tieneRol(usuario, rol)) {
-        return <Navigate to="/login" replace state={{ from: location, sesionCerrada }} />
+    if (rol && !rolesPermitidos.some((rolPermitido) => tieneRol(usuario, rolPermitido))) {
+        const destino = rolesPermitidos.includes("admin") && tieneRol(usuario, "vendedor")
+            ? "/admin"
+            : "/login"
+        return <Navigate to={destino} replace state={{ from: location, sesionCerrada }} />
     }
 
     return children
+}
+
+function AdminOnly({ children }) {
+    return <RequireAuth rol="admin">{children}</RequireAuth>
 }
 
 const router = createBrowserRouter([
@@ -38,18 +46,20 @@ const router = createBrowserRouter([
       { path:"nosotros",element: <AboutUs/> },
       { 
         path:"admin",
-        element:<RequireAuth rol="admin"><AdminLayout/></RequireAuth>,
+        element:<RequireAuth rol={["admin", "vendedor"]}><AdminLayout/></RequireAuth>,
         children:[
-          {index: true, element:<AdminProfile/>},
+          {index: true, element:<AdminDashboard/>},
+          {path: "ordenes", element:<AdminOrders/>},
+          {path: "perfil", element:<AdminProfile/>},
           {path: "productos", element:<AdminControlProduct/>},
-          {path: "productos/:idProducto", element: <AdminProductForm/>},
+          {path: "productos/:idProducto", element: <AdminOnly><AdminProductForm/></AdminOnly>},
           {path: "productos/nuevo", element: <AdminProductForm/>},
-          {path: "usuarios", element: <AdminControlUser/>},
-          {path: "usuarios/:id", element: <AdminUserForm/>},
-          {path: "usuarios/nuevo", element: <AdminUserForm/>},
+          {path: "usuarios", element: <AdminOnly><AdminControlUser/></AdminOnly>},
+          {path: "usuarios/:id", element: <AdminOnly><AdminUserForm/></AdminOnly>},
+          {path: "usuarios/nuevo", element: <AdminOnly><AdminUserForm/></AdminOnly>},
           {path: "categorias", element: <AdminControlCategoria/>},
-          {path: "categorias/:idCategoria", element: <AdminCategoriaForm/>},
-          {path: "categorias/nuevo", element: <AdminCategoriaForm/>}
+          {path: "categorias/:idCategoria", element: <AdminOnly><AdminCategoriaForm/></AdminOnly>},
+          {path: "categorias/nuevo", element: <AdminOnly><AdminCategoriaForm/></AdminOnly>}
         ] 
       },
       { path:"blogs",element:<Blogs/> },

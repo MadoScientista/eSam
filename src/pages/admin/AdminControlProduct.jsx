@@ -2,15 +2,19 @@ import { useEffect, useState } from "react"
 import {obtenerProductos} from "../../services/productoService"
 import { ProductTable } from "../../components/ProductTable"
 import { AlertMessage } from "../../components/AlertMessage"
-import { useNavigate } from "react-router-dom"
+import { useLocation, useNavigate } from "react-router-dom"
+import { useAuth, tieneRol } from "../../context/authContext"
 
 
 export function AdminControlProduct(){
     
     const navigate = useNavigate()
+    const location = useLocation()
+    const { usuario } = useAuth()
+    const esAdmin = tieneRol(usuario, "admin")
     const [products, setProducts] = useState([])
     const [busqueda, setBusqueda] = useState("")
-    const [mensajeAlerta, setMensajeAlerta] = useState(null)
+    const [mensajeAlerta, setMensajeAlerta] = useState(location.state?.mensajeAlerta ?? null)
 
     useEffect(() => {
         const cargarProductos = async () =>{
@@ -50,15 +54,15 @@ export function AdminControlProduct(){
                         onChange={(e) => setBusqueda(e.target.value)}
                     />
                 </div>
-                <button 
+                <button
                     className="btn btn-dark"
                     onClick={()=>{navigate("nuevo")}}
-                >   
+                >
                     Nuevo producto
                 </button>
             </div>
             <AlertMessage type={mensajeAlerta?.type} message={mensajeAlerta?.message} onClose={() => setMensajeAlerta(null)} />
-            <ProductTable products={productosFiltrados} handleClick={handleClick}/>
+            <ProductTable products={productosFiltrados} handleClick={handleClick} editable={esAdmin}/>
         </>
     )
 }

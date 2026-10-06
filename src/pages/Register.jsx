@@ -1,8 +1,11 @@
-import {RegisterForm} from '../components/RegisterForm'
+import {RegisterForm} from '../components/user-form/RegisterForm'
 
 export function Register(){
     return (
-    <div className='container pt-5 pb-5'>
-        <RegisterForm/>
-    </div>)
+        <section className="public-register-page">
+            <div className="container">
+                <RegisterForm wideLayout />
+            </div>
+        </section>
+    )
 }

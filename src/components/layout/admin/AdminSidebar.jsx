@@ -1,124 +1,97 @@
-import { NavLink, useLocation, useNavigate } from "react-router-dom";
-import { useState } from "react";
-import { useAuth } from "../../../context/authContext";
-
-const ADMIN_MENU_ITEMS = [
-    { label: "Perfil", path: "/admin" },
-    {
-        label: "Productos",
-        path: "/admin/productos",
-        children: [
-            { label: "Todos", path: "/admin/productos" },
-            { label: "Nuevo producto", path: "/admin/productos/nuevo" },
-        ],
-    },
-    {
-        label: "Usuarios",
-        path: "/admin/usuarios",
-        children: [
-            { label: "Todos", path: "/admin/usuarios" },
-            { label: "Nuevo usuario", path: "/admin/usuarios/nuevo" },
-        ],
-    },
-    {
-        label: "Categorías",
-        path: "/admin/categorias",
-        children: [
-            { label: "Todas", path: "/admin/categorias" },
-            { label: "Nueva categoría", path: "/admin/categorias/nuevo" },
-        ],
-    },
-];
-
-function SubMenu({ item }) {
-    const location = useLocation();
-    const navigate = useNavigate();
-    const { label, path, children } = item;
-    const [open, setOpen] = useState(
-        location.pathname.startsWith(path)
-    );
-
-    if (!children) {
-        return (
-            <li className="nav-item">
-                <NavLink
-                    to={path}
-                    end={path === "/admin"}
-                    className={({ isActive }) =>
-                        `nav-link ${isActive ? "fw-bold active text-black" : "text-black"}`
-                    }
-                >
-                    {label}
-                </NavLink>
-            </li>
-        );
-    }
-
-    const handleClick = (e) => {
-        e.preventDefault();
-        setOpen((prev) => !prev);
-        if (!open) navigate(path);
-    };
-
-    return (
-        <li className="nav-item">
-            <a href={path} onClick={handleClick} className="nav-link text-black">
-                <i
-                    className={`bi bi-chevron-${open ? "down" : "right"} me-2`}
-                />
-                {label}
-            </a>
-            {open && (
-                <ul className="nav flex-column ps-3">
-                    {children.map((child) => (
-                        <li className="nav-item" key={child.path}>
-                            <NavLink
-                                to={child.path}
-                                end
-                                className={({ isActive }) =>
-                                    `nav-link py-0 ${isActive ? "fw-bold active text-black" : "text-secondary"}`
-                                }
-                            >
-                                {child.label}
-                            </NavLink>
-                        </li>
-                    ))}
-                </ul>
-            )}
-        </li>
-    );
-}
+import { NavLink, useNavigate } from "react-router-dom";
+import { tieneRol, useAuth } from "../../../context/authContext";
 
 export function AdminSidebar() {
-    const { logout } = useAuth();
+    const { logout, usuario } = useAuth();
     const navigate = useNavigate();
+    const esVendedor = tieneRol(usuario, "vendedor");
+    const menuItems = [
+        { label: "Dashboard", path: "/admin", icon: "bi-grid-1x2" },
+        { label: "Órdenes", path: "/admin/ordenes", icon: "bi-bag" },
+        { label: "Productos", path: "/admin/productos", icon: "bi-box-seam" },
+        { label: "Categorías", path: "/admin/categorias", icon: "bi-tags" },
+        ...(!esVendedor ? [{ label: "Usuarios", path: "/admin/usuarios", icon: "bi-people" }] : []),
+    ];
 
     const handleLogout = () => {
         logout();
         navigate("/");
     };
 
+    const nombre = [usuario?.nombres, usuario?.aPaterno].filter(Boolean).join(" ");
+
     return (
-        <nav className="col-md-3 col-lg-2 d-md-block pt-5 collapse text-end border-end shadow-sm align-items-center">
-            <div className="position-sticky pt-3">
-                <h6 className="text-black text-uppercase px-3 mb-2">
-                    Administración
-                </h6>
-                <ul className="nav flex-column">
-                    {ADMIN_MENU_ITEMS.map((item) => (
-                        <SubMenu key={item.path} item={item} />
+        <aside className="admin-sidebar">
+            <NavLink to="/admin" className="admin-brand">
+                <span className="admin-brand-mark"><i className="bi bi-bag-heart-fill" /></span>
+                <span>eSam <small>{esVendedor ? "VENDEDOR" : "ADMIN"}</small></span>
+            </NavLink>
+
+            <div className="admin-sidebar-label">MENÚ PRINCIPAL</div>
+            <nav aria-label="Navegación de administración">
+                <ul className="admin-nav-list">
+                    {menuItems.map((item) => (
+                        <li key={item.path}>
+                            <NavLink
+                                to={item.path}
+                                end={item.path === "/admin"}
+                                className={({ isActive }) =>
+                                    `admin-nav-link${isActive ? " is-active" : ""}`
+                                }
+                            >
+                                <i className={`bi ${item.icon}`} aria-hidden="true" />
+                                <span>{item.label}</span>
+                            </NavLink>
+                        </li>
                     ))}
-                    <li className="nav-item">
-                        <button
-                            type="button"
-                            className="nav-link text-black border-0 bg-transparent text-end w-100"
-                            onClick={handleLogout}
+                    <li>
+                        <span className="admin-nav-link is-disabled" aria-disabled="true">
+                            <i className="bi bi-bar-chart-line" aria-hidden="true" />
+                            <span>Reportes</span>
+                            <span className="admin-coming-soon">Próximamente</span>
+                        </span>
+                    </li>
+                    <li>
+                        <NavLink
+                            to="/"
+                            end
+                            className={({ isActive }) =>
+                                `admin-nav-link${isActive ? " is-active" : ""}`
+                            }
                         >
-                            Cerrar sesión
-                        </button>
+                            <i className="bi bi-arrow-left-circle" aria-hidden="true" />
+                            <span>Volver a la tienda</span>
+                        </NavLink>
                     </li>
                 </ul>
+            </nav>
+
+            <div className="admin-sidebar-divider" />
+            <div className="admin-sidebar-bottom">
+                {nombre && (
+                    <div className="admin-account">
+                        <span className="admin-avatar">{nombre.charAt(0).toUpperCase()}</span>
+                        <span className="admin-account-copy">
+                            <strong>{nombre}</strong>
+                            <small>{esVendedor ? "Vendedor" : "Administrador"}</small>
+                        </span>
+                    </div>
+                )}
+                <NavLink
+                    to="/admin/perfil"
+                    className={({ isActive }) =>
+                        `admin-nav-link${isActive ? " is-active" : ""}`
+                    }
+                >
+                    <i className="bi bi-person-circle" aria-hidden="true" />
+                    <span>Perfil</span>
+                </NavLink>
+                <div className="admin-sidebar-divider" />
+                <button type="button" className="admin-logout" onClick={handleLogout}>
+                    <i className="bi bi-box-arrow-left" aria-hidden="true" />
+                    <span>Cerrar sesión</span>
+                </button>
             </div>
-        </nav>
+        </aside>
     );
 }

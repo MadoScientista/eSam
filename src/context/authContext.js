@@ -19,5 +19,5 @@ export function nombreRol(usuario) {
 }
 
 export function tieneRol(usuario, rol) {
-    return nombreRol(usuario) === rol
+    return nombreRol(usuario)?.toLowerCase() === rol.toLowerCase()
 }
