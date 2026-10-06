@@ -1,3 +1,5 @@
+import { productosDeCategoria } from "./producto"
+
 // Una categoría y todas sus descendientes. Sirve para que el bloque de una raíz
 // no deje fuera los productos que están asignados a una subcategoría.
 export function idsCategoriaConDescendientes(categorias, idCategoria) {
@@ -19,6 +21,22 @@ export function idsCategoriaConDescendientes(categorias, idCategoria) {
     }
 
     return ids
+}
+
+// Categorías raíz del catálogo con la cantidad de productos de cada una. El
+// recuento incluye lo que está en sus subcategorías, que es exactamente lo que
+// se va a mostrar al marcar el filtro.
+export function categoriasCatalogo(productos, categorias) {
+    return (categorias ?? [])
+        .filter((c) => c.idCategoriaPadre == null)
+        .map((c) => ({
+            clave: c.idCategoria,
+            nombre: c.nombre,
+            total: productosDeCategoria(
+                productos,
+                [...idsCategoriaConDescendientes(categorias, c.idCategoria)]
+            ).length
+        }))
 }
 
 // Ordena las categorías para que cada una quede debajo de su padre, de modo que
