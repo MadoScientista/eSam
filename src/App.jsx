@@ -5,7 +5,7 @@ import { Navigate, useLocation } from 'react-router-dom'
 import { MainLayout, AdminLayout, CustomerLayout } from './components'
 import {
   AboutUs, Blogs, Contact, Home, Login, ProductDetails, Products,
-  Register, CustomerProfile, BlogArticle, Cart, Category,
+  Register, CustomerProfile, BlogArticle, Cart, Checkout, Category,
   AdminDashboard, AdminOrders, AdminProfile, AdminControlProduct, AdminProductForm,
   AdminControlUser, AdminUserForm,
   AdminControlCategoria, AdminCategoriaForm
@@ -76,7 +76,8 @@ const router = createBrowserRouter([
         element:<RequireAuth rol="cliente"><CustomerLayout/></RequireAuth>,
         children:[
           {index: true, element:<CustomerProfile/>},
-          {path: "carrito", element:<Cart/>}
+          {path: "carrito", element:<Cart/>},
+          {path: "checkout", element:<Checkout/>}
         ]
       }
     ]

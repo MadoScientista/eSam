@@ -1,10 +1,13 @@
 import { api } from "./api"
 
 
-// Crear un pedido a partir del carrito.
-// El cliente sólo envía la dirección de envío.
-export const crearPedido = async (idDireccion) => {
-    const response = await api.post("/pedidos", { idDireccion })
+// Crear un pedido a partir del carrito persistido.
+// idDireccion sólo se envía para despacho.
+export const crearPedido = async (tipoEntrega, idDireccion) => {
+    const body = tipoEntrega === "DESPACHO"
+        ? { tipoEntrega, idDireccion }
+        : { tipoEntrega }
+    const response = await api.post("/pedidos", body)
 
     return response.data
 }

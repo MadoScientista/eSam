@@ -9,6 +9,7 @@ export { Register } from "./Register"
 export { CustomerProfile } from "./CustomerProfile"
 export { BlogArticle } from "./BlogArticle"
 export { Cart } from "./Cart"
+export { Checkout } from "./Checkout";
 export { Category } from "./Category"
 
 export { AdminProfile } from "./admin/AdminProfile"

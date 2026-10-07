@@ -36,3 +36,48 @@ export const vaciarCarrito = async () => {
 
     return response.data
 }
+
+// Incorpora el carrito local de invitado al carrito persistido del usuario.
+// Conserva artículos que ya estaban en la cuenta y para coincidencias usa la
+// cantidad local como fuente de verdad.
+export const fusionarCarritoLocal = async (carritoLocal) => {
+    const carritoServidor = await obtenerCarrito()
+    const itemsServidor = carritoServidor?.items
+
+    if (!Array.isArray(itemsServidor)) {
+        throw new Error("El servidor devolvió un carrito con formato inesperado.")
+    }
+
+    const itemsLocales = Array.isArray(carritoLocal) ? carritoLocal : []
+    const localesPorProducto = new Map(
+        itemsLocales.map(({ product, units }) => [Number(product.idProducto), Number(units)])
+    )
+    const productosServidor = new Set()
+
+    for (const item of itemsServidor) {
+        const idProducto = Number(item.producto?.idProducto ?? item.product?.idProducto ?? item.idProducto)
+        if (!Number.isFinite(idProducto)) {
+            throw new Error("El servidor devolvió un producto de carrito sin identificador.")
+        }
+        productosServidor.add(idProducto)
+
+        if (localesPorProducto.has(idProducto)) {
+            const cantidadLocal = localesPorProducto.get(idProducto)
+            if (Number(item.cantidad) !== cantidadLocal) {
+                await actualizarCantidadItem(idProducto, cantidadLocal)
+            }
+        }
+    }
+
+    for (const { product, units } of itemsLocales) {
+        const idProducto = Number(product?.idProducto)
+        if (!Number.isFinite(idProducto) || !Number.isInteger(units) || units < 1) {
+            throw new Error("El carrito local contiene un producto o cantidad inválida.")
+        }
+        if (!productosServidor.has(idProducto)) {
+            await agregarItemCarrito(idProducto, units)
+        }
+    }
+
+    return obtenerCarrito()
+}

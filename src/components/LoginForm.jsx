@@ -52,7 +52,9 @@ export function LoginForm(){
                 navigate(
                     tieneRol(res.usuario, "admin") || tieneRol(res.usuario, "vendedor")
                         ? "/admin"
-                        : "/usuario"
+                        : location.state?.from?.pathname === "/usuario/checkout"
+                            ? "/usuario/checkout"
+                            : "/usuario"
                 )
             }else{
                 setMensajeAlerta({type: "danger", message: "Correo o contraseña incorrectos."})

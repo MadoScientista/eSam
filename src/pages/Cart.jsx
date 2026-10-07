@@ -1,15 +1,21 @@
 import { useEffect, useMemo, useState } from "react"
+import { useNavigate } from "react-router-dom"
 import { ProductCardH } from "../components/ProductCardH"
 import { ProductCarousel } from "../components/ProductCarousel"
 import { useCart } from "../context/cartContext"
 import { obtenerProductos } from "../services/productoService"
 import { formatearPrecio } from "../utils/moneda"
-import { categoriaMasPresente, productosRecomendados } from "../utils/producto"
+import { categoriaMasPresente, productosRecomendados, stockDisponible } from "../utils/producto"
+import { useAuth, tieneRol } from "../context/authContext"
+import { AlertMessage } from "../components/AlertMessage"
 
 export function Cart(){
 
     const { cart, increaseUnits, decreaseUnits, removeProduct } = useCart()
+    const { estaAutenticado, usuario } = useAuth()
+    const navigate = useNavigate()
     const [products, setProducts ] = useState([])
+    const [mensaje, setMensaje] = useState(null)
 
     
     useEffect(()=>{
@@ -48,6 +54,23 @@ export function Cart(){
         return productosRecomendados(products, idCategoria != null ? [idCategoria] : [], idsExcluidos)
     },[cart, products])
 
+    const iniciarCheckout = () => {
+        setMensaje(null)
+        if (!cart.length) {
+            setMensaje({ type: "warning", message: "Agrega productos al carrito antes de continuar." })
+            return
+        }
+        if (estaAutenticado && !tieneRol(usuario, "cliente")) {
+            setMensaje({ type: "warning", message: "El checkout está disponible para cuentas de cliente." })
+            return
+        }
+        if (!estaAutenticado) {
+            navigate("/login", { state: { from: { pathname: "/usuario/checkout" } } })
+            return
+        }
+        navigate("/usuario/checkout")
+    }
+
 
     return (
         <div className="container pt-5">
@@ -64,6 +87,9 @@ export function Cart(){
                                         handleClicklMinus={()=>{decreaseUnits(item.product.idProducto)}}
                                         handleTrash={()=>{removeProduct(item.product.idProducto)}}
                                     />
+                                    {item.units > stockDisponible(item.product) &&
+                                        <p className="text-danger">La cantidad supera el stock disponible actualizado.</p>
+                                    }
                                 </div>)
                         })}
                     </div>
@@ -80,7 +106,10 @@ export function Cart(){
                         }
                         <hr />
                         <p>Sub total: {formatearPrecio(subtotal)}</p>
-                        <button className="btn btn-dark">Pagar</button>
+                        <AlertMessage type={mensaje?.type} message={mensaje?.message} />
+                        <button className="btn btn-dark" onClick={iniciarCheckout} disabled={cart.length === 0}>
+                            Continuar con la compra
+                        </button>
                     </div>
                 </div>
             </div>
