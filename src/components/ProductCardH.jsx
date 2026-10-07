@@ -1,9 +1,10 @@
 import { formatearPrecio } from "../utils/moneda"
-import { imagenPrincipalProducto } from "../utils/producto"
+import { imagenPrincipalProducto, stockDisponible } from "../utils/producto"
 
 export function ProductCardH({item, handleClickPlus, handleClicklMinus, handleTrash}){
 
     const imagen = imagenPrincipalProducto(item.product)
+    const disponible = stockDisponible(item.product)
 
     return (
         <div className=" mb-3" id={`item-${item.product.idProducto}`}>
@@ -19,6 +20,7 @@ export function ProductCardH({item, handleClickPlus, handleClicklMinus, handleTr
                     <div className="card-body">
                         <h6 className="card-title">{item.product.nombre}</h6>
                         <p className="card-text">{formatearPrecio(item.product.precio)}</p>
+                        <p className="card-text">Disponibles ahora: {disponible}u</p>
 
 
                         <div className="d-flex flex-row align-items-center gap-2">
@@ -41,6 +43,7 @@ export function ProductCardH({item, handleClickPlus, handleClicklMinus, handleTr
                                     className="btn btn-outline-secondary"
                                     type="button"
                                     onClick={handleClickPlus}
+                                    disabled={item.units >= disponible}
                                     key={`btnPlus-${item.product.idProducto}`}
                                 >+</button>
                             </div>

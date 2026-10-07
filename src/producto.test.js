@@ -1,6 +1,6 @@
 import { describe, it, expect } from "vitest"
 import { categoriasCatalogo } from "./utils/categoria"
-import { filtrarProductos, marcasCatalogo, nombreMarcaProducto, normalizarTexto, ordenarProductos } from "./utils/producto"
+import { filtrarProductos, marcasCatalogo, nombreMarcaProducto, normalizarTexto, ordenarProductos, stockDisponible } from "./utils/producto"
 
 const producto = (id, nombre, precio, cats, extra = {}) => ({
     idProducto: id,
@@ -29,6 +29,24 @@ describe("normalizarTexto", () => {
     it("No rompe con valores nulos", () => {
         expect(normalizarTexto(null)).toBe("")
         expect(normalizarTexto(undefined)).toBe("")
+    })
+})
+
+describe("stockDisponible", () => {
+    it("Resta las unidades reservadas del stock físico", () => {
+        expect(stockDisponible({ stock: 12, stockReservado: 5 })).toBe(7)
+    })
+
+    it("Limita el disponible a cero cuando todo el stock está reservado", () => {
+        expect(stockDisponible({ stock: 3, stockReservado: 5 })).toBe(0)
+    })
+
+    it("Mantiene compatibilidad con productos sin stockReservado", () => {
+        expect(stockDisponible({ stock: 6 })).toBe(6)
+    })
+
+    it("Devuelve cero para datos de stock inválidos", () => {
+        expect(stockDisponible({ stock: "no-disponible", stockReservado: 1 })).toBe(0)
     })
 })
 

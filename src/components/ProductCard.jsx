@@ -1,19 +1,23 @@
 import { useState } from "react"
 import { createPortal } from "react-dom"
 import { formatearPrecio } from "../utils/moneda"
-import { imagenPrincipalProducto } from "../utils/producto"
+import { imagenPrincipalProducto, stockDisponible } from "../utils/producto"
 import { useCart } from "../context/cartContext"
 import { Toast } from "./Toast"
 
 export function ProductCard({ product, handleClick }) {
 
-    const { addProduct } = useCart()
+    const { cart, addProduct } = useCart()
     const [toastTrigger, setToastTrigger] = useState(0)
 
     const imagen = imagenPrincipalProducto(product)
+    const disponible = stockDisponible(product)
+    const unidadesEnCarrito = cart.find((item) => item.product.idProducto === product.idProducto)?.units ?? 0
+    const puedeAgregar = unidadesEnCarrito < disponible
 
     const handleAddToCart = (e) => {
         e.stopPropagation()
+        if (!puedeAgregar) return
         addProduct(product)
         setToastTrigger(t => t + 1)
     }
@@ -53,6 +57,7 @@ export function ProductCard({ product, handleClick }) {
                     type="button"
                     className="product-cart-btn"
                     onClick={handleAddToCart}
+                    disabled={!puedeAgregar}
                     aria-label={`Agregar ${product.nombre} al carrito`}
                 >
                     <i className="bi bi-cart-plus"></i>
@@ -63,7 +68,7 @@ export function ProductCard({ product, handleClick }) {
                 <h6 className="card-title">{product.nombre}</h6>
                 <div className="mt-auto">
                     <p className="card-text mb-0">{formatearPrecio(product.precio)}</p>
-                    <p className="card-text mb-0">Quedan: {product.stock}u</p>
+                    <p className="card-text mb-0">Disponibles: {disponible}u</p>
                 </div>
             </div>
 

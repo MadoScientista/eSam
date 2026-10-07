@@ -10,6 +10,15 @@ export function imagenPrincipalProducto(producto) {
 return (principal ?? imagenes[0])?.url ?? null
 }
 
+export function stockDisponible(producto) {
+    const stock = Number(producto?.stock)
+    const stockReservado = Number(producto?.stockReservado ?? 0)
+
+    if (!Number.isFinite(stock) || !Number.isFinite(stockReservado)) return 0
+
+    return Math.max(0, stock - stockReservado)
+}
+
 // Sin tildes y en minúscula, para que "lapiz" encuentre "Lápiz".
 export function normalizarTexto(valor) {
     return String(valor ?? "")

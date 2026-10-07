@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { CartContext } from "./cartContext";
+import { stockDisponible } from "../utils/producto";
 
 export function CartProvider({children}){
 
@@ -23,16 +24,24 @@ export function CartProvider({children}){
                 return item.product.idProducto == p.idProducto
             })
 
+            const disponible = stockDisponible(p)
+            const unidadesActuales = productFound?.units ?? 0
+            const unidadesAgregar = Math.min(Math.max(0, n), disponible - unidadesActuales)
+
+            if (unidadesAgregar <= 0) return currentCart
+
             if(productFound){
               return currentCart.map((item)=>{
-                return item.product.idProducto == p.idProducto ? {...item, units: item.units + n}: item
+                return item.product.idProducto == p.idProducto
+                    ? {...item, product: p, units: item.units + unidadesAgregar}
+                    : item
               })  
             }
             
             return [...currentCart, 
                 {
                     product: p,
-                    units: n
+                    units: unidadesAgregar
                 }]
         })
     }
@@ -41,7 +50,10 @@ export function CartProvider({children}){
     const increaseUnits = (idProducto) => {
         setCart((currentCart) => {
             return currentCart.map((item)=>{
-                return item.product.idProducto == idProducto? {...item, units: item.units + 1}:item
+                const disponible = stockDisponible(item.product)
+                return item.product.idProducto == idProducto && item.units < disponible
+                    ? {...item, units: item.units + 1}
+                    : item
             })
         })
     }
@@ -69,6 +81,8 @@ export function CartProvider({children}){
         })
     }
 
+    const clearCart = () => setCart([])
+
     return (
         <CartContext.Provider 
             value={{
@@ -76,7 +90,8 @@ export function CartProvider({children}){
                 addProduct, 
                 increaseUnits, 
                 decreaseUnits, 
-                removeProduct
+                removeProduct,
+                clearCart
             }}
         >
             {children}

@@ -5,7 +5,7 @@ import { obtenerProductos, obtenerProductoPorId } from "../services/productoServ
 import { useCart } from "../context/cartContext"
 import { Toast } from "../components/Toast"
 import { formatearPrecio } from "../utils/moneda"
-import { imagenPrincipalProducto, productosRecomendados } from "../utils/producto"
+import { imagenPrincipalProducto, productosRecomendados, stockDisponible } from "../utils/producto"
 
 export function ProductDetails(){
 
@@ -15,7 +15,7 @@ export function ProductDetails(){
     const [products, setProducts] = useState([])
     const [toastTrigger, setToastTrigger] = useState(0)
 
-    const { addProduct } = useCart()
+    const { cart, addProduct } = useCart()
 
 
     useEffect(()=>{
@@ -66,6 +66,8 @@ export function ProductDetails(){
     },[product, products])
 
     const imagen = imagenPrincipalProducto(product)
+    const disponible = stockDisponible(product)
+    const unidadesEnCarrito = cart.find((item) => item.product.idProducto === product?.idProducto)?.units ?? 0
 
     return (
     <div className="container mt-5">
@@ -81,8 +83,8 @@ export function ProductDetails(){
                 <div className="h3">{product?.nombre}</div>
                 <p>{product?.descripcion}</p>
                 <p>{product ? formatearPrecio(product.precio) : ""}</p>
-                <p>Quedan: {product?.stock}</p>
-                <button className="btn btn-dark" onClick={handleClick} disabled={!product}>
+                <p>Disponibles: {product ? disponible : "—"}</p>
+                <button className="btn btn-dark" onClick={handleClick} disabled={!product || unidadesEnCarrito >= disponible}>
                     <i className="bi bi-cart"></i> Añadir
                 </button>
             </div>
