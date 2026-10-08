@@ -35,4 +35,4 @@
 - [x] Mostrar el pedido recién creado como `PENDIENTE` y comunicar que sus unidades están reservadas, no descontadas del stock físico.
 - [ ] Agregar en el panel admin/vendedor acciones para las transiciones permitidas, incluyendo la confirmación (`PENDIENTE` → `CONFIRMADO`) tras la simulación de pago.
 - [ ] Implementar la consulta de pedidos e historial del cliente con sus DTOs y estados actuales.
-- [ ] Verificar todas las transiciones y que la reserva se mantenga, se libere o se descuente según el ciclo de stock especificado.
+- [ ] Verificar todas las transiciones y que la reserva se mantenga, se libere o se descuente según el ciclo de stock especificado (solo bajo permiso explícito, no ejecutar sin permiso).

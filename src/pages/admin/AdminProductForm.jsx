@@ -726,7 +726,7 @@ export function AdminProductForm(){
                         accion === "actualizar" ? "Actualizar producto" : "Eliminar producto"
                     }
                     message={
-                        eliminado ? `El producto ${idProducto} fue eliminado.` :
+                        eliminado ? `El producto se eliminó correctamente.` :
                         accion === "crear" ? "¿Estás seguro de guardar el nuevo producto?" :
                         accion === "actualizar" ? `¿Estás seguro de actualizar el producto ${idProducto}?` :
                         `¿Estás seguro de eliminar el producto ${idProducto}?`

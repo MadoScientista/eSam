@@ -7,6 +7,8 @@ export { ProductDetails } from "./ProductDetails"
 export { Products } from "./Products"
 export { Register } from "./Register"
 export { CustomerProfile } from "./CustomerProfile"
+export { CustomerOrders } from "./CustomerOrders"
+export { CustomerOrderDetail } from "./CustomerOrderDetail"
 export { BlogArticle } from "./BlogArticle"
 export { Cart } from "./Cart"
 export { Checkout } from "./Checkout";

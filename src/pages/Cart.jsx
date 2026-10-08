@@ -61,10 +61,11 @@ export function Cart(){
             return
         }
         if (estaAutenticado && !tieneRol(usuario, "cliente")) {
-            setMensaje({ type: "warning", message: "El checkout está disponible para cuentas de cliente." })
+            setMensaje({ type: "warning", message: "Inicia sesión con una cuenta de cliente para finalizar la compra." })
             return
         }
         if (!estaAutenticado) {
+            setMensaje({ type: "warning", message: "Inicia sesión o regístrate para continuar con la compra." })
             navigate("/login", { state: { from: { pathname: "/usuario/checkout" } } })
             return
         }
@@ -108,7 +109,7 @@ export function Cart(){
                         <p>Sub total: {formatearPrecio(subtotal)}</p>
                         <AlertMessage type={mensaje?.type} message={mensaje?.message} />
                         <button className="btn btn-dark" onClick={iniciarCheckout} disabled={cart.length === 0}>
-                            Continuar con la compra
+                            Pagar
                         </button>
                     </div>
                 </div>

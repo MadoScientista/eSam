@@ -101,7 +101,7 @@ export function Checkout() {
             })
 
             if (!direccion?.idDireccion) {
-                throw new Error("El servidor no devolvió el identificador de la dirección creada.")
+                throw new Error("Error al cargar dirección creada.")
             }
 
             setDirecciones((actuales) => [...actuales, direccion])
@@ -121,11 +121,11 @@ export function Checkout() {
         setMensaje(null)
 
         if (cart.length === 0) {
-            setMensaje({ type: "warning", message: "El carrito está vacío. Agrega productos antes de continuar." })
+            setMensaje({ type: "warning", message: "Tu carrito está vacío. Agrega productos para poder pagar." })
             return
         }
         if (tipoEntrega === "DESPACHO" && !idDireccion) {
-            setMensaje({ type: "warning", message: "Selecciona o agrega una dirección para el despacho." })
+            setMensaje({ type: "warning", message: "Selecciona o agrega una dirección de despacho para continuar." })
             return
         }
 
@@ -149,7 +149,7 @@ export function Checkout() {
             setMensaje({
                 type: conflictoStock ? "warning" : "danger",
                 message: conflictoStock
-                    ? "El stock disponible cambió y no alcanza para completar el pedido. Revisa las cantidades e inténtalo nuevamente."
+                    ? "Algunos de los productos no tienen stock suficiente. Revisa las cantidades e inténtalo nuevamente."
                     : error?.message || "No se pudo crear el pedido."
             })
         } finally {
@@ -165,9 +165,9 @@ export function Checkout() {
                         <h1 className="h3">Pedido recibido</h1>
                         <AlertMessage
                             type="success"
-                            message={`La simulación de pago finalizó. El pedido ${pedido.numeroPedido || `#${pedido.idPedido}`} quedó PENDIENTE; el stock está reservado y falta que un vendedor o administrador confirme el pago.`}
+                            message={`El pedido ${pedido.numeroPedido || `#${pedido.idPedido}`} fue creado correctamente y quedó PENDIENTE. El stock está reservado, a la espera de la confirmación de pago por parte de un vendedor o administrador.`}
                         />
-                        <p>El stock físico todavía no se descuenta. Puedes consultar el estado desde tu cuenta cuando el historial de pedidos esté disponible.</p>
+                        <p>El stock físico todavía no se descuenta. Puedes seguir el estado del pedido en <Link to="/usuario/pedidos">Mis pedidos</Link>.</p>
                         <h2 className="h5 mt-4">Resumen del pedido</h2>
                         <ul className="list-group mb-4">
                             {(pedido.detalles ?? []).map((detalle) => (
@@ -331,14 +331,14 @@ export function Checkout() {
                                 <span>Total estimado</span>
                                 <span>{formatearPrecio(totalLocal)}</span>
                             </p>
-                            <p className="small text-secondary">El servidor calcula el total definitivo, valida el stock disponible y reserva las unidades al crear el pedido. La simulación no confirma el pago en backend.</p>
+                            <p className="small text-secondary">Estamos verificando el stock disponible y reservando las unidades para crear el pedido.</p>
                             <button
                                 type="button"
                                 className="btn btn-dark w-100"
                                 onClick={completarPedido}
                                 disabled={procesando || cargandoDatos || (tipoEntrega === "DESPACHO" && !idDireccion)}
                             >
-                                {procesando ? "Procesando..." : "Pagar (simulación)"}
+                                {procesando ? "Procesando..." : "Pagar"}
                             </button>
                         </div>
                     </div>

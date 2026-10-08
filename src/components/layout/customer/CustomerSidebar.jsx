@@ -4,6 +4,7 @@ import { useAuth } from "../../../context/authContext";
 const CUSTOMER_MENU_ITEMS = [
     { label: "Perfil", path: "/usuario", end: true },
     { label: "Carrito", path: "/usuario/carrito" },
+    { label: "Mis pedidos", path: "/usuario/pedidos" },
 ];
 
 export function CustomerSidebar() {

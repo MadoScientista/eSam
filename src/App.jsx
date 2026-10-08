@@ -6,6 +6,7 @@ import { MainLayout, AdminLayout, CustomerLayout } from './components'
 import {
   AboutUs, Blogs, Contact, Home, Login, ProductDetails, Products,
   Register, CustomerProfile, BlogArticle, Cart, Checkout, Category,
+  CustomerOrders, CustomerOrderDetail,
   AdminDashboard, AdminOrders, AdminProfile, AdminControlProduct, AdminProductForm,
   AdminControlUser, AdminUserForm,
   AdminControlCategoria, AdminCategoriaForm
@@ -77,7 +78,9 @@ const router = createBrowserRouter([
         children:[
           {index: true, element:<CustomerProfile/>},
           {path: "carrito", element:<Cart/>},
-          {path: "checkout", element:<Checkout/>}
+          {path: "checkout", element:<Checkout/>},
+          {path: "pedidos", element:<CustomerOrders/>},
+          {path: "pedidos/:idPedido", element:<CustomerOrderDetail/>}
         ]
       }
     ]

@@ -23,4 +23,4 @@ Importante:
 - [x] Implementar checkout con retiro en tienda o despacho, selección de dirección activa y creación de dirección en el mismo flujo.
 - [x] Crear el pedido desde el carrito mediante `POST /api/pedidos` con `tipoEntrega` y, solo para despacho, `idDireccion`; reflejar `409 CONFLICTO_STOCK` sin vaciar ni perder el carrito local.
 - [x] Simular el resultado exitoso en el frontend sin declarar que el backend confirmó el pago ni descontar stock físico; mostrar el pedido como pendiente hasta que admin o vendedor lo confirme.
-- [ ] Verificar el flujo completo con un pedido pendiente, reserva de stock, manejo de errores y carrito vaciado únicamente tras la creación exitosa del pedido.
+- [ ] Verificar el flujo completo con un pedido pendiente, reserva de stock, manejo de errores y carrito vaciado únicamente tras la creación exitosa del pedido (solo bajo permiso explícito, no ejecutar sin permiso).
