@@ -1,6 +1,6 @@
 import { describe, it, expect } from "vitest"
-import { categoriasCatalogo } from "./utils/categoria"
-import { filtrarProductos, marcasCatalogo, nombreMarcaProducto, normalizarTexto, ordenarProductos, stockDisponible } from "./utils/producto"
+import { categoriasCatalogo } from "../../utils/categoria"
+import { filtrarProductos, marcasCatalogo, nombreMarcaProducto, normalizarTexto, ordenarProductos, stockDisponible } from "../../utils/producto"
 
 const producto = (id, nombre, precio, cats, extra = {}) => ({
     idProducto: id,

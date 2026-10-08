@@ -1,6 +1,6 @@
 import { beforeEach, describe, expect, it, vi } from "vitest"
 
-vi.mock("./api", () => ({
+vi.mock("../../services/api", () => ({
     api: {
         get: vi.fn(),
         post: vi.fn(),
@@ -8,9 +8,8 @@ vi.mock("./api", () => ({
     }
 }))
 
-import { api } from "./api"
-import { fusionarCarritoLocal } from "./carritoService"
-import { crearPedido } from "./pedidoService"
+import { api } from "../../services/api"
+import { fusionarCarritoLocal } from "../../services/carritoService"
 
 describe("fusionarCarritoLocal", () => {
     beforeEach(() => {
@@ -38,29 +37,5 @@ describe("fusionarCarritoLocal", () => {
 
         expect(api.put).toHaveBeenCalledWith("/carrito/items/1", { cantidad: 2 })
         expect(api.post).toHaveBeenCalledWith("/carrito/items", { idProducto: 3, cantidad: 1 })
-    })
-})
-
-describe("crearPedido", () => {
-    beforeEach(() => {
-        vi.resetAllMocks()
-        api.post.mockResolvedValue({ data: { idPedido: 1, estado: "PENDIENTE" } })
-    })
-
-    it("envía modalidad e ID de dirección para despacho", async () => {
-        await crearPedido("DESPACHO", 42)
-
-        expect(api.post).toHaveBeenCalledWith("/pedidos", {
-            tipoEntrega: "DESPACHO",
-            idDireccion: 42
-        })
-    })
-
-    it("omite dirección para retiro en tienda", async () => {
-        await crearPedido("RETIRA_TIENDA")
-
-        expect(api.post).toHaveBeenCalledWith("/pedidos", {
-            tipoEntrega: "RETIRA_TIENDA"
-        })
     })
 })

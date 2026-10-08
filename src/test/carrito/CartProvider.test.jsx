@@ -1,7 +1,7 @@
 import { act, renderHook } from "@testing-library/react"
 import { beforeEach, describe, expect, it } from "vitest"
-import { CartProvider } from "./CartProvider"
-import { useCart } from "./cartContext"
+import { CartProvider } from "../../context/CartProvider"
+import { useCart } from "../../context/cartContext"
 
 describe("CartProvider stock disponible", () => {
     beforeEach(() => {

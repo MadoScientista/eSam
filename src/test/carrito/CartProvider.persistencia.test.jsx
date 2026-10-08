@@ -1,17 +1,17 @@
 import { act, renderHook, waitFor } from "@testing-library/react"
 import { beforeEach, describe, expect, it, vi } from "vitest"
-import { CartProvider } from "./CartProvider"
-import { useCart } from "./cartContext"
-import { AuthContext } from "./authContext"
+import { CartProvider } from "../../context/CartProvider"
+import { useCart } from "../../context/cartContext"
+import { AuthContext } from "../../context/authContext"
 import {
     agregarItemCarrito,
     actualizarCantidadItem,
     eliminarItemCarrito,
     obtenerCarrito,
     vaciarCarrito
-} from "../services/carritoService"
+} from "../../services/carritoService"
 
-vi.mock("../services/carritoService", () => ({
+vi.mock("../../services/carritoService", () => ({
     agregarItemCarrito: vi.fn(),
     actualizarCantidadItem: vi.fn(),
     eliminarItemCarrito: vi.fn(),
