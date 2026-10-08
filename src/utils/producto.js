@@ -119,6 +119,47 @@ export function ordenarProductos(productos, orden = "destacados") {
     }
 }
 
+// Campos por los que se ordena el listado del panel de administración y
+// direcciones posibles. Por defecto la tabla de /admin/productos se muestra
+// ordenada por SKU descendente.
+export const ORDENES_ADMIN_PRODUCTO = [
+    { valor: "sku", etiqueta: "SKU" },
+    { valor: "id", etiqueta: "ID" },
+    { valor: "precio", etiqueta: "Precio" },
+    { valor: "nombre", etiqueta: "Nombre" },
+    { valor: "stock", etiqueta: "Stock" },
+]
+
+export const DIRECCIONES_ORDEN = [
+    { valor: "asc", etiqueta: "Ascendente" },
+    { valor: "desc", etiqueta: "Descendente" },
+]
+
+// factor convierte la comparación en ascendente (1) o descendente (-1).
+export function ordenarProductosAdmin(productos, campo = "sku", direccion = "desc") {
+    const lista = [...(productos ?? [])]
+    const factor = direccion === "asc" ? 1 : -1
+
+    switch (campo) {
+        case "sku":
+            return lista.sort((a, b) =>
+                factor * String(a.sku ?? "").localeCompare(String(b.sku ?? ""), "es", { numeric: true, sensitivity: "base" })
+            )
+        case "id":
+            return lista.sort((a, b) => factor * (Number(a.idProducto) - Number(b.idProducto)))
+        case "precio":
+            return lista.sort((a, b) => factor * (Number(a.precio) - Number(b.precio)))
+        case "nombre":
+            return lista.sort((a, b) =>
+                factor * normalizarTexto(a.nombre).localeCompare(normalizarTexto(b.nombre), "es")
+            )
+        case "stock":
+            return lista.sort((a, b) => factor * (Number(a.stock) - Number(b.stock)))
+        default:
+            return lista
+    }
+}
+
 // Tarjetas que caben en una fila del carrusel: .product-carousel-item usa 20% de
 // ancho desde 1200px, y ProductCarousel mide la fila como clientWidth / 5.
 export const CANTIDAD_RELACIONADOS = 5

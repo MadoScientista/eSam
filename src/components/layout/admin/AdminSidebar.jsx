@@ -10,6 +10,7 @@ export function AdminSidebar() {
         { label: "Órdenes", path: "/admin/ordenes", icon: "bi-bag" },
         { label: "Productos", path: "/admin/productos", icon: "bi-box-seam" },
         { label: "Categorías", path: "/admin/categorias", icon: "bi-tags" },
+        { label: "Marcas", path: "/admin/marcas", icon: "bi-award" },
         ...(!esVendedor ? [{ label: "Usuarios", path: "/admin/usuarios", icon: "bi-people" }] : []),
     ];
 

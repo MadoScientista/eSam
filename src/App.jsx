@@ -9,7 +9,8 @@ import {
   CustomerOrders, CustomerOrderDetail,
   AdminDashboard, AdminOrders, AdminProfile, AdminControlProduct, AdminProductForm,
   AdminControlUser, AdminUserForm,
-  AdminControlCategoria, AdminCategoriaForm
+  AdminControlCategoria, AdminCategoriaForm,
+  AdminControlMarca, AdminMarcaForm
 } from './pages'
 
 import { useAuth, tieneRol } from './context/authContext'
@@ -60,7 +61,10 @@ const router = createBrowserRouter([
           {path: "usuarios/nuevo", element: <AdminOnly><AdminUserForm/></AdminOnly>},
           {path: "categorias", element: <AdminControlCategoria/>},
           {path: "categorias/:idCategoria", element: <AdminOnly><AdminCategoriaForm/></AdminOnly>},
-          {path: "categorias/nuevo", element: <AdminOnly><AdminCategoriaForm/></AdminOnly>}
+          {path: "categorias/nuevo", element: <AdminOnly><AdminCategoriaForm/></AdminOnly>},
+          {path: "marcas", element: <AdminControlMarca/>},
+          {path: "marcas/:idMarca", element: <AdminOnly><AdminMarcaForm/></AdminOnly>},
+          {path: "marcas/nuevo", element: <AdminOnly><AdminMarcaForm/></AdminOnly>}
         ] 
       },
       { path:"blogs",element:<Blogs/> },
