@@ -62,7 +62,7 @@ export function CustomerOrders() {
                     <table className="table align-middle">
                         <thead>
                             <tr>
-                                <th scope="col">PEDIDO</th>
+                                <th scope="col">ID PEDIDO</th>
                                 <th scope="col">FECHA</th>
                                 <th scope="col">ARTÍCULOS</th>
                                 <th scope="col">TOTAL</th>
@@ -73,7 +73,7 @@ export function CustomerOrders() {
                         <tbody>
                             {pedidos.map((pedido) => (
                                 <tr key={pedido.idPedido}>
-                                    <td><strong>{pedido.numeroPedido || `#${pedido.idPedido}`}</strong></td>
+                                    <td><strong>#{pedido.idPedido}</strong></td>
                                     <td>{fechaPedido(pedido.creadoEn)}</td>
                                     <td>{pedido.cantidadItems ?? "—"}</td>
                                     <td><strong>{formatearPrecio(pedido.total ?? 0)}</strong></td>

@@ -165,9 +165,9 @@ export function Checkout() {
                         <h1 className="h3">Pedido recibido</h1>
                         <AlertMessage
                             type="success"
-                            message={`El pedido ${pedido.numeroPedido || `#${pedido.idPedido}`} fue creado correctamente y quedó PENDIENTE. El stock está reservado, a la espera de la confirmación de pago por parte de un vendedor o administrador.`}
+                            message={`El pedido #${pedido.idPedido} fue creado exitosamente, y quedó PENDIENTE a la espera de la confirmación de pago por la tienda.`}
                         />
-                        <p>El stock físico todavía no se descuenta. Puedes seguir el estado del pedido en <Link to="/usuario/pedidos">Mis pedidos</Link>.</p>
+                        <p>Puedes seguir el estado del pedido en <Link to="/usuario/pedidos">Mis pedidos</Link>.</p>
                         <h2 className="h5 mt-4">Resumen del pedido</h2>
                         <ul className="list-group mb-4">
                             {(pedido.detalles ?? []).map((detalle) => (

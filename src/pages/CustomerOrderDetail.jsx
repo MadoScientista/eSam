@@ -16,11 +16,11 @@ function fechaPedido(fecha) {
 // Explica al cliente qué significa el estado actual sobre el stock reservado,
 // siguiendo el ciclo de stock de la especificación de pedidos.
 const EXPLICACION_ESTADO = {
-    PENDIENTE: "El pago está pendiente de confirmación: las unidades del pedido están reservadas y aún no se descuentan del stock físico.",
-    CONFIRMADO: "El pago fue confirmado por un vendedor o administrador; la reserva de unidades se mantiene.",
-    ENVIADO: "El pedido está en camino; la reserva de unidades se mantiene hasta la entrega.",
-    ENTREGADO: "El pedido fue entregado: el stock se descontó y la reserva se liberó.",
-    CANCELADO: "El pedido fue cancelado y la reserva de unidades se liberó del stock.",
+    PENDIENTE: "El pago está pendiente de confirmación: las unidades del pedido están reservadas para tí hasta que se confirme el pago",
+    CONFIRMADO: "El pago fue confirmado por un vendedor o administrador",
+    ENVIADO: "El pedido está en camino.",
+    ENTREGADO: "El pedido fue entregado.",
+    CANCELADO: "El pedido fue cancelado.",
 }
 
 function direccionTexto(envio) {
@@ -87,7 +87,7 @@ export function CustomerOrderDetail() {
             <div className="d-flex flex-wrap justify-content-between align-items-center mb-4 gap-2">
                 <div>
                     <Link className="text-decoration-none small" to="/usuario/pedidos">← Mis pedidos</Link>
-                    <h1 className="h3 mb-1">{pedido.numeroPedido || `Pedido #${pedido.idPedido}`}</h1>
+                    <h1 className="h3 mb-1">#${pedido.idPedido}</h1>
                     <p className="text-secondary mb-0">Creado el {fechaPedido(pedido.creadoEn)}</p>
                 </div>
                 <EstadoPedidoBadge estado={pedido.estado} />
