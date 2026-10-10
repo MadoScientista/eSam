@@ -1,4 +1,4 @@
-import { fireEvent, render, screen } from "@testing-library/react"
+import { fireEvent, render, screen, waitFor } from "@testing-library/react"
 import { MemoryRouter, Route, Routes } from "react-router-dom"
 import { beforeEach, describe, expect, it, vi } from "vitest"
 
@@ -113,6 +113,46 @@ describe("ProductDetails", () => {
         fireEvent.click(boton)
 
         expect(boton).toBeDisabled()
+    })
+
+    it("Permite elegir la cantidad de unidades a añadir", async () => {
+        obtenerProductoPorId.mockResolvedValue(product(1, "Cuaderno", 2490, 5))
+        obtenerProductos.mockResolvedValue([])
+
+        renderProductDetails()
+        const cantidad = await screen.findByLabelText("Cantidad")
+
+        expect(cantidad).toHaveAttribute("max", "5")
+
+        fireEvent.change(cantidad, { target: { value: "3" } })
+        fireEvent.click(screen.getByRole("button", { name: "Añadir" }))
+
+        await waitFor(() => {
+            const carrito = JSON.parse(localStorage.getItem("eSamCart"))
+            expect(carrito[0].units).toBe(3)
+        })
+    })
+
+    it("Limita la cantidad elegida al stock disponible", async () => {
+        obtenerProductoPorId.mockResolvedValue(product(1, "Cuaderno", 2490, 2))
+        obtenerProductos.mockResolvedValue([])
+
+        renderProductDetails()
+        const cantidad = await screen.findByLabelText("Cantidad")
+
+        fireEvent.change(cantidad, { target: { value: "10" } })
+
+        expect(cantidad).toHaveValue(2)
+    })
+
+    it("Deshabilita el selector de cantidad cuando no hay stock", async () => {
+        obtenerProductoPorId.mockResolvedValue(product(1, "Cuaderno", 2490, 0))
+        obtenerProductos.mockResolvedValue([])
+
+        renderProductDetails()
+
+        expect(await screen.findByLabelText("Cantidad")).toBeDisabled()
+        expect(screen.getByRole("button", { name: "Añadir" })).toBeDisabled()
     })
 
     it("Muestra los productos relacionados de la misma categoría", async () => {

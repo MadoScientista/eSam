@@ -104,4 +104,50 @@ describe("AdminOrders", () => {
 
         expect(await screen.findByText("La transición de estado no está permitida para este pedido.")).toBeInTheDocument()
     })
+
+    it("Abre el detalle de un pedido con despacho a domicilio", async () => {
+        obtenerPedidosAdmin.mockResolvedValue([orden({
+            tipoEntrega: "DESPACHO",
+            total: 4980,
+            emailUsuario: "ana@correo.cl",
+            detalles: [{ idDetallePedido: 1, cantidad: 2, nombreProducto: "Cuaderno", skuProducto: "SKU-1", subtotal: 4980 }],
+            envio: {
+                nombreReceptor: "Ana López",
+                telefonoReceptor: "+56912345678",
+                calle: "Av. Siempre Viva",
+                numero: "742",
+                complemento: "Depto 3",
+                comunaNombre: "Santiago",
+                regionNombre: "Metropolitana"
+            },
+            historialEstados: [
+                { estadoAnterior: null, estadoNuevo: "PENDIENTE", cambiadoEn: "2026-01-15T12:30:00Z" }
+            ]
+        })])
+
+        render(<AdminOrders />)
+        fireEvent.click(await screen.findByRole("button", { name: "Ver detalle del pedido 5" }))
+
+        expect(await screen.findByText("2 × Cuaderno")).toBeInTheDocument()
+        expect(screen.getByText("Despacho a domicilio")).toBeInTheDocument()
+        expect(screen.getByText("Ana López")).toBeInTheDocument()
+        expect(screen.getByText("Av. Siempre Viva 742, Depto 3, Santiago, Metropolitana")).toBeInTheDocument()
+        expect(screen.getByText("ana@correo.cl")).toBeInTheDocument()
+        expect(screen.getByText("Creado en PENDIENTE")).toBeInTheDocument()
+    })
+
+    it("Abre el detalle de un pedido con retiro en tienda sin datos de envío", async () => {
+        obtenerPedidosAdmin.mockResolvedValue([orden({
+            tipoEntrega: "RETIRA_TIENDA",
+            envio: null,
+            detalles: [{ idDetallePedido: 1, cantidad: 1, nombreProducto: "Lápiz", subtotal: 990 }]
+        })])
+
+        render(<AdminOrders />)
+        fireEvent.click(await screen.findByRole("button", { name: "Ver detalle del pedido 5" }))
+
+        expect(await screen.findByText("1 × Lápiz")).toBeInTheDocument()
+        expect(screen.getByText("Retiro en tienda")).toBeInTheDocument()
+        expect(screen.queryByText("Recibe")).not.toBeInTheDocument()
+    })
 })
