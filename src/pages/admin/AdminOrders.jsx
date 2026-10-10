@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import { AlertMessage } from "../../components/AlertMessage";
 import { ConfirmModal } from "../../components/ConfirmModal";
+import { OrderDetailModal } from "../../components/OrderDetailModal";
+import { TableCard } from "../../components/TableCard";
 import { obtenerPedidosAdmin, actualizarEstadoPedido } from "../../services/pedidoService";
 import { formatearPrecio } from "../../utils/moneda";
 
@@ -61,6 +63,7 @@ export function AdminOrders() {
     const [error, setError] = useState("");
     const [mensaje, setMensaje] = useState(null);
     const [transicionPendiente, setTransicionPendiente] = useState(null);
+    const [ordenDetalle, setOrdenDetalle] = useState(null);
     const [procesando, setProcesando] = useState(false);
 
     useEffect(() => {
@@ -142,33 +145,26 @@ export function AdminOrders() {
             <AlertMessage type={mensaje?.type} message={mensaje?.message} onClose={() => setMensaje(null)} />
             {error && <AlertMessage type="danger" message={error} />}
 
-            <section className="admin-table-card">
-                <div className="admin-table-heading">
-                    <div>
-                        <h2>Todas las órdenes</h2>
-                        <p>Listado general de compras de la tienda</p>
-                    </div>
-                </div>
-                <div className="table-responsive">
-                    <table className="table admin-orders-table align-middle mb-0">
-                        <thead>
-                            <tr>
-                                <th scope="col">ORDEN</th>
-                                <th scope="col">FECHA</th>
-                                <th scope="col">ARTÍCULOS</th>
-                                <th scope="col">TOTAL</th>
-                                <th scope="col">ESTADO</th>
-                                <th scope="col">ACCIONES</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {cargando ? (
-                                <tr><td colSpan="6" className="admin-table-empty">Cargando órdenes...</td></tr>
-                            ) : error ? (
-                                <tr><td colSpan="6" className="admin-table-empty">No fue posible mostrar las órdenes.</td></tr>
-                            ) : ordenes.length === 0 ? (
-                                <tr><td colSpan="6" className="admin-table-empty">Todavía no hay órdenes registradas.</td></tr>
-                            ) : ordenes.map((orden) => {
+            <TableCard title="Todas las órdenes" subtitle="Listado general de compras de la tienda">
+                <table className="table site-table align-middle mb-0">
+                    <thead>
+                        <tr>
+                            <th scope="col">ORDEN</th>
+                            <th scope="col">FECHA</th>
+                            <th scope="col">ARTÍCULOS</th>
+                            <th scope="col">TOTAL</th>
+                            <th scope="col">ESTADO</th>
+                            <th scope="col">ACCIONES</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {cargando ? (
+                            <tr><td colSpan="6" className="site-table-empty">Cargando órdenes...</td></tr>
+                        ) : error ? (
+                            <tr><td colSpan="6" className="site-table-empty">No fue posible mostrar las órdenes.</td></tr>
+                        ) : ordenes.length === 0 ? (
+                            <tr><td colSpan="6" className="site-table-empty">Todavía no hay órdenes registradas.</td></tr>
+                        ) : ordenes.map((orden) => {
                                 const transiciones = TRANSICIONES_PERMITIDAS[orden.estado] ?? [];
 
                                 return (
@@ -187,32 +183,39 @@ export function AdminOrders() {
                                         </span>
                                     </td>
                                     <td>
-                                        {transiciones.length === 0 ? (
-                                            <span className="text-secondary small">Sin acciones disponibles</span>
-                                        ) : (
-                                            <div className="d-flex flex-wrap gap-1">
-                                                {transiciones.map((transicion) => (
-                                                    <button
-                                                        key={transicion.estado}
-                                                        type="button"
-                                                        className={`btn btn-sm ${transicion.estado === "CANCELADO" ? "btn-outline-danger" : "btn-outline-dark"}`}
-                                                        onClick={() => setTransicionPendiente({ orden, transicion })}
-                                                        disabled={procesando}
-                                                    >
-                                                        <i className={`bi ${transicion.icono} me-1`} aria-hidden="true" />
-                                                        {transicion.etiqueta}
-                                                    </button>
-                                                ))}
-                                            </div>
-                                        )}
+                                        <div className="d-flex flex-wrap align-items-center gap-1">
+                                            <button
+                                                type="button"
+                                                className="btn btn-sm btn-outline-secondary"
+                                                onClick={() => setOrdenDetalle(orden)}
+                                                aria-label={`Ver detalle del pedido ${orden.idPedido}`}
+                                            >
+                                                <i className="bi bi-eye me-1" aria-hidden="true" />
+                                                Ver detalle
+                                            </button>
+                                            {transiciones.map((transicion) => (
+                                                <button
+                                                    key={transicion.estado}
+                                                    type="button"
+                                                    className={`btn btn-sm ${transicion.estado === "CANCELADO" ? "btn-outline-danger" : "btn-outline-dark"}`}
+                                                    onClick={() => setTransicionPendiente({ orden, transicion })}
+                                                    disabled={procesando}
+                                                >
+                                                    <i className={`bi ${transicion.icono} me-1`} aria-hidden="true" />
+                                                    {transicion.etiqueta}
+                                                </button>
+                                            ))}
+                                            {transiciones.length === 0 && (
+                                                <span className="text-secondary small">Sin acciones disponibles</span>
+                                            )}
+                                        </div>
                                     </td>
                                 </tr>
                                 );
                             })}
-                        </tbody>
-                    </table>
-                </div>
-            </section>
+                    </tbody>
+                </table>
+            </TableCard>
 
             {transicionPendiente && (
                 <ConfirmModal
@@ -228,6 +231,12 @@ export function AdminOrders() {
                     onCancel={cerrarModal}
                 />
             )}
+
+            <OrderDetailModal
+                show={Boolean(ordenDetalle)}
+                orden={ordenDetalle}
+                onClose={() => setOrdenDetalle(null)}
+            />
         </div>
     );
 }
