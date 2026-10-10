@@ -153,6 +153,7 @@ export function AdminMarcaForm() {
                     <input
                         type="text"
                         className="form-control border-black"
+                        id="nombre"
                         name="nombre"
                         placeholder="Torre"
                         value={formulario.nombre}

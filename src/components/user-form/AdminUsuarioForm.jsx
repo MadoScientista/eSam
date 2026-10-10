@@ -41,6 +41,7 @@ export function AdminUsuarioForm({ idUsuario, onSubmit, onDelete }) {
                         <input
                             type="text"
                             className="form-control border-black"
+                            id="idUsuario"
                             name="idUsuario"
                             value={idUsuario}
                             disabled
@@ -62,6 +63,7 @@ export function AdminUsuarioForm({ idUsuario, onSubmit, onDelete }) {
                     <label htmlFor="idRolUsuario" className="form-label">Tipo de Usuario*</label>
                     <select
                         className="form-select border-black"
+                        id="idRolUsuario"
                         name="idRolUsuario"
                         value={formulario.idRolUsuario}
                         onChange={handleChange}

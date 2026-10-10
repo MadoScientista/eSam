@@ -195,6 +195,7 @@ export function AdminCategoriaForm() {
                     <input
                         type="text"
                         className="form-control border-black"
+                        id="nombre"
                         name="nombre"
                         placeholder="Cuadernos"
                         value={formulario.nombre}
@@ -208,6 +209,7 @@ export function AdminCategoriaForm() {
                     <label htmlFor="idCategoriaPadre" className="form-label fw-bold">Categoría padre</label>
                     <select
                         className="form-select border-black"
+                        id="idCategoriaPadre"
                         name="idCategoriaPadre"
                         value={formulario.idCategoriaPadre}
                         onChange={handleChange}>

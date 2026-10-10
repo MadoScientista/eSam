@@ -503,6 +503,7 @@ export function AdminProductForm(){
                             <input
                                 type="text"
                                 className="form-control border-black"
+                                id="sku"
                                 name="sku"
                                 maxLength={50}
                                 placeholder="CUAD-001"
@@ -516,6 +517,7 @@ export function AdminProductForm(){
                             <input
                                 type="text"
                                 className="form-control border-black"
+                                id="nombre"
                                 name="nombre"
                                 maxLength={100}
                                 placeholder="Nombre producto"
@@ -528,6 +530,7 @@ export function AdminProductForm(){
                             <label htmlFor="descripcion" className="form-label fw-bold">Descripción</label>
                             <textarea
                                 className="form-control border-black"
+                                id="descripcion"
                                 name="descripcion"
                                 rows="3"
                                 placeholder="Descripción de producto"
@@ -543,6 +546,7 @@ export function AdminProductForm(){
                                 <input
                                     type="text"
                                     className="form-control border-black"
+                                    id="precio"
                                     name="precio"
                                     maxLength={10}
                                     placeholder="1000"
@@ -559,6 +563,7 @@ export function AdminProductForm(){
                                 <input
                                     type="text"
                                     className="form-control border-black"
+                                    id="stock"
                                     name="stock"
                                     maxLength={10}
                                     placeholder="10"
@@ -576,6 +581,7 @@ export function AdminProductForm(){
                             <div className="w-50">
                                 <select
                                     className="form-select border-black"
+                                    id="idMarca"
                                     name="idMarca"
                                     value={formulario.idMarca ?? ""}
                                     onChange={handleChange}
