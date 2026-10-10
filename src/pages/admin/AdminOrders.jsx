@@ -108,7 +108,7 @@ export function AdminOrders() {
             );
             setMensaje({
                 type: "success",
-                message: `El pedido ${actualizado.numeroPedido || `#${actualizado.idPedido}`} quedó en estado ${actualizado.estado}.`,
+                message: `El pedido ${`#${actualizado.idPedido}`} quedó en estado ${actualizado.estado}.`,
             });
         } catch (errorCambio) {
             console.error("Error al cambiar el estado del pedido", errorCambio);
@@ -175,7 +175,7 @@ export function AdminOrders() {
                                 <tr key={orden.idPedido}>
                                     <td>
                                         <strong className="admin-order-number">
-                                            {orden.numeroPedido || `#${orden.idPedido}`}
+                                            {`#${orden.idPedido}`}
                                         </strong>
                                     </td>
                                     <td>{fechaPedido(orden.creadoEn)}</td>
@@ -217,7 +217,7 @@ export function AdminOrders() {
             {transicionPendiente && (
                 <ConfirmModal
                     show
-                    title={`${transicionPendiente.transicion.etiqueta} · ${transicionPendiente.orden.numeroPedido || `#${transicionPendiente.orden.idPedido}`}`}
+                    title={`${transicionPendiente.transicion.etiqueta} Pedido #${transicionPendiente.orden.idPedido}`}
                     message={CONFIRMACIONES[transicionPendiente.transicion.estado]}
                     confirmText={transicionPendiente.transicion.etiqueta}
                     cancelText="Volver"

@@ -124,11 +124,6 @@ export function Checkout() {
             setMensaje({ type: "warning", message: "Tu carrito está vacío. Agrega productos para poder pagar." })
             return
         }
-        if (tipoEntrega === "DESPACHO" && !idDireccion) {
-            setMensaje({ type: "warning", message: "Selecciona o agrega una dirección de despacho para continuar." })
-            return
-        }
-
         setProcesando(true)
         try {
             await fusionarCarritoLocal(cart)

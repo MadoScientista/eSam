@@ -87,7 +87,7 @@ export function CustomerOrderDetail() {
             <div className="d-flex flex-wrap justify-content-between align-items-center mb-4 gap-2">
                 <div>
                     <Link className="text-decoration-none small" to="/usuario/pedidos">← Mis pedidos</Link>
-                    <h1 className="h3 mb-1">#${pedido.idPedido}</h1>
+                    <h1 className="h3 mb-1">#{pedido.idPedido}</h1>
                     <p className="text-secondary mb-0">Creado el {fechaPedido(pedido.creadoEn)}</p>
                 </div>
                 <EstadoPedidoBadge estado={pedido.estado} />

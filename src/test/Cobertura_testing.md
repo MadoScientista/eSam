@@ -9,7 +9,7 @@ Documento de referencia sobre el estado actual de los tests de eSam.
 - Comandos:
   - `npm test` — corre los tests en modo watch.
   - `npm run coverage` — corre los tests una vez con reporte de cobertura.
-- Estado actual: **24 archivos, 212 tests, todos en verde** (41 tests de componente + 171 de funciones/contexto).
+- Estado actual: **27 archivos, 234 tests, todos en verde** (63 tests de componente + 171 de funciones/contexto).
 - Objetivo en curso: **al menos 1 test de componente y 1 test de función por cada Page** (ver "Convención por Page").
 
 ## Estructura de archivos
@@ -41,9 +41,9 @@ src/test/
 │   ├── pedidoService.test.js            (crearPedido, mis pedidos y admin)
 │   ├── direccionService.test.js         (direcciones del usuario)
 │   ├── regionComunaService.test.js      (regiones y comunas)
-│   ├── Checkout.test.jsx                (PENDIENTE)
-│   ├── CustomerOrders.test.jsx          (PENDIENTE)
-│   └── CustomerOrderDetail.test.jsx     (PENDIENTE)
+│   ├── Checkout.test.jsx                (resumen, despacho/retiro y creación de pedido)
+│   ├── CustomerOrders.test.jsx          (tabla, vacío, error y navegación al detalle)
+│   └── CustomerOrderDetail.test.jsx     (despacho/retiro, estados, historial y 404)
 ├── registro-login/
 │   ├── rut.test.js                      (validarRut, digitoVerificador, descomponerRut)
 │   ├── token.test.js                    (guardarToken, obtenerToken, limpiarToken, iniciarSesion)
@@ -155,22 +155,22 @@ Vistas: `/usuario/checkout` (Checkout), `/usuario/pedidos` (CustomerOrders), `/u
 ### Checkout
 - Componente: `Checkout`
 - Funciones: `crearPedido`, `fusionarCarritoLocal`, `obtenerDirecciones`, `crearDireccion`, `obtenerRegionesComunas`
-- Test de componente: **Pendiente** — `src/test/pedidos/Checkout.test.jsx`
+- Test de componente: **Sí** — `src/test/pedidos/Checkout.test.jsx` (9 tests: carrito vacío, retiro por defecto, carga de direcciones/regiones, agregar dirección, completar pedido retiro/despacho, conflicto de stock y errores).
 - Test de funciones: **Sí** — `crearPedido` (2 tests), `obtenerDirecciones`/`crearDireccion` en `direccionService.test.js` (7), `obtenerRegionesComunas` en `regionComunaService.test.js` (3).
 
 ### CustomerOrders (listado de mis pedidos)
 - Componente: `CustomerOrders`, `EstadoPedidoBadge`
 - Funciones: `obtenerMisPedidos`
-- Test de componente: **Pendiente** — `src/test/pedidos/CustomerOrders.test.jsx` (tabla, vacío, error).
+- Test de componente: **Sí** — `src/test/pedidos/CustomerOrders.test.jsx` (6 tests: carga, tabla con pedidos, valores alternativos, vacío, error cerrable y formato inesperado).
 - Test de funciones: **Sí** — `pedidoService.test.js` cubre `obtenerMisPedidos`.
 
 ### CustomerOrderDetail (detalle de mi pedido)
 - Componente: `CustomerOrderDetail`, `EstadoPedidoBadge`
 - Funciones: `obtenerMiPedido`
-- Test de componente: **Pendiente** — `src/test/pedidos/CustomerOrderDetail.test.jsx` (DESPACHO vs retiro, estados, 404).
+- Test de componente: **Sí** — `src/test/pedidos/CustomerOrderDetail.test.jsx` (7 tests: carga, retiro, despacho con envío, explicación/historial, 404, error y formato inesperado).
 - Test de funciones: **Sí** — `pedidoService.test.js` cubre `obtenerMiPedido`.
 
-**Resumen de la categoría (actual):** 17 tests de funciones. Pendientes: 3 tests de componente.
+**Resumen de la categoría (actual):** 17 tests de funciones y 22 tests de componente. Pendientes: ninguno.
 
 ---
 
@@ -246,9 +246,9 @@ Estado por vista (criterio: 1 test de componente + 1 de función por Page):
 | 3 | Category | catalogo | Cubierto | Cubierto | `Category.test.jsx` |
 | 4 | ProductDetails | catalogo | Cubierto | Cubierto | `ProductDetails.test.jsx` |
 | 5 | Cart | carrito | Cubierto | Cubierto | `Cart.test.jsx` |
-| 6 | Checkout | pedidos | Pendiente | Cubierto | `Checkout.test.jsx` |
-| 7 | CustomerOrders | pedidos | Pendiente | Cubierto | `CustomerOrders.test.jsx` |
-| 8 | CustomerOrderDetail | pedidos | Pendiente | Cubierto | `CustomerOrderDetail.test.jsx` |
+| 6 | Checkout | pedidos | Cubierto | Cubierto | `Checkout.test.jsx` |
+| 7 | CustomerOrders | pedidos | Cubierto | Cubierto | `CustomerOrders.test.jsx` |
+| 8 | CustomerOrderDetail | pedidos | Cubierto | Cubierto | `CustomerOrderDetail.test.jsx` |
 | 9 | Login | registro-login | Pendiente | Cubierto (parcial) | `Login.test.jsx` |
 | 10 | Register | registro-login | Pendiente | Cubierto (parcial) | `Register.test.jsx` |
 | 11 | CustomerProfile | registro-login | Pendiente | Cubierto | `CustomerProfile.test.jsx` |
@@ -278,14 +278,14 @@ Estado por vista (criterio: 1 test de componente + 1 de función por Page):
 |---|---|---|---|
 | 1. Catálogo | 32 | 88 | `src/test/catalogo/producto.test.js` (44), `src/test/catalogo/categoria.test.js` (16), `src/test/catalogo/productoService.test.js` (16), `src/test/catalogo/categoriaService.test.js` (9), `src/test/catalogo/moneda.test.js` (3), `src/test/catalogo/ProductCarousel.test.jsx` (6), `Home.test.jsx` (4), `Products.test.jsx` (9), `Category.test.jsx` (6), `ProductDetails.test.jsx` (7) |
 | 2. Carrito | 9 | 10 | `src/test/carrito/CartProvider.test.jsx` (3), `src/test/carrito/CartProvider.persistencia.test.jsx` (6), `src/test/carrito/carritoService.test.js` (1), `src/test/carrito/Cart.test.jsx` (9) |
-| 3. Pedidos | 0 | 17 | `src/test/pedidos/pedidoService.test.js` (7), `src/test/pedidos/direccionService.test.js` (7), `src/test/pedidos/regionComunaService.test.js` (3) |
+| 3. Pedidos | 22 | 17 | `src/test/pedidos/pedidoService.test.js` (7), `src/test/pedidos/direccionService.test.js` (7), `src/test/pedidos/regionComunaService.test.js` (3), `src/test/pedidos/Checkout.test.jsx` (9), `CustomerOrders.test.jsx` (6), `CustomerOrderDetail.test.jsx` (7) |
 | 4. Registro y Login | 0 | 39 | `src/test/registro-login/rut.test.js` (12), `src/test/registro-login/token.test.js` (7), `src/test/registro-login/usuarioService.test.js` (11), `src/test/registro-login/useUsuarioForm.test.js` (9) |
 | 5. Admin | 0 | 17 | `src/test/admin/ordenarProductosAdmin.test.js` (10), `src/test/admin/marcaService.test.js` (4), `src/test/admin/marca.test.js` (3) |
-| **Total** | **41** | **171** | 24 archivos |
+| **Total** | **63** | **171** | 27 archivos |
 
 ### Pendientes (objetivo: 1 test de función + 1 de componente por Page)
 
-- **Tests de componente: 20 páginas pendientes** (cubiertas hasta ahora `Home`, `Products`, `Category`, `ProductDetails` y `Cart`). Se colocan en la carpeta de dominio de cada Page (`pedidos/`, `registro-login/`, `admin/`, `estaticas/`).
+- **Tests de componente: 17 páginas pendientes** (cubiertas hasta ahora `Home`, `Products`, `Category`, `ProductDetails`, `Cart`, `Checkout`, `CustomerOrders` y `CustomerOrderDetail`). Se colocan en la carpeta de dominio de cada Page (`registro-login/`, `admin/`, `estaticas/`).
 - **Tests de función pendientes por servicio/util/hook: ninguno.** Todos los servicios/utiles/hook están cubiertos:
   - `catalogo/`: `productoService.test.js` (16) y `categoriaService.test.js` (9).
   - `pedidos/`: `pedidoService.test.js` (7), `direccionService.test.js` (7), `regionComunaService.test.js` (3).
