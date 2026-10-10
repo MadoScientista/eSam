@@ -9,7 +9,7 @@ Documento de referencia sobre el estado actual de los tests de eSam.
 - Comandos:
   - `npm test` — corre los tests en modo watch.
   - `npm run coverage` — corre los tests una vez con reporte de cobertura.
-- Estado actual: **27 archivos, 234 tests, todos en verde** (63 tests de componente + 171 de funciones/contexto).
+- Estado actual: **30 archivos, 252 tests, todos en verde** (81 tests de componente + 171 de funciones/contexto).
 - Objetivo en curso: **al menos 1 test de componente y 1 test de función por cada Page** (ver "Convención por Page").
 
 ## Estructura de archivos
@@ -49,9 +49,9 @@ src/test/
 │   ├── token.test.js                    (guardarToken, obtenerToken, limpiarToken, iniciarSesion)
 │   ├── usuarioService.test.js           (crearUsuario, perfil, admin usuarios)
 │   ├── useUsuarioForm.test.js           (construirPayload con renderHook)
-│   ├── Login.test.jsx                   (PENDIENTE)
-│   ├── Register.test.jsx                (PENDIENTE)
-│   └── CustomerProfile.test.jsx         (PENDIENTE)
+│   ├── Login.test.jsx                   (formulario, redirección por rol y errores)
+│   ├── Register.test.jsx                (registro, validaciones y navegación)
+│   └── CustomerProfile.test.jsx         (modo edición: carga, guardado y error)
 ├── admin/
 │   ├── ordenarProductosAdmin.test.js    (ordenarProductosAdmin y selectores de orden)
 │   ├── marcaService.test.js             (servicio de marcas)
@@ -181,19 +181,19 @@ Vistas: `/login` (Login), `/registro` (Register), `/usuario` (CustomerProfile).
 ### Login
 - Componente: `Login`, `LoginForm`
 - Funciones: `iniciarSesion`, `guardarToken`, `obtenerToken`, `limpiarToken`
-- Test de componente: **Pendiente** — `src/test/registro-login/Login.test.jsx` (error 401, éxito redirige).
+- Test de componente: **Sí** — `src/test/registro-login/Login.test.jsx` (10 tests: formulario, redirección por rol, retorno al checkout, error 401/loggin false, error genérico y sesión rechazada).
 - Test de funciones: **Sí (parcial)** — `token.test.js` (7 tests). Quedan sin probar los `interceptors` de axios.
 
 ### Registro
 - Componente: `Register`, `RegisterForm`
 - Funciones: `crearUsuario`, `validarRut`, `digitoVerificador`, `descomponerRut`
-- Test de componente: **Pendiente** — `src/test/registro-login/Register.test.jsx` (validación + submit navega a `/login`).
+- Test de componente: **Sí** — `src/test/registro-login/Register.test.jsx` (5 tests: formulario, registro + navegación a `/login`, validaciones de dominio y contraseñas, y error del servicio).
 - Test de funciones: **Sí** — RUT cubierto en `rut.test.js` (12 tests); `crearUsuario` en `usuarioService.test.js` y `construirPayload` en `useUsuarioForm.test.js`.
 
 ### Perfil de cliente
 - Componente: `CustomerProfile`, `RegisterForm`
 - Funciones: `obtenerPerfil`, `actualizarPerfil`, `useUsuarioForm`
-- Test de componente: **Pendiente** — `src/test/registro-login/CustomerProfile.test.jsx` (modo "Editar Perfil").
+- Test de componente: **Sí** — `src/test/registro-login/CustomerProfile.test.jsx` (3 tests: modo "Editar Perfil" con datos cargados, guardado exitoso y error del servicio).
 - Test de funciones: **Sí** — `usuarioService.test.js` (`obtenerPerfil`, `actualizarPerfil`) y `useUsuarioForm.test.js`.
 
 ### Control de acceso (`RequireAuth`)
@@ -201,7 +201,7 @@ Vistas: `/login` (Login), `/registro` (Register), `/usuario` (CustomerProfile).
 - Funciones: `tieneRol`, `nombreRol`
 - Test de componente/funciones: **No existe** (fuera del criterio "por Page"; pendiente de triaje aparte).
 
-**Resumen de la categoría (actual):** 39 tests de funciones. Pendientes: 3 tests de componente.
+**Resumen de la categoría (actual):** 39 tests de funciones y 18 tests de componente. Pendientes: ninguno.
 
 ---
 
@@ -249,9 +249,9 @@ Estado por vista (criterio: 1 test de componente + 1 de función por Page):
 | 6 | Checkout | pedidos | Cubierto | Cubierto | `Checkout.test.jsx` |
 | 7 | CustomerOrders | pedidos | Cubierto | Cubierto | `CustomerOrders.test.jsx` |
 | 8 | CustomerOrderDetail | pedidos | Cubierto | Cubierto | `CustomerOrderDetail.test.jsx` |
-| 9 | Login | registro-login | Pendiente | Cubierto (parcial) | `Login.test.jsx` |
-| 10 | Register | registro-login | Pendiente | Cubierto (parcial) | `Register.test.jsx` |
-| 11 | CustomerProfile | registro-login | Pendiente | Cubierto | `CustomerProfile.test.jsx` |
+| 9 | Login | registro-login | Cubierto | Cubierto (parcial) | `Login.test.jsx` |
+| 10 | Register | registro-login | Cubierto | Cubierto (parcial) | `Register.test.jsx` |
+| 11 | CustomerProfile | registro-login | Cubierto | Cubierto | `CustomerProfile.test.jsx` |
 | 12 | AdminDashboard | admin | Pendiente | Cubierto | `AdminDashboard.test.jsx` |
 | 13 | AdminOrders | admin | Pendiente | Cubierto | `AdminOrders.test.jsx` |
 | 14 | AdminProfile | admin | Pendiente | Cubierto | `AdminProfile.test.jsx` |
@@ -279,13 +279,13 @@ Estado por vista (criterio: 1 test de componente + 1 de función por Page):
 | 1. Catálogo | 32 | 88 | `src/test/catalogo/producto.test.js` (44), `src/test/catalogo/categoria.test.js` (16), `src/test/catalogo/productoService.test.js` (16), `src/test/catalogo/categoriaService.test.js` (9), `src/test/catalogo/moneda.test.js` (3), `src/test/catalogo/ProductCarousel.test.jsx` (6), `Home.test.jsx` (4), `Products.test.jsx` (9), `Category.test.jsx` (6), `ProductDetails.test.jsx` (7) |
 | 2. Carrito | 9 | 10 | `src/test/carrito/CartProvider.test.jsx` (3), `src/test/carrito/CartProvider.persistencia.test.jsx` (6), `src/test/carrito/carritoService.test.js` (1), `src/test/carrito/Cart.test.jsx` (9) |
 | 3. Pedidos | 22 | 17 | `src/test/pedidos/pedidoService.test.js` (7), `src/test/pedidos/direccionService.test.js` (7), `src/test/pedidos/regionComunaService.test.js` (3), `src/test/pedidos/Checkout.test.jsx` (9), `CustomerOrders.test.jsx` (6), `CustomerOrderDetail.test.jsx` (7) |
-| 4. Registro y Login | 0 | 39 | `src/test/registro-login/rut.test.js` (12), `src/test/registro-login/token.test.js` (7), `src/test/registro-login/usuarioService.test.js` (11), `src/test/registro-login/useUsuarioForm.test.js` (9) |
+| 4. Registro y Login | 18 | 39 | `src/test/registro-login/rut.test.js` (12), `src/test/registro-login/token.test.js` (7), `src/test/registro-login/usuarioService.test.js` (11), `src/test/registro-login/useUsuarioForm.test.js` (9), `Login.test.jsx` (10), `Register.test.jsx` (5), `CustomerProfile.test.jsx` (3) |
 | 5. Admin | 0 | 17 | `src/test/admin/ordenarProductosAdmin.test.js` (10), `src/test/admin/marcaService.test.js` (4), `src/test/admin/marca.test.js` (3) |
-| **Total** | **63** | **171** | 27 archivos |
+| **Total** | **81** | **171** | 30 archivos |
 
 ### Pendientes (objetivo: 1 test de función + 1 de componente por Page)
 
-- **Tests de componente: 17 páginas pendientes** (cubiertas hasta ahora `Home`, `Products`, `Category`, `ProductDetails`, `Cart`, `Checkout`, `CustomerOrders` y `CustomerOrderDetail`). Se colocan en la carpeta de dominio de cada Page (`registro-login/`, `admin/`, `estaticas/`).
+- **Tests de componente: 14 páginas pendientes** (cubiertas hasta ahora `Home`, `Products`, `Category`, `ProductDetails`, `Cart`, `Checkout`, `CustomerOrders`, `CustomerOrderDetail`, `Login`, `Register` y `CustomerProfile`). Se colocan en la carpeta de dominio de cada Page (`admin/`, `estaticas/`).
 - **Tests de función pendientes por servicio/util/hook: ninguno.** Todos los servicios/utiles/hook están cubiertos:
   - `catalogo/`: `productoService.test.js` (16) y `categoriaService.test.js` (9).
   - `pedidos/`: `pedidoService.test.js` (7), `direccionService.test.js` (7), `regionComunaService.test.js` (3).
