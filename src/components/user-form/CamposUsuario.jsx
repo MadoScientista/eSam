@@ -7,6 +7,7 @@ export function CamposUsuario({ formulario, handleChange, handleChangeRut, esEdi
                 <label htmlFor="nombres" className="form-label">Nombres*</label>
                 <input
                     type="text"
+                    id="nombres"
                     className="form-control border-black"
                     name="nombres"
                     maxLength={50}
@@ -20,6 +21,7 @@ export function CamposUsuario({ formulario, handleChange, handleChangeRut, esEdi
                     <label htmlFor="aPaterno" className="form-label">Apellido Paterno*</label>
                     <input
                         type="text"
+                        id="aPaterno"
                         className="form-control border-black"
                         name="aPaterno"
                         maxLength={50}
@@ -31,6 +33,7 @@ export function CamposUsuario({ formulario, handleChange, handleChangeRut, esEdi
                     <label htmlFor="aMaterno" className="form-label">Apellido Materno</label>
                     <input
                         type="text"
+                        id="aMaterno"
                         className="form-control border-black"
                         name="aMaterno"
                         maxLength={50}
@@ -43,6 +46,7 @@ export function CamposUsuario({ formulario, handleChange, handleChangeRut, esEdi
                 <label htmlFor="rut" className="form-label">RUN*</label>
                 <input
                     type="text"
+                    id="rut"
                     className="form-control border-black"
                     name="rut"
                     placeholder="19011022K"
@@ -61,6 +65,7 @@ export function CamposUsuario({ formulario, handleChange, handleChangeRut, esEdi
                     <label htmlFor="fechaNacimiento" className="form-label">Fecha de Nacimiento</label>
                     <input
                         type="date"
+                        id="fechaNacimiento"
                         className="form-control border-black"
                         name="fechaNacimiento"
                         value={formulario.fechaNacimiento}
@@ -70,6 +75,7 @@ export function CamposUsuario({ formulario, handleChange, handleChangeRut, esEdi
                     <label htmlFor="telefono" className="form-label">Teléfono (Opcional)</label>
                     <input
                         type="tel"
+                        id="telefono"
                         className="form-control border-black"
                         name="telefono"
                         maxLength={15}
@@ -82,6 +88,7 @@ export function CamposUsuario({ formulario, handleChange, handleChangeRut, esEdi
                 <label htmlFor="correo" className="form-label">Correo*</label>
                 <input
                     type="email"
+                    id="correo"
                     className="form-control border-black"
                     name="correo"
                     maxLength={100}
@@ -94,6 +101,7 @@ export function CamposUsuario({ formulario, handleChange, handleChangeRut, esEdi
                 <label htmlFor="correoConfirm" className="form-label">Confirme correo*</label>
                 <input
                     type="email"
+                    id="correoConfirm"
                     className="form-control border-black"
                     name="correoConfirm"
                     maxLength={100}
@@ -108,6 +116,7 @@ export function CamposUsuario({ formulario, handleChange, handleChangeRut, esEdi
                 </label>
                 <input
                     type="password"
+                    id="password"
                     className="form-control border-black"
                     name="password"
                     minLength={8}
@@ -122,6 +131,7 @@ export function CamposUsuario({ formulario, handleChange, handleChangeRut, esEdi
                 <label htmlFor="passwordConfirm" className="form-label">Confirme Contraseña*</label>
                 <input
                     type="password"
+                    id="passwordConfirm"
                     className="form-control border-black"
                     name="passwordConfirm"
                     minLength={8}
@@ -134,7 +144,7 @@ export function CamposUsuario({ formulario, handleChange, handleChangeRut, esEdi
             <div className={`row mb-3${wideLayout ? " user-form-field-pair" : ""}`}>
                 <div className={`col mb-3 mb-md-0${wideLayout ? " user-form-field-cell" : ""}`}>
                     <label htmlFor="idRegion" className="form-label">Región*</label>
-                    <select name="idRegion" className="form-select border-black" value={formulario.idRegion} onChange={handleChange}>
+                    <select id="idRegion" name="idRegion" className="form-select border-black" value={formulario.idRegion} onChange={handleChange}>
                         <option value="">-- Seleccione Región --</option>
                         {
                             regionesComunas.map((r) => (
@@ -145,7 +155,7 @@ export function CamposUsuario({ formulario, handleChange, handleChangeRut, esEdi
                 </div>
                 <div className={`col${wideLayout ? " user-form-field-cell" : ""}`}>
                     <label htmlFor="idComuna" className="form-label">Comuna*</label>
-                    <select name="idComuna" className="form-select border-black" value={formulario.idComuna} onChange={handleChange}>
+                    <select id="idComuna" name="idComuna" className="form-select border-black" value={formulario.idComuna} onChange={handleChange}>
                         <option value="">-- Seleccione Comuna --</option>
                         {
                             comunas.map((c) => (
@@ -159,6 +169,7 @@ export function CamposUsuario({ formulario, handleChange, handleChangeRut, esEdi
             <div className={`mb-3${wideLayout ? " user-form-field user-form-field--full" : ""}`}>
                 <label htmlFor="direccion" className="form-label">Dirección*</label>
                 <textarea
+                    id="direccion"
                     className="form-control border-black"
                     name="direccion"
                     rows="2"

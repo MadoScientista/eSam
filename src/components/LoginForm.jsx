@@ -80,6 +80,7 @@ export function LoginForm(){
                     <label htmlFor="email" className="form-label">Correo</label>
                     <input
                         type="email"
+                        id="email"
                         className="form-control border-black"
                         name="email"
                         maxLength={100} // Longitud máxma 100 caracteres
@@ -91,6 +92,7 @@ export function LoginForm(){
                     <label htmlFor="password" className="form-label">Contraseña</label>
                     <input
                         type="password"
+                        id="password"
                         className="form-control border-black"
                         name="password"
                         minLength={8}   // El DTO exige entre 8 y 72 caracteres
