@@ -71,7 +71,7 @@ describe("ProductDetails", () => {
         expect(await screen.findByText("Cuaderno")).toBeInTheDocument()
         expect(screen.getByText("Descripción de Cuaderno")).toBeInTheDocument()
         expect(screen.getByText("$2.490")).toBeInTheDocument()
-        expect(screen.getByText(/Disponibles: 5/)).toBeInTheDocument()
+        expect(screen.getByText(/Quedan: 5 un/)).toBeInTheDocument()
         expect(obtenerProductoPorId).toHaveBeenCalledWith("7")
     })
 
