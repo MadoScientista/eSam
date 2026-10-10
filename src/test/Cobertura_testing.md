@@ -9,7 +9,7 @@ Documento de referencia sobre el estado actual de los tests de eSam.
 - Comandos:
   - `npm test` — corre los tests en modo watch.
   - `npm run coverage` — corre los tests una vez con reporte de cobertura.
-- Estado actual: **19 archivos, 177 tests, todos en verde** (6 tests de componente + 171 de funciones/contexto).
+- Estado actual: **24 archivos, 212 tests, todos en verde** (41 tests de componente + 171 de funciones/contexto).
 - Objetivo en curso: **al menos 1 test de componente y 1 test de función por cada Page** (ver "Convención por Page").
 
 ## Estructura de archivos
@@ -28,15 +28,15 @@ src/test/
 │   ├── categoriaService.test.js         (servicio de categorías)
 │   ├── moneda.test.js                   (formatearPrecio)
 │   ├── ProductCarousel.test.jsx         (carrusel: tarjetas, flechas, carrito y navegación)
-│   ├── Home.test.jsx                    (PENDIENTE)
-│   ├── Products.test.jsx                (PENDIENTE)
-│   ├── Category.test.jsx                (PENDIENTE)
-│   └── ProductDetails.test.jsx          (PENDIENTE)
+│   ├── Home.test.jsx                    (banner y carga de productos)
+│   ├── Products.test.jsx                (filtros, orden y navegación)
+│   ├── Category.test.jsx                (bloques por categoría y accesos rápidos)
+│   └── ProductDetails.test.jsx          (detalle, stock y recomendados)
 ├── carrito/
 │   ├── CartProvider.test.jsx            (contexto: límite de stock disponible)
 │   ├── CartProvider.persistencia.test.jsx (contexto: sincronización con backend)
 │   ├── carritoService.test.js           (fusionarCarritoLocal)
-│   └── Cart.test.jsx                    (PENDIENTE: componente de la vista Cart)
+│   └── Cart.test.jsx                    (líneas, totales y flujo de pago)
 ├── pedidos/
 │   ├── pedidoService.test.js            (crearPedido, mis pedidos y admin)
 │   ├── direccionService.test.js         (direcciones del usuario)
@@ -91,7 +91,7 @@ Para que cada vista quede cubierta, se exige **por cada Page**:
 
 Reglas vigentes:
 
-- **Home**: cuenta con `ProductCarousel.test.jsx` como cobertura de componente del carrusel, pero tendrá `Home.test.jsx` propio por consistencia (banner + carga de productos con `productoService` mockeado).
+- **Home**: cuenta con `ProductCarousel.test.jsx` (carrusel) y `Home.test.jsx` propio (banner + carga de productos con `productoService` mockeado), ambos en `src/test/catalogo/`.
 - **`utils/blog.js`** (`formatearFecha`, `tiempoLectura`, `parsearCuerpo`): **fuera de alcance** por decisión previa. `BlogArticle` recibe solo test de componente.
 - **Páginas estáticas**: no se les exige test de función (no tienen funciones propias).
 - **Servicios**: los nuevos tests de servicio viven en la carpeta de dominio correspondiente (p.ej. `productoService.test.js` en `catalogo/`, `usuarioService.test.js` en `registro-login/`).
@@ -106,31 +106,31 @@ Vistas: `/` (Home), `/productos` (Products), `/categorias` (Category), `/detalle
 #### Productos destacados
 - Componente: `Banner`, `Carousel`, `ProductCarousel`
 - Funciones: `obtenerProductos` (`src/services/productoService.js`)
-- Test de componente: **Sí (parcial)** — `src/test/catalogo/ProductCarousel.test.jsx` (6 tests). Pendiente `Home.test.jsx` (banner + carrusel con datos mockeados y sin datos).
+- Test de componente: **Sí** — `src/test/catalogo/ProductCarousel.test.jsx` (6 tests) + `Home.test.jsx` (4 tests: banner, carga con datos y sin datos, error de carga).
 - Test de funciones: **Sí** — `src/test/catalogo/productoService.test.js` (16 tests) cubre `obtenerProductos`.
 
 ### Products (catálogo de productos)
 #### Listado y grilla de productos
 - Componente: `ProductList`, `ProductCard`, `ProductFilterSidebar`, `ProductToolbar`
 - Funciones: `filtrarProductos`, `ordenarProductos`, `marcasCatalogo`, `categoriasCatalogo`, `idsCategoriaConDescendientes`, `ORDENES_PRODUCTO` (`src/utils/producto.js`, `src/utils/categoria.js`)
-- Test de componente: **Pendiente** — `src/test/catalogo/Products.test.jsx`
+- Test de componente: **Sí** — `src/test/catalogo/Products.test.jsx` (9 tests: carga, alerta de error, búsqueda, orden por precio, marca, categoría por URL, limpiar filtros, vacío y navegación al detalle).
 - Test de funciones: **Sí** — `src/test/catalogo/producto.test.js` + `categoria.test.js` (ver resumen).
 
 ### Category (categoría puntual)
 #### Productos de la categoría
 - Componente: `CategoryBanner`, `ProductCarousel`
 - Funciones: `productosDeCategoria`, `obtenerCategorias`/`obtenerProductos`
-- Test de componente: **Pendiente** — `src/test/catalogo/Category.test.jsx`
+- Test de componente: **Sí** — `src/test/catalogo/Category.test.jsx` (6 tests: bloques con productos, accesos rápidos, error de carga, sin productos y navegación a /productos).
 - Test de funciones: **Sí** — `productosDeCategoria` en `producto.test.js`; `obtenerProductos` en `productoService.test.js`; `obtenerCategorias` en `categoriaService.test.js`.
 
 ### ProductDetails (detalle de producto)
 #### Información, stock y recomendados
 - Componente: `ProductCarousel`, `Toast`
 - Funciones: `imagenPrincipalProducto`, `stockDisponible`, `productosRecomendados`, `obtenerProductoPorId`
-- Test de componente: **Pendiente** — `src/test/catalogo/ProductDetails.test.jsx`
+- Test de componente: **Sí** — `src/test/catalogo/ProductDetails.test.jsx` (7 tests: carga por id, imagen principal, añadir + toast, límite de stock, relacionados, sin relacionados y error).
 - Test de funciones: **Sí** — utils cubiertas en `producto.test.js`; `obtenerProductoPorId` en `productoService.test.js`.
 
-**Resumen de la categoría (actual):** 88 tests de funciones y 6 tests de componente. Pendientes: 4 tests de componente (`Home`, `Products`, `Category`, `ProductDetails`).
+**Resumen de la categoría (actual):** 88 tests de funciones y 32 tests de componente. Pendientes: ninguno.
 
 ---
 
@@ -141,10 +141,10 @@ Vistas: `/carrito` y `/usuario/carrito` (Cart).
 ### Cart (vista de carrito)
 - Componente: `Cart`, `ProductCardH`, `ProductCarousel`
 - Funciones: `categoriaMasPresente`, `productosRecomendados`, `stockDisponible`, contexto `CartProvider`, `carritoService`
-- Test de componente: **Pendiente** — `src/test/carrito/Cart.test.jsx` (carrito seed en `CartProvider`: líneas, cantidades, total, recomendados).
+- Test de componente: **Sí** — `src/test/carrito/Cart.test.jsx` (9 tests con carrito seed en `CartProvider`: líneas, cantidades, total, recomendados y flujo de pago con AuthProvider).
 - Test de funciones: **Sí** — `CartProvider.test.jsx` (3), `CartProvider.persistencia.test.jsx` (6), `carritoService.test.js` (1); utils en `catalogo/producto.test.js`.
 
-**Resumen de la categoría (actual):** 10 tests de contexto/función. Pendiente: 1 test de componente (`Cart`).
+**Resumen de la categoría (actual):** 10 tests de contexto/función y 9 tests de componente. Pendientes: ninguno.
 
 ---
 
@@ -241,11 +241,11 @@ Estado por vista (criterio: 1 test de componente + 1 de función por Page):
 
 | # | Page | Dominio | Componente | Función | Archivo de componente |
 |---|---|---|---|---|---|
-| 1 | Home | catalogo | Parcial (`ProductCarousel`) | Cubierto | `Home.test.jsx` |
-| 2 | Products | catalogo | Pendiente | Cubierto | `Products.test.jsx` |
-| 3 | Category | catalogo | Pendiente | Cubierto | `Category.test.jsx` |
-| 4 | ProductDetails | catalogo | Pendiente | Cubierto | `ProductDetails.test.jsx` |
-| 5 | Cart | carrito | Pendiente | Cubierto | `Cart.test.jsx` |
+| 1 | Home | catalogo | Cubierto (`ProductCarousel` + `Home`) | Cubierto | `Home.test.jsx` |
+| 2 | Products | catalogo | Cubierto | Cubierto | `Products.test.jsx` |
+| 3 | Category | catalogo | Cubierto | Cubierto | `Category.test.jsx` |
+| 4 | ProductDetails | catalogo | Cubierto | Cubierto | `ProductDetails.test.jsx` |
+| 5 | Cart | carrito | Cubierto | Cubierto | `Cart.test.jsx` |
 | 6 | Checkout | pedidos | Pendiente | Cubierto | `Checkout.test.jsx` |
 | 7 | CustomerOrders | pedidos | Pendiente | Cubierto | `CustomerOrders.test.jsx` |
 | 8 | CustomerOrderDetail | pedidos | Pendiente | Cubierto | `CustomerOrderDetail.test.jsx` |
@@ -276,16 +276,16 @@ Estado por vista (criterio: 1 test de componente + 1 de función por Page):
 
 | Categoría | Tests de componente | Tests de funciones | Archivos |
 |---|---|---|---|
-| 1. Catálogo | 6 | 88 | `src/test/catalogo/producto.test.js` (44), `src/test/catalogo/categoria.test.js` (16), `src/test/catalogo/productoService.test.js` (16), `src/test/catalogo/categoriaService.test.js` (9), `src/test/catalogo/moneda.test.js` (3), `src/test/catalogo/ProductCarousel.test.jsx` (6) |
-| 2. Carrito | 0 | 10 | `src/test/carrito/CartProvider.test.jsx` (3), `src/test/carrito/CartProvider.persistencia.test.jsx` (6), `src/test/carrito/carritoService.test.js` (1) |
+| 1. Catálogo | 32 | 88 | `src/test/catalogo/producto.test.js` (44), `src/test/catalogo/categoria.test.js` (16), `src/test/catalogo/productoService.test.js` (16), `src/test/catalogo/categoriaService.test.js` (9), `src/test/catalogo/moneda.test.js` (3), `src/test/catalogo/ProductCarousel.test.jsx` (6), `Home.test.jsx` (4), `Products.test.jsx` (9), `Category.test.jsx` (6), `ProductDetails.test.jsx` (7) |
+| 2. Carrito | 9 | 10 | `src/test/carrito/CartProvider.test.jsx` (3), `src/test/carrito/CartProvider.persistencia.test.jsx` (6), `src/test/carrito/carritoService.test.js` (1), `src/test/carrito/Cart.test.jsx` (9) |
 | 3. Pedidos | 0 | 17 | `src/test/pedidos/pedidoService.test.js` (7), `src/test/pedidos/direccionService.test.js` (7), `src/test/pedidos/regionComunaService.test.js` (3) |
 | 4. Registro y Login | 0 | 39 | `src/test/registro-login/rut.test.js` (12), `src/test/registro-login/token.test.js` (7), `src/test/registro-login/usuarioService.test.js` (11), `src/test/registro-login/useUsuarioForm.test.js` (9) |
 | 5. Admin | 0 | 17 | `src/test/admin/ordenarProductosAdmin.test.js` (10), `src/test/admin/marcaService.test.js` (4), `src/test/admin/marca.test.js` (3) |
-| **Total** | **6** | **171** | 19 archivos |
+| **Total** | **41** | **171** | 24 archivos |
 
 ### Pendientes (objetivo: 1 test de función + 1 de componente por Page)
 
-- **Tests de componente: 25 páginas pendientes** (todas excepto Home, que cuenta con `ProductCarousel.test.jsx` pero tendrá `Home.test.jsx` propio). Se colocan en la carpeta de dominio de cada Page (`catalogo/`, `carrito/`, `pedidos/`, `registro-login/`, `admin/`, `estaticas/`).
+- **Tests de componente: 20 páginas pendientes** (cubiertas hasta ahora `Home`, `Products`, `Category`, `ProductDetails` y `Cart`). Se colocan en la carpeta de dominio de cada Page (`pedidos/`, `registro-login/`, `admin/`, `estaticas/`).
 - **Tests de función pendientes por servicio/util/hook: ninguno.** Todos los servicios/utiles/hook están cubiertos:
   - `catalogo/`: `productoService.test.js` (16) y `categoriaService.test.js` (9).
   - `pedidos/`: `pedidoService.test.js` (7), `direccionService.test.js` (7), `regionComunaService.test.js` (3).
