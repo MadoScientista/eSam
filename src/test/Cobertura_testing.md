@@ -9,7 +9,7 @@ Documento de referencia sobre el estado actual de los tests de eSam.
 - Comandos:
   - `npm test` — corre los tests en modo watch.
   - `npm run coverage` — corre los tests una vez con reporte de cobertura.
-- Estado actual: **30 archivos, 252 tests, todos en verde** (81 tests de componente + 171 de funciones/contexto).
+- Estado actual: **45 archivos, 313 tests, todos en verde** (142 tests de componente + 171 de funciones/contexto).
 - Objetivo en curso: **al menos 1 test de componente y 1 test de función por cada Page** (ver "Convención por Page").
 
 ## Estructura de archivos
@@ -56,22 +56,22 @@ src/test/
 │   ├── ordenarProductosAdmin.test.js    (ordenarProductosAdmin y selectores de orden)
 │   ├── marcaService.test.js             (servicio de marcas)
 │   ├── marca.test.js                    (validarNombreMarca)
-│   ├── AdminDashboard.test.jsx          (PENDIENTE)
-│   ├── AdminOrders.test.jsx             (PENDIENTE)
-│   ├── AdminProfile.test.jsx            (PENDIENTE)
-│   ├── AdminControlProduct.test.jsx     (PENDIENTE)
-│   ├── AdminProductForm.test.jsx        (PENDIENTE)
-│   ├── AdminControlUser.test.jsx        (PENDIENTE)
-│   ├── AdminUserForm.test.jsx           (PENDIENTE)
-│   ├── AdminControlCategoria.test.jsx   (PENDIENTE)
-│   ├── AdminCategoriaForm.test.jsx      (PENDIENTE)
-│   ├── AdminControlMarca.test.jsx       (PENDIENTE)
-│   └── AdminMarcaForm.test.jsx          (PENDIENTE)
+│   ├── AdminDashboard.test.jsx          (resumen admin/vendedor, error y carga)
+│   ├── AdminOrders.test.jsx             (tabla, vacío, error y cambio de estado)
+│   ├── AdminProfile.test.jsx            (modo edición: carga, guardado y error)
+│   ├── AdminControlProduct.test.jsx     (tabla admin/vendedor, filtro y navegación)
+│   ├── AdminProductForm.test.jsx        (alta, validación, eliminación y navegación)
+│   ├── AdminControlUser.test.jsx        (tabla, navegación a formularios y error)
+│   ├── AdminUserForm.test.jsx           (alta, validación y eliminación)
+│   ├── AdminControlCategoria.test.jsx   (tabla admin/vendedor, filtro y navegación)
+│   ├── AdminCategoriaForm.test.jsx      (alta, validación y eliminación)
+│   ├── AdminControlMarca.test.jsx       (tabla admin/vendedor, filtro y navegación)
+│   └── AdminMarcaForm.test.jsx          (alta, validación y eliminación)
 ├── estaticas/               (AboutUs, Blogs, BlogArticle, Contact — solo componente)
-│   ├── AboutUs.test.jsx                 (PENDIENTE)
-│   ├── Blogs.test.jsx                   (PENDIENTE)
-│   ├── BlogArticle.test.jsx             (PENDIENTE)
-│   └── Contact.test.jsx                 (PENDIENTE)
+│   ├── AboutUs.test.jsx                 (encabezado, valores y datos de contacto)
+│   ├── Blogs.test.jsx                   (encabezado, tarjetas y navegación al detalle)
+│   ├── BlogArticle.test.jsx             (entrada, lista, "Sigue leyendo" y 404)
+│   └── Contact.test.jsx                 (datos, redes, envío y alerta)
 └── Cobertura_testing.md                 (este documento)
 ```
 
@@ -209,19 +209,19 @@ Vistas: `/login` (Login), `/registro` (Register), `/usuario` (CustomerProfile).
 
 Vistas bajo `/admin`: las 11 pantallas del panel.
 
-- **AdminDashboard** — comp: `AdminDashboard.test.jsx` (PENDIENTE, variantes admin/vendedor); func: `obtenerPedidosAdmin`/`obtenerProductos`/`obtenerUsuarios` → `pedidoService.test.js` (Sí)/`productoService.test.js` (Sí)/`usuarioService.test.js` (Sí).
-- **AdminOrders** — comp: `AdminOrders.test.jsx` (PENDIENTE); func: `obtenerPedidosAdmin`, `actualizarEstadoPedido` → `pedidoService.test.js` (Sí).
-- **AdminProfile** — comp: `AdminProfile.test.jsx` (PENDIENTE); func: `actualizarPerfil` + `useUsuarioForm` → `usuarioService.test.js`/`useUsuarioForm.test.js` (Sí).
-- **AdminControlProduct** — comp: `AdminControlProduct.test.jsx` (PENDIENTE); func: **Sí** (`ordenarProductosAdmin.test.js`, 10 tests).
-- **AdminProductForm** — comp: `AdminProductForm.test.jsx` (PENDIENTE); func: `crearProducto`, `actualizarProducto`, `eliminarProducto`, stock e imágenes → `productoService.test.js` (Sí).
-- **AdminControlUser** — comp: `AdminControlUser.test.jsx` (PENDIENTE); func: `obtenerUsuarios` → `usuarioService.test.js` (Sí).
-- **AdminUserForm** — comp: `AdminUserForm.test.jsx` (PENDIENTE); func: `crearUsuarioAdmin`, `actualizarUsuario`, `eliminarUsuario` → `usuarioService.test.js` (Sí).
-- **AdminControlCategoria** — comp: `AdminControlCategoria.test.jsx` (PENDIENTE); func: `obtenerCategorias` → `categoriaService.test.js` (Sí).
-- **AdminCategoriaForm** — comp: `AdminCategoriaForm.test.jsx` (PENDIENTE); func: crear/actualizar/eliminar/subir imagen + `validarNombreCategoria` (cubierto en `categoria.test.js`) → `categoriaService.test.js` (Sí).
-- **AdminControlMarca** — comp: `AdminControlMarca.test.jsx` (PENDIENTE); func: `obtenerMarcas` → `marcaService.test.js` (Sí).
-- **AdminMarcaForm** — comp: `AdminMarcaForm.test.jsx` (PENDIENTE); func: crear/actualizar/eliminar + `validarNombreMarca` → `marcaService.test.js`/`marca.test.js` (Sí).
+- **AdminDashboard** — comp: `AdminDashboard.test.jsx` (Sí, 4 tests, variantes admin/vendedor); func: `obtenerPedidosAdmin`/`obtenerProductos`/`obtenerUsuarios` → `pedidoService.test.js` (Sí)/`productoService.test.js` (Sí)/`usuarioService.test.js` (Sí).
+- **AdminOrders** — comp: `AdminOrders.test.jsx` (Sí, 7 tests); func: `obtenerPedidosAdmin`, `actualizarEstadoPedido` → `pedidoService.test.js` (Sí).
+- **AdminProfile** — comp: `AdminProfile.test.jsx` (Sí, 3 tests); func: `actualizarPerfil` + `useUsuarioForm` → `usuarioService.test.js`/`useUsuarioForm.test.js` (Sí).
+- **AdminControlProduct** — comp: `AdminControlProduct.test.jsx` (Sí, 7 tests); func: **Sí** (`ordenarProductosAdmin.test.js`, 10 tests).
+- **AdminProductForm** — comp: `AdminProductForm.test.jsx` (Sí, 3 tests: alta tras confirmar y paso a edición, validación de obligatorios y eliminación con retorno al listado); func: `crearProducto`, `actualizarProducto`, `eliminarProducto`, stock e imágenes → `productoService.test.js` (Sí).
+- **AdminControlUser** — comp: `AdminControlUser.test.jsx` (Sí, 4 tests: listado con rol, apertura del formulario de edición, alta y error); func: `obtenerUsuarios` → `usuarioService.test.js` (Sí).
+- **AdminUserForm** — comp: `AdminUserForm.test.jsx` (Sí, 3 tests: alta tras confirmar, validación de campos y eliminación con retorno al listado); func: `crearUsuarioAdmin`, `actualizarUsuario`, `eliminarUsuario` → `usuarioService.test.js` (Sí).
+- **AdminControlCategoria** — comp: `AdminControlCategoria.test.jsx` (Sí, 6 tests: listado con padre, ocultar acciones a vendedor, filtro, navegación a alta/edición y error); func: `obtenerCategorias` → `categoriaService.test.js` (Sí).
+- **AdminCategoriaForm** — comp: `AdminCategoriaForm.test.jsx` (Sí, 3 tests: alta tras confirmar, validación de nombre y eliminación con retorno al listado); func: crear/actualizar/eliminar/subir imagen + `validarNombreCategoria` (cubierto en `categoria.test.js`) → `categoriaService.test.js` (Sí).
+- **AdminControlMarca** — comp: `AdminControlMarca.test.jsx` (Sí, 6 tests: listado, ocultar acciones a vendedor, filtro, navegación a alta/edición y error); func: `obtenerMarcas` → `marcaService.test.js` (Sí).
+- **AdminMarcaForm** — comp: `AdminMarcaForm.test.jsx` (Sí, 3 tests: alta tras confirmar, validación de nombre y eliminación con retorno al listado); func: crear/actualizar/eliminar + `validarNombreMarca` → `marcaService.test.js`/`marca.test.js` (Sí).
 
-**Resumen de la categoría (actual):** 17 tests de funciones (`ordenarProductosAdmin.test.js` 10, `marcaService.test.js` 4, `marca.test.js` 3). Pendientes: 11 tests de componente (uno por página).
+**Resumen de la categoría (actual):** 17 tests de funciones y 49 tests de componente (Dashboard 4, Orders 7, Profile 3, ControlProduct 7, ProductForm 3, ControlUser 4, UserForm 3, ControlCategoria 6, CategoriaForm 3, ControlMarca 6, MarcaForm 3). Pendientes: ninguno.
 
 ---
 
@@ -230,10 +230,10 @@ Vistas bajo `/admin`: las 11 pantallas del panel.
 Vistas sin dominio funcional: `/nosotros` (AboutUs), `/blogs` (Blogs), `/entradaBlog/:idEntrada` (BlogArticle), `/contacto` (Contact).
 
 - Sin funciones propias → **solo test de componente** (carpeta `src/test/estaticas/`):
-  - `AboutUs.test.jsx` (PENDIENTE)
-  - `Blogs.test.jsx` (PENDIENTE)
-  - `BlogArticle.test.jsx` (PENDIENTE; `utils/blog.js` fuera de alcance)
-  - `Contact.test.jsx` (PENDIENTE; submit del formulario y alerta)
+  - `AboutUs.test.jsx` (3 tests: encabezado e historia, lista de valores y datos de contacto)
+  - `Blogs.test.jsx` (2 tests: encabezado con una tarjeta por entrada y navegación al detalle)
+  - `BlogArticle.test.jsx` (4 tests: información de la entrada, pasos como lista, "Sigue leyendo" y entrada no encontrada; `utils/blog.js` fuera de alcance)
+  - `Contact.test.jsx` (3 tests: datos/redes/formulario, envío con alerta de éxito y cierre de la alerta)
 
 ## Matriz por Page
 
@@ -252,21 +252,21 @@ Estado por vista (criterio: 1 test de componente + 1 de función por Page):
 | 9 | Login | registro-login | Cubierto | Cubierto (parcial) | `Login.test.jsx` |
 | 10 | Register | registro-login | Cubierto | Cubierto (parcial) | `Register.test.jsx` |
 | 11 | CustomerProfile | registro-login | Cubierto | Cubierto | `CustomerProfile.test.jsx` |
-| 12 | AdminDashboard | admin | Pendiente | Cubierto | `AdminDashboard.test.jsx` |
-| 13 | AdminOrders | admin | Pendiente | Cubierto | `AdminOrders.test.jsx` |
-| 14 | AdminProfile | admin | Pendiente | Cubierto | `AdminProfile.test.jsx` |
-| 15 | AdminControlProduct | admin | Pendiente | Cubierto | `AdminControlProduct.test.jsx` |
-| 16 | AdminProductForm | admin | Pendiente | Cubierto | `AdminProductForm.test.jsx` |
-| 17 | AdminControlUser | admin | Pendiente | Cubierto | `AdminControlUser.test.jsx` |
-| 18 | AdminUserForm | admin | Pendiente | Cubierto | `AdminUserForm.test.jsx` |
-| 19 | AdminControlCategoria | admin | Pendiente | Cubierto | `AdminControlCategoria.test.jsx` |
-| 20 | AdminCategoriaForm | admin | Pendiente | Cubierto | `AdminCategoriaForm.test.jsx` |
-| 21 | AdminControlMarca | admin | Pendiente | Cubierto | `AdminControlMarca.test.jsx` |
-| 22 | AdminMarcaForm | admin | Pendiente | Cubierto | `AdminMarcaForm.test.jsx` |
-| 23 | AboutUs | estaticas | Pendiente | N/A (solo componente) | `AboutUs.test.jsx` |
-| 24 | Blogs | estaticas | Pendiente | N/A (solo componente) | `Blogs.test.jsx` |
-| 25 | BlogArticle | estaticas | Pendiente | N/A (`blog.js` excluido) | `BlogArticle.test.jsx` |
-| 26 | Contact | estaticas | Pendiente | N/A (solo componente) | `Contact.test.jsx` |
+| 12 | AdminDashboard | admin | Cubierto | Cubierto | `AdminDashboard.test.jsx` |
+| 13 | AdminOrders | admin | Cubierto | Cubierto | `AdminOrders.test.jsx` |
+| 14 | AdminProfile | admin | Cubierto | Cubierto | `AdminProfile.test.jsx` |
+| 15 | AdminControlProduct | admin | Cubierto | Cubierto | `AdminControlProduct.test.jsx` |
+| 16 | AdminProductForm | admin | Cubierto | Cubierto | `AdminProductForm.test.jsx` |
+| 17 | AdminControlUser | admin | Cubierto | Cubierto | `AdminControlUser.test.jsx` |
+| 18 | AdminUserForm | admin | Cubierto | Cubierto | `AdminUserForm.test.jsx` |
+| 19 | AdminControlCategoria | admin | Cubierto | Cubierto | `AdminControlCategoria.test.jsx` |
+| 20 | AdminCategoriaForm | admin | Cubierto | Cubierto | `AdminCategoriaForm.test.jsx` |
+| 21 | AdminControlMarca | admin | Cubierto | Cubierto | `AdminControlMarca.test.jsx` |
+| 22 | AdminMarcaForm | admin | Cubierto | Cubierto | `AdminMarcaForm.test.jsx` |
+| 23 | AboutUs | estaticas | Cubierto | N/A (solo componente) | `AboutUs.test.jsx` |
+| 24 | Blogs | estaticas | Cubierto | N/A (solo componente) | `Blogs.test.jsx` |
+| 25 | BlogArticle | estaticas | Cubierto | N/A (`blog.js` excluido) | `BlogArticle.test.jsx` |
+| 26 | Contact | estaticas | Cubierto | N/A (solo componente) | `Contact.test.jsx` |
 
 ---
 
@@ -280,12 +280,13 @@ Estado por vista (criterio: 1 test de componente + 1 de función por Page):
 | 2. Carrito | 9 | 10 | `src/test/carrito/CartProvider.test.jsx` (3), `src/test/carrito/CartProvider.persistencia.test.jsx` (6), `src/test/carrito/carritoService.test.js` (1), `src/test/carrito/Cart.test.jsx` (9) |
 | 3. Pedidos | 22 | 17 | `src/test/pedidos/pedidoService.test.js` (7), `src/test/pedidos/direccionService.test.js` (7), `src/test/pedidos/regionComunaService.test.js` (3), `src/test/pedidos/Checkout.test.jsx` (9), `CustomerOrders.test.jsx` (6), `CustomerOrderDetail.test.jsx` (7) |
 | 4. Registro y Login | 18 | 39 | `src/test/registro-login/rut.test.js` (12), `src/test/registro-login/token.test.js` (7), `src/test/registro-login/usuarioService.test.js` (11), `src/test/registro-login/useUsuarioForm.test.js` (9), `Login.test.jsx` (10), `Register.test.jsx` (5), `CustomerProfile.test.jsx` (3) |
-| 5. Admin | 0 | 17 | `src/test/admin/ordenarProductosAdmin.test.js` (10), `src/test/admin/marcaService.test.js` (4), `src/test/admin/marca.test.js` (3) |
-| **Total** | **81** | **171** | 30 archivos |
+| 5. Admin | 49 | 17 | `src/test/admin/ordenarProductosAdmin.test.js` (10), `src/test/admin/marcaService.test.js` (4), `src/test/admin/marca.test.js` (3), `AdminDashboard.test.jsx` (4), `AdminOrders.test.jsx` (7), `AdminProfile.test.jsx` (3), `AdminControlProduct.test.jsx` (7), `AdminProductForm.test.jsx` (3), `AdminControlUser.test.jsx` (4), `AdminUserForm.test.jsx` (3), `AdminControlCategoria.test.jsx` (6), `AdminCategoriaForm.test.jsx` (3), `AdminControlMarca.test.jsx` (6), `AdminMarcaForm.test.jsx` (3) |
+| 6. Páginas estáticas | 12 | — | `src/test/estaticas/AboutUs.test.jsx` (3), `Blogs.test.jsx` (2), `BlogArticle.test.jsx` (4), `Contact.test.jsx` (3) |
+| **Total** | **142** | **171** | 45 archivos |
 
 ### Pendientes (objetivo: 1 test de función + 1 de componente por Page)
 
-- **Tests de componente: 14 páginas pendientes** (cubiertas hasta ahora `Home`, `Products`, `Category`, `ProductDetails`, `Cart`, `Checkout`, `CustomerOrders`, `CustomerOrderDetail`, `Login`, `Register` y `CustomerProfile`). Se colocan en la carpeta de dominio de cada Page (`admin/`, `estaticas/`).
+- **Tests de componente: ninguno.** Las 26 Pages del criterio tienen su test de componente.
 - **Tests de función pendientes por servicio/util/hook: ninguno.** Todos los servicios/utiles/hook están cubiertos:
   - `catalogo/`: `productoService.test.js` (16) y `categoriaService.test.js` (9).
   - `pedidos/`: `pedidoService.test.js` (7), `direccionService.test.js` (7), `regionComunaService.test.js` (3).
