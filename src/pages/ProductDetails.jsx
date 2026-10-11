@@ -14,6 +14,7 @@ export function ProductDetails(){
     const [product, setProduct] = useState(null)
     const [products, setProducts] = useState([])
     const [toastTrigger, setToastTrigger] = useState(0)
+    const [cantidad, setCantidad] = useState(1)
 
     const { cart, addProduct } = useCart()
 
@@ -49,8 +50,9 @@ export function ProductDetails(){
     },[])
 
     const handleClick = () => {
-        addProduct(product)
+        addProduct(product, cantidad)
         setToastTrigger(t => t + 1)
+        setCantidad(1)
     }
 
     // Los relacionados salen de la categoría del producto que se está viendo. Si no
@@ -68,6 +70,21 @@ export function ProductDetails(){
     const imagen = imagenPrincipalProducto(product)
     const disponible = stockDisponible(product)
     const unidadesEnCarrito = cart.find((item) => item.product.idProducto === product?.idProducto)?.units ?? 0
+    const maxAgregar = Math.max(0, disponible - unidadesEnCarrito)
+    const sinStock = !product || maxAgregar <= 0
+
+    // La cantidad elegida nunca puede superar las unidades que aún se pueden
+    // agregar: el stock disponible menos lo que ya está en el carrito.
+    const manejarCantidad = (valor) => {
+        const numero = Math.floor(Number(valor))
+
+        if (!Number.isFinite(numero)) {
+            setCantidad(1)
+            return
+        }
+
+        setCantidad(Math.min(Math.max(1, numero), Math.max(1, maxAgregar)))
+    }
 
     return (
     <div className="container mt-5">
@@ -83,13 +100,46 @@ export function ProductDetails(){
                 <div className="h3">{product?.nombre}</div>
                 <p>{product?.descripcion}</p>
                 <p>{product ? formatearPrecio(product.precio) : ""}</p>
-                <p>Disponibles: {product ? disponible : "—"}</p>
-                <button className="btn btn-dark" onClick={handleClick} disabled={!product || unidadesEnCarrito >= disponible}>
+                <p>Quedan: {product ? disponible : "—"} un</p>
+                <div className="d-flex align-items-center gap-2 mb-3">
+                    <label htmlFor="cantidadProducto" className="mb-0">Cantidad</label>
+                    <div className="input-group" style={{maxWidth:'9rem'}}>
+                        <button
+                            type="button"
+                            className="btn btn-outline-dark"
+                            onClick={() => manejarCantidad(cantidad - 1)}
+                            disabled={sinStock || cantidad <= 1}
+                            aria-label="Disminuir cantidad"
+                        >
+                            −
+                        </button>
+                        <input
+                            id="cantidadProducto"
+                            type="number"
+                            className="form-control text-center"
+                            value={cantidad}
+                            min="1"
+                            max={Math.max(1, maxAgregar)}
+                            onChange={(evento) => manejarCantidad(evento.target.value)}
+                            disabled={sinStock}
+                        />
+                        <button
+                            type="button"
+                            className="btn btn-outline-dark"
+                            onClick={() => manejarCantidad(cantidad + 1)}
+                            disabled={sinStock || cantidad >= maxAgregar}
+                            aria-label="Aumentar cantidad"
+                        >
+                            +
+                        </button>
+                    </div>
+                </div>
+                <button className="btn btn-dark" onClick={handleClick} disabled={sinStock}>
                     <i className="bi bi-cart"></i> Añadir
                 </button>
             </div>
         </div>
-        <div className="container">
+        <div className="container p-0 mb-5">
             <h3 className="mb-4">Productos relacionados</h3>
             {
                 relacionados.length > 0

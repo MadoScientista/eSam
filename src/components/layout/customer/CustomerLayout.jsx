@@ -1,14 +1,16 @@
 import { Outlet } from "react-router-dom";
 import { CustomerSidebar } from "./CustomerSidebar";
+import "../sidebar.css";
+import "./customer.css";
 
 export function CustomerLayout() {
     return (
-        <div className="container-fluid">
-            <div className="row" style={{ minHeight: "90vh" }}>
+        <div className="customer-shell">
+            <div className="customer-layout">
                 <CustomerSidebar />
-                <section className="col-md-9 col-lg-10 p-4">
+                <main className="customer-main">
                     <Outlet />
-                </section>
+                </main>
             </div>
         </div>
     );

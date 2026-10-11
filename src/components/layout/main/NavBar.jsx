@@ -75,7 +75,7 @@ export function NavBar(){
                                 to={tieneRol(usuario, "admin") || tieneRol(usuario, "vendedor") ? "/admin" : "/usuario"}
                                 title="Perfil"
                             >
-                                <i className="bi bi-person-circle"></i>
+                                <i className="bi bi-person-circle"></i> Mi Esam
                             </NavLink>
                         </li>
                     }

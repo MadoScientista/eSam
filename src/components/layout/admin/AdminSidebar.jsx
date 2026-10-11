@@ -22,22 +22,22 @@ export function AdminSidebar() {
     const nombre = [usuario?.nombres, usuario?.aPaterno].filter(Boolean).join(" ");
 
     return (
-        <aside className="admin-sidebar">
-            <NavLink to="/admin" className="admin-brand">
-                <span className="admin-brand-mark"><i className="bi bi-bag-heart-fill" /></span>
+        <aside className="app-sidebar">
+            <NavLink to="/admin" className="app-brand">
+                <span className="app-brand-mark"><i className="bi bi-bag-heart-fill" /></span>
                 <span>eSam <small>{esVendedor ? "VENDEDOR" : "ADMIN"}</small></span>
             </NavLink>
 
-            <div className="admin-sidebar-label">MENÚ PRINCIPAL</div>
+            <div className="app-sidebar-label">MENÚ PRINCIPAL</div>
             <nav aria-label="Navegación de administración">
-                <ul className="admin-nav-list">
+                <ul className="app-nav-list">
                     {menuItems.map((item) => (
                         <li key={item.path}>
                             <NavLink
                                 to={item.path}
                                 end={item.path === "/admin"}
                                 className={({ isActive }) =>
-                                    `admin-nav-link${isActive ? " is-active" : ""}`
+                                    `app-nav-link${isActive ? " is-active" : ""}`
                                 }
                             >
                                 <i className={`bi ${item.icon}`} aria-hidden="true" />
@@ -46,10 +46,10 @@ export function AdminSidebar() {
                         </li>
                     ))}
                     <li>
-                        <span className="admin-nav-link is-disabled" aria-disabled="true">
+                        <span className="app-nav-link is-disabled" aria-disabled="true">
                             <i className="bi bi-bar-chart-line" aria-hidden="true" />
                             <span>Reportes</span>
-                            <span className="admin-coming-soon">Próximamente</span>
+                            <span className="app-coming-soon">Próximamente</span>
                         </span>
                     </li>
                     <li>
@@ -57,7 +57,7 @@ export function AdminSidebar() {
                             to="/"
                             end
                             className={({ isActive }) =>
-                                `admin-nav-link${isActive ? " is-active" : ""}`
+                                `app-nav-link${isActive ? " is-active" : ""}`
                             }
                         >
                             <i className="bi bi-arrow-left-circle" aria-hidden="true" />
@@ -67,12 +67,12 @@ export function AdminSidebar() {
                 </ul>
             </nav>
 
-            <div className="admin-sidebar-divider" />
-            <div className="admin-sidebar-bottom">
+            <div className="app-sidebar-divider" />
+            <div className="app-sidebar-bottom">
                 {nombre && (
-                    <div className="admin-account">
-                        <span className="admin-avatar">{nombre.charAt(0).toUpperCase()}</span>
-                        <span className="admin-account-copy">
+                    <div className="app-account">
+                        <span className="app-avatar">{nombre.charAt(0).toUpperCase()}</span>
+                        <span className="app-account-copy">
                             <strong>{nombre}</strong>
                             <small>{esVendedor ? "Vendedor" : "Administrador"}</small>
                         </span>
@@ -81,14 +81,14 @@ export function AdminSidebar() {
                 <NavLink
                     to="/admin/perfil"
                     className={({ isActive }) =>
-                        `admin-nav-link${isActive ? " is-active" : ""}`
+                        `app-nav-link${isActive ? " is-active" : ""}`
                     }
                 >
                     <i className="bi bi-person-circle" aria-hidden="true" />
                     <span>Perfil</span>
                 </NavLink>
-                <div className="admin-sidebar-divider" />
-                <button type="button" className="admin-logout" onClick={handleLogout}>
+                <div className="app-sidebar-divider" />
+                <button type="button" className="app-logout" onClick={handleLogout}>
                     <i className="bi bi-box-arrow-left" aria-hidden="true" />
                     <span>Cerrar sesión</span>
                 </button>

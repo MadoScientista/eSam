@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react"
 import {obtenerProductos} from "../../services/productoService"
 import { ProductTable } from "../../components/ProductTable"
+import { TableCard } from "../../components/TableCard"
 import { AlertMessage } from "../../components/AlertMessage"
 import { ORDENES_ADMIN_PRODUCTO, DIRECCIONES_ORDEN, ordenarProductosAdmin } from "../../utils/producto"
 import { useLocation, useNavigate } from "react-router-dom"
@@ -47,44 +48,8 @@ export function AdminControlProduct(){
 
     return(
         <>
-            <h2 className="mb-5 mt-3 text-center">Administración Productos</h2>
-            <div className="d-flex justify-content-center align-items-end gap-3 flex-wrap mb-4">
-                <div className="input-group" style={{ maxWidth: "25rem" }}>
-                    <span className="input-group-text border-black"><i className="bi bi-search"></i></span>
-                    <input
-                        type="text"
-                        className="form-control border-black"
-                        placeholder="Buscar por nombre o ID"
-                        value={busqueda}
-                        onChange={(e) => setBusqueda(e.target.value)}
-                    />
-                </div>
-                <div style={{ maxWidth: "11rem" }}>
-                    <label htmlFor="ordenarProductosAdmin" className="form-label mb-1">Ordenar por</label>
-                    <select
-                        id="ordenarProductosAdmin"
-                        className="form-select border-black"
-                        value={orden}
-                        onChange={(e) => setOrden(e.target.value)}
-                    >
-                        {ORDENES_ADMIN_PRODUCTO.map((o) => (
-                            <option key={o.valor} value={o.valor}>{o.etiqueta}</option>
-                        ))}
-                    </select>
-                </div>
-                <div style={{ maxWidth: "11rem" }}>
-                    <label htmlFor="direccionOrdenAdmin" className="form-label mb-1">Dirección</label>
-                    <select
-                        id="direccionOrdenAdmin"
-                        className="form-select border-black"
-                        value={direccion}
-                        onChange={(e) => setDireccion(e.target.value)}
-                    >
-                        {DIRECCIONES_ORDEN.map((d) => (
-                            <option key={d.valor} value={d.valor}>{d.etiqueta}</option>
-                        ))}
-                    </select>
-                </div>
+            <div className="d-flex justify-content-between align-items-center mb-4 mt-3">
+                <h2 className="mb-0">Administración Productos</h2>
                 <button
                     className="btn btn-dark"
                     onClick={()=>{navigate("nuevo")}}
@@ -93,7 +58,52 @@ export function AdminControlProduct(){
                 </button>
             </div>
             <AlertMessage type={mensajeAlerta?.type} message={mensajeAlerta?.message} onClose={() => setMensajeAlerta(null)} />
-            <ProductTable products={productosOrdenados} handleClick={handleClick} editable={esAdmin}/>
+            <TableCard
+                title="Todos los productos"
+                subtitle="Listado de productos de la tienda"
+                toolbar={
+                    <>
+                        <div className="input-group" style={{ maxWidth: "25rem" }}>
+                            <span className="input-group-text border-black"><i className="bi bi-search"></i></span>
+                            <input
+                                type="text"
+                                className="form-control border-black"
+                                placeholder="Buscar por nombre o ID"
+                                value={busqueda}
+                                onChange={(e) => setBusqueda(e.target.value)}
+                            />
+                        </div>
+                        <div style={{ maxWidth: "11rem" }}>
+                            <label htmlFor="ordenarProductosAdmin" className="form-label mb-1">Ordenar por</label>
+                            <select
+                                id="ordenarProductosAdmin"
+                                className="form-select border-black"
+                                value={orden}
+                                onChange={(e) => setOrden(e.target.value)}
+                            >
+                                {ORDENES_ADMIN_PRODUCTO.map((o) => (
+                                    <option key={o.valor} value={o.valor}>{o.etiqueta}</option>
+                                ))}
+                            </select>
+                        </div>
+                        <div style={{ maxWidth: "11rem" }}>
+                            <label htmlFor="direccionOrdenAdmin" className="form-label mb-1">Dirección</label>
+                            <select
+                                id="direccionOrdenAdmin"
+                                className="form-select border-black"
+                                value={direccion}
+                                onChange={(e) => setDireccion(e.target.value)}
+                            >
+                                {DIRECCIONES_ORDEN.map((d) => (
+                                    <option key={d.valor} value={d.valor}>{d.etiqueta}</option>
+                                ))}
+                            </select>
+                        </div>
+                    </>
+                }
+            >
+                <ProductTable products={productosOrdenados} handleClick={handleClick} editable={esAdmin}/>
+            </TableCard>
         </>
     )
 }

@@ -1,0 +1,162 @@
+.app-sidebar {
+    --side-ink: var(--bs-body-color, #212529);
+    --side-muted: var(--bs-secondary-color, #6c757d);
+    --side-line: var(--bs-border-color, #dee2e6);
+    --side-radius: 8px;
+    position: sticky;
+    top: 0;
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    min-height: 620px;
+    padding: 28px 18px 18px;
+    background: var(--site-background);
+    border-right: 1px solid var(--side-line);
+}
+
+.app-brand {
+    display: flex;
+    align-items: center;
+    gap: 11px;
+    margin: 0 7px 42px;
+    color: var(--side-ink);
+    font-size: 20px;
+    font-weight: 800;
+    letter-spacing: -.7px;
+    text-decoration: none;
+}
+
+.app-brand:hover { color: var(--side-ink); }
+
+.app-brand small {
+    display: block;
+    margin-top: -3px;
+    color: #8992a2;
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: 1.6px;
+}
+
+.app-brand-mark {
+    display: grid;
+    width: 42px;
+    height: 42px;
+    place-items: center;
+    border-radius: var(--side-radius);
+    background: var(--side-ink);
+    color: #fff;
+    font-size: 20px;
+}
+
+.app-sidebar-label {
+    margin: 0 12px 12px;
+    color: #939cac;
+    font-size: 10px;
+    font-weight: 800;
+    letter-spacing: 1.25px;
+}
+
+.app-nav-list {
+    display: grid;
+    gap: 5px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.app-nav-link {
+    display: flex;
+    min-height: 45px;
+    align-items: center;
+    gap: 13px;
+    padding: 0 13px;
+    border: 0;
+    border-radius: var(--side-radius);
+    color: var(--side-muted);
+    font-size: inherit;
+    font-weight: 600;
+    text-decoration: none;
+    transition: color .15s ease, background-color .15s ease;
+}
+
+.app-nav-link > .bi { width: 18px; font-size: 17px; }
+.app-nav-link:hover { color: var(--side-ink); background: #f8f9fa; }
+.app-nav-link.is-active { color: #fff; background: var(--side-ink); }
+.app-nav-link.is-active:hover { color: #fff; background: var(--side-ink); }
+.app-nav-link.is-disabled { color: #aab1bd; cursor: not-allowed; }
+.app-nav-link.is-disabled:hover { color: #aab1bd; background: transparent; }
+
+.app-coming-soon {
+    margin-left: auto;
+    color: #9aa2b0;
+    font-size: 9px;
+    font-weight: 600;
+}
+
+.app-sidebar-divider {
+    height: 1px;
+    margin: 20px 4px 12px;
+    background: var(--side-line);
+}
+
+.app-sidebar-bottom { margin-top: auto; }
+
+.app-account {
+    display: flex;
+    align-items: center;
+    gap: 11px;
+    margin: 0 4px 12px;
+    padding: 10px 8px 12px;
+}
+
+.app-avatar {
+    display: grid;
+    flex: 0 0 36px;
+    height: 36px;
+    place-items: center;
+    border-radius: 50%;
+    background: #f8f9fa;
+    color: var(--side-ink);
+    font-size: 14px;
+    font-weight: 800;
+}
+
+.app-account-copy { display: grid; min-width: 0; }
+.app-account-copy strong { overflow: hidden; color: var(--side-ink); font-size: .875rem; text-overflow: ellipsis; white-space: nowrap; }
+.app-account-copy small { color: var(--side-muted); font-size: .8125rem; }
+
+.app-logout {
+    display: flex;
+    width: 100%;
+    min-height: 42px;
+    align-items: center;
+    gap: 13px;
+    padding: 0 13px;
+    border: 0;
+    border-radius: var(--side-radius);
+    background: transparent;
+    color: var(--side-muted);
+    font-size: inherit;
+    font-weight: 600;
+    text-align: left;
+}
+
+.app-logout:hover { background: #fff1f0; color: #b02a37; }
+.app-logout .bi { width: 18px; font-size: 17px; }
+
+@media (max-width: 760px) {
+    .app-sidebar { position: static; height: auto; min-height: 0; padding: 17px 16px 12px; border-right: 0; border-bottom: 1px solid var(--side-line); }
+    .app-brand { margin: 0 4px 18px; }
+    .app-sidebar-label { margin-left: 5px; }
+    .app-nav-list { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 5px; }
+    .app-nav-link { justify-content: center; gap: 7px; padding: 0 7px; font-size: .875rem; }
+    .app-nav-link > .bi { width: auto; font-size: 15px; }
+    .app-coming-soon { display: none; }
+    .app-sidebar-divider { margin: 10px 4px; }
+    .app-sidebar > .app-nav-link { justify-content: flex-start; }
+    .app-sidebar-bottom { display: grid; grid-template-columns: 1fr auto; align-items: center; gap: 0 10px; margin-top: 6px; }
+    .app-account { grid-column: 1 / -1; margin: 0; padding: 8px 4px; }
+    .app-sidebar-bottom > .app-nav-link { justify-content: flex-start; }
+    .app-sidebar-bottom > .app-sidebar-divider { grid-column: 1 / -1; margin: 4px 4px; }
+    .app-logout { width: auto; padding: 0 8px; }
+}

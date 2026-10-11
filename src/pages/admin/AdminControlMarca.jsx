@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react"
 import { useNavigate } from "react-router-dom"
 import { MarcasTable } from "../../components/MarcasTable"
+import { TableCard } from "../../components/TableCard"
 import { AlertMessage } from "../../components/AlertMessage"
 import { obtenerMarcas } from "../../services/marcaService"
 import { useAuth, tieneRol } from "../../context/authContext"
@@ -38,19 +39,8 @@ export function AdminControlMarca() {
 
     return (
         <>
-            <h2 className="mb-4 mt-3 text-center">Administración Marcas</h2>
-
-            <div className="d-flex justify-content-center align-items-center gap-3 mb-4">
-                <div className="input-group" style={{ maxWidth: "25rem" }}>
-                    <span className="input-group-text border-black"><i className="bi bi-search"></i></span>
-                    <input
-                        type="text"
-                        className="form-control border-black"
-                        placeholder="Buscar por nombre o ID"
-                        value={busqueda}
-                        onChange={(e) => setBusqueda(e.target.value)}
-                    />
-                </div>
+            <div className="d-flex justify-content-between align-items-center mb-4 mt-3">
+                <h2 className="mb-0">Administración Marcas</h2>
                 {esAdmin && (
                     <button className="btn btn-dark" onClick={() => { navigate("nuevo") }}>
                         Nueva marca
@@ -59,11 +49,28 @@ export function AdminControlMarca() {
             </div>
 
             <AlertMessage type={mensajeAlerta?.type} message={mensajeAlerta?.message} onClose={() => setMensajeAlerta(null)} />
-            <MarcasTable
-                marcas={filtradas}
-                handleClick={handleClick}
-                editable={esAdmin}
-            />
+            <TableCard
+                title="Todas las marcas"
+                subtitle="Listado de marcas de la tienda"
+                toolbar={
+                    <div className="input-group" style={{ maxWidth: "25rem" }}>
+                        <span className="input-group-text border-black"><i className="bi bi-search"></i></span>
+                        <input
+                            type="text"
+                            className="form-control border-black"
+                            placeholder="Buscar por nombre o ID"
+                            value={busqueda}
+                            onChange={(e) => setBusqueda(e.target.value)}
+                        />
+                    </div>
+                }
+            >
+                <MarcasTable
+                    marcas={filtradas}
+                    handleClick={handleClick}
+                    editable={esAdmin}
+                />
+            </TableCard>
         </>
     )
 }

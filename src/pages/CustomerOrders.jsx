@@ -2,6 +2,7 @@ import { useEffect, useState } from "react"
 import { Link } from "react-router-dom"
 import { AlertMessage } from "../components/AlertMessage"
 import { EstadoPedidoBadge } from "../components/EstadoPedidoBadge"
+import { TableCard } from "../components/TableCard"
 import { obtenerMisPedidos } from "../services/pedidoService"
 import { formatearPrecio } from "../utils/moneda"
 
@@ -58,8 +59,8 @@ export function CustomerOrders() {
                     <Link className="btn btn-dark" to="/productos">Ver productos</Link>
                 </div>
             ) : (
-                <div className="table-responsive">
-                    <table className="table align-middle">
+                <TableCard title="Historial de pedidos" subtitle="Revisa el estado y detalle de tus compras">
+                    <table className="table site-table align-middle mb-0">
                         <thead>
                             <tr>
                                 <th scope="col">ID PEDIDO</th>
@@ -87,7 +88,7 @@ export function CustomerOrders() {
                             ))}
                         </tbody>
                     </table>
-                </div>
+                </TableCard>
             )}
         </div>
     )

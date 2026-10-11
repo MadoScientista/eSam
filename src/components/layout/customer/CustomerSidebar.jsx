@@ -2,13 +2,13 @@ import { NavLink, useNavigate } from "react-router-dom";
 import { useAuth } from "../../../context/authContext";
 
 const CUSTOMER_MENU_ITEMS = [
-    { label: "Perfil", path: "/usuario", end: true },
-    { label: "Carrito", path: "/usuario/carrito" },
-    { label: "Mis pedidos", path: "/usuario/pedidos" },
+    { label: "Perfil", path: "/usuario", icon: "bi-person", end: true },
+    { label: "Carrito", path: "/usuario/carrito", icon: "bi-cart" },
+    { label: "Mis pedidos", path: "/usuario/pedidos", icon: "bi-bag-check" },
 ];
 
 export function CustomerSidebar() {
-    const { logout } = useAuth();
+    const { logout, usuario } = useAuth();
     const navigate = useNavigate();
 
     const handleLogout = () => {
@@ -16,37 +16,64 @@ export function CustomerSidebar() {
         navigate("/");
     };
 
+    const nombre = [usuario?.nombres, usuario?.aPaterno].filter(Boolean).join(" ");
+
     return (
-        <nav className="col-md-3 col-lg-2 d-md-block pt-5 collapse text-end border-end shadow-sm align-items-center">
-            <div className="position-sticky pt-3">
-                <h6 className="text-black text-uppercase px-3 mb-2">
-                    Mi Cuenta
-                </h6>
-                <ul className="nav flex-column">
+        <aside className="app-sidebar">
+            <NavLink to="/usuario" className="app-brand">
+                <span className="app-brand-mark"><i className="bi bi-bag-heart-fill" /></span>
+                <span>eSam <small>CLIENTE</small></span>
+            </NavLink>
+
+            <div className="app-sidebar-label">MENÚ PRINCIPAL</div>
+            <nav aria-label="Navegación de la cuenta">
+                <ul className="app-nav-list">
                     {CUSTOMER_MENU_ITEMS.map((item) => (
-                        <li className="nav-item" key={item.path}>
+                        <li key={item.path}>
                             <NavLink
                                 to={item.path}
                                 end={item.end}
                                 className={({ isActive }) =>
-                                    `nav-link ${isActive ? "fw-bold active text-black" : "text-black"}`
+                                    `app-nav-link${isActive ? " is-active" : ""}`
                                 }
                             >
-                                {item.label}
+                                <i className={`bi ${item.icon}`} aria-hidden="true" />
+                                <span>{item.label}</span>
                             </NavLink>
                         </li>
                     ))}
-                    <li className="nav-item">
-                        <button
-                            type="button"
-                            className="nav-link text-black border-0 bg-transparent text-end w-100"
-                            onClick={handleLogout}
+                    <li>
+                        <NavLink
+                            to="/"
+                            end
+                            className={({ isActive }) =>
+                                `app-nav-link${isActive ? " is-active" : ""}`
+                            }
                         >
-                            Cerrar sesión
-                        </button>
+                            <i className="bi bi-arrow-left-circle" aria-hidden="true" />
+                            <span>Volver a la tienda</span>
+                        </NavLink>
                     </li>
                 </ul>
+            </nav>
+
+            <div className="app-sidebar-divider" />
+            <div className="app-sidebar-bottom">
+                {nombre && (
+                    <div className="app-account">
+                        <span className="app-avatar">{nombre.charAt(0).toUpperCase()}</span>
+                        <span className="app-account-copy">
+                            <strong>{nombre}</strong>
+                            <small>Cliente</small>
+                        </span>
+                    </div>
+                )}
+                <div className="app-sidebar-divider" />
+                <button type="button" className="app-logout" onClick={handleLogout}>
+                    <i className="bi bi-box-arrow-left" aria-hidden="true" />
+                    <span>Cerrar sesión</span>
+                </button>
             </div>
-        </nav>
+        </aside>
     );
 }

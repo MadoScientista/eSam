@@ -1,0 +1,22 @@
+.customer-shell {
+    min-height: 100vh;
+    background: var(--site-background);
+}
+
+.customer-layout {
+    display: grid;
+    grid-template-columns: 258px minmax(0, 1fr);
+    min-height: 100vh;
+}
+
+.customer-main { min-width: 0; padding: 48px clamp(24px, 4vw, 62px); }
+
+@media (max-width: 1000px) {
+    .customer-layout { grid-template-columns: 220px minmax(0, 1fr); }
+    .customer-main { padding: 36px 25px; }
+}
+
+@media (max-width: 760px) {
+    .customer-layout { display: block; }
+    .customer-main { padding: 30px 18px; }
+}
