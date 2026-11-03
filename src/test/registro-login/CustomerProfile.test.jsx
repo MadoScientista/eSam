@@ -41,9 +41,10 @@ const perfil = {
 }
 
 // Siembra la sesión para que AuthProvider exponga un usuario autenticado.
-const seedSesion = () => {
+const seedSesion = ({ esGoogle = false } = {}) => {
     localStorage.setItem("eSamToken", "token-fake")
     localStorage.setItem("eSamSession", JSON.stringify({ id: 1, rol: "cliente", nombres: "Ana", aPaterno: "López" }))
+    if (esGoogle) localStorage.setItem("eSamGoogleSession", "true")
 }
 
 const renderPerfil = () =>
@@ -95,6 +96,22 @@ describe("CustomerProfile", () => {
             correo: "ana@duoc.cl",
             password: "nueva-clave"
         })
+        expect(await screen.findByText("Usuario actualizado correctamente.")).toBeInTheDocument()
+    })
+
+    it("Permite completar el perfil de una cuenta Google sin contraseña", async () => {
+        seedSesion({ esGoogle: true })
+        actualizarPerfil.mockResolvedValue({ idUsuario: 1 })
+
+        renderPerfil()
+        await screen.findByDisplayValue("Ana")
+
+        expect(screen.getByLabelText("Contraseña (opcional)")).not.toBeRequired()
+        fireEvent.click(screen.getByRole("button", { name: "Guardar Perfil" }))
+
+        await waitFor(() => expect(actualizarPerfil).toHaveBeenCalledTimes(1))
+        expect(actualizarPerfil.mock.calls[0][0]).not.toHaveProperty("password")
+        await waitFor(() => expect(obtenerPerfil).toHaveBeenCalledTimes(2))
         expect(await screen.findByText("Usuario actualizado correctamente.")).toBeInTheDocument()
     })
 

@@ -8,8 +8,9 @@ import { AlertMessage } from "../AlertMessage"
 export function RegisterForm({ idUsuario, esAdmin = false, wideLayout = false }) {
 
     const navigate = useNavigate()
-    const { usuario, estaAutenticado } = useAuth()
-    const esPropio = Boolean(estaAutenticado && usuario?.id === idUsuario)
+    const { usuario, estaAutenticado, esSesionGoogle, refrescarPerfil } = useAuth()
+    const idUsuarioActual = usuario?.id ?? usuario?.idUsuario
+    const esPropio = Boolean(estaAutenticado && idUsuarioActual === idUsuario)
 
     const {
         esEdicion,
@@ -22,7 +23,7 @@ export function RegisterForm({ idUsuario, esAdmin = false, wideLayout = false })
         handleChangeRut,
         construirPayload,
         limpiarFormulario
-    } = useUsuarioForm({ idUsuario, esAdmin, esPropio })
+    } = useUsuarioForm({ idUsuario, esAdmin, esPropio, esOAuth: esSesionGoogle })
 
     const handleSubmit = async (e) => {
         e.preventDefault()
@@ -35,6 +36,7 @@ export function RegisterForm({ idUsuario, esAdmin = false, wideLayout = false })
             if (esEdicion) {
                 if (esPropio) {
                     await actualizarPerfil(payload)
+                    await refrescarPerfil()
                 } else {
                     await actualizarUsuario(idUsuario, payload)
                 }
@@ -67,6 +69,7 @@ export function RegisterForm({ idUsuario, esAdmin = false, wideLayout = false })
                     handleChange={handleChange}
                     handleChangeRut={handleChangeRut}
                     esEdicion={esEdicion}
+                    esOAuth={esSesionGoogle}
                     regionesComunas={regionesComunas}
                     comunas={comunas}
                 />

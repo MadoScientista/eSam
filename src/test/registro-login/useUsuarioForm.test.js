@@ -125,13 +125,12 @@ describe("useUsuarioForm", () => {
         expect(result.current.mensajeAlerta.message).toBe("El RUN ingresado no es válido.")
     })
 
-    it("rechaza correos con dominio no permitido", async () => {
+    it("acepta correos de cualquier dominio", async () => {
         const { result } = await montarHook()
 
         rellenar(result, { ...camposValidos, rut: "123456785", correo: "ana@hotmail.com", correoConfirm: "ana@hotmail.com" })
 
-        expect(construirPayload(result)).toBeNull()
-        expect(result.current.mensajeAlerta.message).toBe("Solo se permiten correos @duoc.cl, @profesor.duoc.cl y @gmail.com.")
+        expect(construirPayload(result).correo).toBe("ana@hotmail.com")
     })
 
     it("rechaza contraseñas que no coinciden", async () => {

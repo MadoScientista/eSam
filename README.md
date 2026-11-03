@@ -53,6 +53,16 @@ npm run lint      # Linting con ESLint
 
 > El backend debe estar en ejecución en `http://localhost:8080`; el proxy de Vite (`vite.config.js`) redirige las peticiones `/api/*`.
 
+### Inicio de sesión con Google
+
+Configura `VITE_GOOGLE_CLIENT_ID` con el Client ID web de Google para el
+entorno. Este valor es público; no configures un `client_secret` en el frontend.
+Registra el origen del frontend en Google Cloud y configura el backend con el
+mismo Client ID mediante `GOOGLE_CLIENT_ID`. El backend valida el ID token en
+`POST /api/usuarios/oauth/google` y devuelve el JWT propio de la API; solo ese
+JWT se guarda como sesión. También se requiere que CORS permita al frontend
+llamar a la API.
+
 ## API consumida
 
 | Método | Endpoint | Función | Servicio |
@@ -69,6 +79,7 @@ npm run lint      # Linting con ESLint
 | POST | `/usuarios/:id` | Actualizar usuario | `usuarioService` |
 | DELETE | `/usuarios/:id` | Eliminar usuario | `usuarioService` |
 | POST | `/usuarios/login` | Autenticación | `usuarioService` |
+| POST | `/usuarios/oauth/google` | Intercambiar ID token de Google por el JWT de la API | `usuarioService` |
 | GET | `/roles` | Roles de usuario | `usuarioService` |
 | GET | `/regiones/comunas` | Regiones y comunas | `regionComunaService` |
 | GET | `/regiones/:id/comunas` | Comunas de una región | `regionComunaService` |
@@ -80,7 +91,7 @@ npm run lint      # Linting con ESLint
 - **Carrito de compras:** agregar, incrementar/decrementar unidades y eliminar productos; resumen con unidades y subtotal. Persistente en `localStorage`.
 - **Blog:** listado de entradas y artículo completo (contenido local).
 - **Autenticación:** registro, inicio/cierre de sesión, sesión persistida y rutas protegidas.
-- **Registro validado:** algoritmo de dígito verificador de RUT chileno, confirmación de correo/clave y dominios de correo permitidos; selector dependiente región → comuna.
+- **Registro validado:** algoritmo de dígito verificador de RUT chileno, confirmación de correo/clave y selector dependiente región → comuna; no se restringen los dominios de correo.
 - **Roles:** `cliente` (perfil y carrito) y `admin` (panel de administración).
 - **Panel administración:** CRUD de productos y de usuarios (crear, editar, eliminar).
 

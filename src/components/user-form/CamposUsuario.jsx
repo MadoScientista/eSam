@@ -1,6 +1,8 @@
 import "./user-form.css"
 
-export function CamposUsuario({ formulario, handleChange, handleChangeRut, esEdicion, regionesComunas, comunas, wideLayout = false }) {
+export function CamposUsuario({ formulario, handleChange, handleChangeRut, esEdicion, esOAuth = false, regionesComunas, comunas, wideLayout = false }) {
+    const passwordOpcional = esEdicion && esOAuth
+
     return (
         <div className={wideLayout ? "user-form-fields" : undefined}>
             <div className={`mb-3${wideLayout ? " user-form-field user-form-field--full" : ""}`}>
@@ -112,7 +114,7 @@ export function CamposUsuario({ formulario, handleChange, handleChangeRut, esEdi
 
             <div className={`mb-3${wideLayout ? " user-form-field" : ""}`}>
                 <label htmlFor="password" className="form-label">
-                    Contraseña*
+                    {passwordOpcional ? "Contraseña (opcional)" : "Contraseña*"}
                 </label>
                 <input
                     type="password"
@@ -123,12 +125,16 @@ export function CamposUsuario({ formulario, handleChange, handleChangeRut, esEdi
                     maxLength={72}
                     value={formulario.password}
                     onChange={handleChange}
-                    required/>
-                <small className="text-secondary">Entre 8 y 72 caracteres.</small>
+                    required={!passwordOpcional}/>
+                <small className="text-secondary">
+                    {passwordOpcional ? "Déjala vacía si no deseas crear o cambiar una contraseña." : "Entre 8 y 72 caracteres."}
+                </small>
             </div>
 
             <div className={`mb-3${wideLayout ? " user-form-field" : ""}`}>
-                <label htmlFor="passwordConfirm" className="form-label">Confirme Contraseña*</label>
+                <label htmlFor="passwordConfirm" className="form-label">
+                    {passwordOpcional ? "Confirme Contraseña" : "Confirme Contraseña*"}
+                </label>
                 <input
                     type="password"
                     id="passwordConfirm"
@@ -138,7 +144,7 @@ export function CamposUsuario({ formulario, handleChange, handleChangeRut, esEdi
                     maxLength={72}
                     value={formulario.passwordConfirm}
                     onChange={handleChange}
-                    required/>
+                    required={!passwordOpcional}/>
             </div>
 
             <div className={`row mb-3${wideLayout ? " user-form-field-pair" : ""}`}>

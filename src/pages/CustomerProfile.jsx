@@ -10,7 +10,7 @@ export function CustomerProfile() {
                 <h1 className="h3 mb-0">Mi perfil</h1>
             </div>
             <RegisterForm
-                idUsuario={usuario?.id}
+                idUsuario={usuario?.id ?? usuario?.idUsuario}
                 wideLayout
             />
         </div>

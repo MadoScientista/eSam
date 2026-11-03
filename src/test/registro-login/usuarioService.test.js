@@ -17,6 +17,7 @@ import {
     crearUsuarioAdmin,
     eliminarUsuario,
     iniciarSesion,
+    iniciarSesionGoogle,
     obtenerPerfil,
     obtenerRolesUsuario,
     obtenerUsuarioId,
@@ -93,6 +94,20 @@ describe("usuarioService", () => {
             expect(api.post).toHaveBeenCalledWith("/usuarios/login", {
                 correo: "a@duoc.cl",
                 password: "clave"
+            })
+            expect(resultado).toEqual(respuesta.data)
+        })
+    })
+
+    describe("iniciarSesionGoogle", () => {
+        it("envía el ID token a /usuarios/oauth/google", async () => {
+            const respuesta = { data: { loggin: true, token: "jwt-api", usuario: {} } }
+            api.post.mockResolvedValue(respuesta)
+
+            const resultado = await iniciarSesionGoogle("google-id-token")
+
+            expect(api.post).toHaveBeenCalledWith("/usuarios/oauth/google", {
+                idToken: "google-id-token"
             })
             expect(resultado).toEqual(respuesta.data)
         })

@@ -1,13 +1,16 @@
-import { useState } from "react"
+import { useCallback, useEffect, useRef, useState } from "react"
 import { Link, useLocation, useNavigate } from "react-router-dom"
 import { useAuth, tieneRol } from "../context/authContext"
 import { AlertMessage } from "./AlertMessage"
 
 export function LoginForm(){
 
-    const { login } = useAuth()
+    const { login, loginGoogle } = useAuth()
     const navigate = useNavigate()
     const location = useLocation()
+    const googleButton = useRef(null)
+    const googleCallback = useRef(null)
+    const googleClientId = import.meta.env.VITE_GOOGLE_CLIENT_ID
 
     const [ formulario, setFormulario ] = useState({
         email: "",
@@ -25,6 +28,86 @@ export function LoginForm(){
             : null
     )
     const [cargando, setCargando] = useState(false)
+    const [googleDisponible, setGoogleDisponible] = useState(false)
+
+    const navegarTrasLogin = useCallback((usuario) => {
+        navigate(
+            tieneRol(usuario, "admin") || tieneRol(usuario, "vendedor")
+                ? "/admin"
+                : usuario?.perfilCompleto === false
+                    ? "/usuario"
+                    : location.state?.from?.pathname === "/usuario/checkout"
+                        ? "/usuario/checkout"
+                        : "/usuario"
+        )
+    }, [navigate, location.state?.from?.pathname])
+
+    const procesarCredencialGoogle = useCallback(async (credential) => {
+        setMensajeAlerta(null)
+        setCargando(true)
+
+        try {
+            const res = await loginGoogle(credential)
+
+            if(res.ok){
+                navegarTrasLogin(res.usuario)
+            }else{
+                setMensajeAlerta({type: "danger", message: "No se pudo iniciar sesión con Google. Vuelve a intentarlo."})
+            }
+        } catch(error) {
+            console.error("Error al iniciar sesión con Google", error)
+
+            const mensajesPorCodigo = {
+                ERROR_VALIDACION: "No se pudo validar la credencial de Google. Vuelve a intentarlo.",
+                AUTENTICACION_GOOGLE_INVALIDA: "No se pudo iniciar sesión con Google. Vuelve a intentarlo.",
+                GOOGLE_NO_CONFIGURADO: "El inicio de sesión con Google no está disponible. Puedes iniciar sesión con correo y contraseña."
+            }
+            const mensaje = mensajesPorCodigo[error?.code]
+                || error?.message
+                || "No se pudo iniciar sesión con Google."
+
+            setMensajeAlerta({type: "danger", message: mensaje})
+        } finally {
+            setCargando(false)
+        }
+    }, [loginGoogle, navegarTrasLogin])
+
+    useEffect(() => {
+        googleCallback.current = procesarCredencialGoogle
+    }, [procesarCredencialGoogle])
+
+    useEffect(() => {
+        if (!googleClientId) return undefined
+
+        const script = document.querySelector('script[src="https://accounts.google.com/gsi/client"]')
+        if (!script) return undefined
+
+        const inicializarGoogle = () => {
+            const google = window.google
+            if (!google?.accounts?.id || !googleButton.current) return
+
+            google.accounts.id.initialize({
+                client_id: googleClientId,
+                callback: ({ credential }) => {
+                    if (credential) {
+                        googleCallback.current(credential)
+                    }
+                }
+            })
+            google.accounts.id.renderButton(googleButton.current, {
+                theme: "outline",
+                size: "large",
+                text: "continue_with",
+                width: 320
+            })
+            setGoogleDisponible(true)
+        }
+
+        inicializarGoogle()
+        script.addEventListener("load", inicializarGoogle)
+
+        return () => script.removeEventListener("load", inicializarGoogle)
+    }, [googleClientId])
 
     const handleChange = (e)=>{
 
@@ -49,13 +132,7 @@ export function LoginForm(){
             const res = await login(formulario.email, formulario.password)
 
             if(res.ok){
-                navigate(
-                    tieneRol(res.usuario, "admin") || tieneRol(res.usuario, "vendedor")
-                        ? "/admin"
-                        : location.state?.from?.pathname === "/usuario/checkout"
-                            ? "/usuario/checkout"
-                            : "/usuario"
-                )
+                navegarTrasLogin(res.usuario)
             }else{
                 setMensajeAlerta({type: "danger", message: "Correo o contraseña incorrectos."})
             }
@@ -102,6 +179,15 @@ export function LoginForm(){
                         onChange={handleChange}/>
                 </div>
                 <button type="submit" className="btn btn-dark" disabled={cargando}>Entrar</button>
+
+                <div className="mt-4 text-center">
+                    <div className="mb-3">o</div>
+                    {googleClientId
+                        ? <div ref={googleButton} className="d-flex justify-content-center" aria-label="Iniciar sesión con Google" />
+                        : <p className="text-secondary mb-0">El inicio de sesión con Google no está configurado.</p>
+                    }
+                    {googleDisponible && cargando && <span className="visually-hidden">Iniciando sesión con Google...</span>}
+                </div>
 
                 {/* RequireAuth rebota a /login cuando no hay sesión, así que el
                     login es la puerta de entrada habitual al registro. */}

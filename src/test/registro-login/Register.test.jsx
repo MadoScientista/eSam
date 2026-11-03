@@ -101,14 +101,14 @@ describe("Register", () => {
         expect(await screen.findByText("Página login")).toBeInTheDocument()
     })
 
-    it("Muestra validación para correos de dominio no permitido", async () => {
+    it("Registra correos de cualquier dominio", async () => {
         renderRegister()
         await llenarFormulario({ "Correo*": "ana@hotmail.com", "Confirme correo*": "ana@hotmail.com" })
 
         fireEvent.click(screen.getByRole("button", { name: "Registrar" }))
 
-        expect(await screen.findByText("Solo se permiten correos @duoc.cl, @profesor.duoc.cl y @gmail.com.")).toBeInTheDocument()
-        expect(crearUsuario).not.toHaveBeenCalled()
+        await waitFor(() => expect(crearUsuario).toHaveBeenCalledTimes(1))
+        expect(crearUsuario.mock.calls[0][0].correo).toBe("ana@hotmail.com")
     })
 
     it("Muestra validación cuando las contraseñas no coinciden", async () => {

@@ -141,6 +141,12 @@ export function Checkout() {
         } catch (error) {
             console.error("Error al crear el pedido", error)
             const conflictoStock = error?.status === 409 && error?.code === "CONFLICTO_STOCK"
+
+            if (error?.status === 409 && error?.code === "PERFIL_INCOMPLETO") {
+                navigate("/usuario")
+                return
+            }
+
             setMensaje({
                 type: conflictoStock ? "warning" : "danger",
                 message: conflictoStock

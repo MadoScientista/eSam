@@ -42,7 +42,12 @@ const perfil = {
 // El admin autenticado edita su propio perfil (esPropio).
 const renderPerfil = () =>
     render(
-        <AuthContext.Provider value={{ usuario: { id: 1, rol: "admin" }, estaAutenticado: true, token: "token-fake" }}>
+        <AuthContext.Provider value={{
+            usuario: { id: 1, rol: "admin" },
+            estaAutenticado: true,
+            token: "token-fake",
+            refrescarPerfil: vi.fn().mockResolvedValue(perfil)
+        }}>
             <MemoryRouter>
                 <AdminProfile />
             </MemoryRouter>

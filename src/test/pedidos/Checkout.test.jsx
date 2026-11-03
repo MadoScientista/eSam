@@ -61,6 +61,7 @@ const renderCheckout = () =>
                 <MemoryRouter initialEntries={["/usuario/checkout"]}>
                     <Routes>
                         <Route path="/usuario/checkout" element={<Checkout />} />
+                        <Route path="/usuario" element={<div>Completar perfil</div>} />
                         <Route path="/" element={<div>Página inicio</div>} />
                         <Route path="/productos" element={<div>Página productos</div>} />
                         <Route path="/usuario/pedidos" element={<div>Página mis pedidos</div>} />
@@ -260,6 +261,27 @@ describe("Checkout", () => {
         fireEvent.click(screen.getByRole("button", { name: "Pagar" }))
 
         expect(await screen.findByText("Algunos de los productos no tienen stock suficiente. Revisa las cantidades e inténtalo nuevamente.")).toBeInTheDocument()
+    })
+
+    it("Abre el perfil y conserva el carrito ante 409 PERFIL_INCOMPLETO", async () => {
+        seedSesionCliente()
+        seedCart([itemCarrito(producto(1, "Cuaderno", 2490), 1)])
+        obtenerDirecciones.mockResolvedValue([])
+        obtenerRegionesComunas.mockResolvedValue([])
+        fusionarCarritoLocal.mockResolvedValue({ items: [] })
+        const errorPerfil = new Error("Perfil incompleto")
+        errorPerfil.status = 409
+        errorPerfil.code = "PERFIL_INCOMPLETO"
+        crearPedido.mockRejectedValue(errorPerfil)
+
+        renderCheckout()
+
+        await waitFor(() => expect(obtenerDirecciones).toHaveBeenCalledTimes(1))
+        fireEvent.click(screen.getByRole("button", { name: "Pagar" }))
+
+        expect(await screen.findByText("Completar perfil")).toBeInTheDocument()
+        expect(crearPedido).toHaveBeenCalledTimes(1)
+        expect(JSON.parse(localStorage.getItem("eSamCart"))).toHaveLength(1)
     })
 
     it("Muestra mensaje de error genérico al fallar la creación del pedido", async () => {

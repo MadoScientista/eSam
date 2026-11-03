@@ -45,6 +45,13 @@ export const iniciarSesion = async (correo, password) => {
     return response.data
 }
 
+// Intercambiar el ID token de Google por el JWT propio de la API.
+export const iniciarSesionGoogle = async (idToken) => {
+    const response = await api.post("/usuarios/oauth/google", { idToken })
+
+    return response.data
+}
+
 // Crear un usuario en el registro público.
 // El servidor asigna el rol "cliente", por lo que no se envía idRolUsuario.
 export const crearUsuario = async (usuario) => {

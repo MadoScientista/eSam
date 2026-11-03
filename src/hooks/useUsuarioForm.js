@@ -21,9 +21,7 @@ const formularioVacio = {
     idRolUsuario: ""
 }
 
-const dominiosPermitidos = ["duoc.cl", "gmail.com", "profesor.duoc.cl", "duocuc.cl"]
-
-export function useUsuarioForm({ idUsuario, esAdmin = false, esPropio = false }) {
+export function useUsuarioForm({ idUsuario, esAdmin = false, esPropio = false, esOAuth = false }) {
 
     const esEdicion = Boolean(idUsuario)
 
@@ -175,29 +173,24 @@ export function useUsuarioForm({ idUsuario, esAdmin = false, esPropio = false })
             return null
         }
 
-        if(!dominiosPermitidos.includes(formulario.correo.split("@")[1])){
-            setMensajeAlerta({type: "danger", message: "Solo se permiten correos @duoc.cl, @profesor.duoc.cl y @gmail.com."})
-            return null
-        }
-
         if(formulario.correo !== formulario.correoConfirm){
             setMensajeAlerta({type: "danger", message: "Los correos no coinciden."})
             return null
         }
 
-        // Contraseña. El DTO la marca como obligatoria siempre y el servicio
-        // reemplaza la contraseña por la recibida, también al editar el perfil.
-        if(!formulario.password){
+        // Las cuentas Google pueden completar el perfil sin crear una contraseña.
+        const permitePasswordVacio = esEdicion && esPropio && esOAuth
+        if(!formulario.password && !permitePasswordVacio){
             setMensajeAlerta({type: "danger", message: "La contraseña es obligatoria."})
             return null
         }
 
-        if(formulario.password.length < 8 || formulario.password.length > 72){
+        if(formulario.password && (formulario.password.length < 8 || formulario.password.length > 72)){
             setMensajeAlerta({type: "danger", message: "La contraseña debe tener entre 8 y 72 caracteres."})
             return null
         }
 
-        if(formulario.password !== formulario.passwordConfirm){
+        if(formulario.password && formulario.password !== formulario.passwordConfirm){
             setMensajeAlerta({type: "danger", message: "Las contraseñas no coinciden."})
             return null
         }
@@ -255,9 +248,12 @@ export function useUsuarioForm({ idUsuario, esAdmin = false, esPropio = false })
             direccion: formulario.direccion.trim(),
             correo,
             telefono: formulario.telefono ? formulario.telefono.trim() : null,
-            password: formulario.password,
             idRegion: Number(formulario.idRegion),
             idComuna: Number(formulario.idComuna)
+        }
+
+        if(formulario.password){
+            payload.password = formulario.password
         }
 
         // El registro público no permite elegir rol y el servicio tampoco lo

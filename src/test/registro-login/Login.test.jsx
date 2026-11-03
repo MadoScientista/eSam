@@ -1,13 +1,15 @@
-import { fireEvent, render, screen, waitFor } from "@testing-library/react"
+import { act, fireEvent, render, screen, waitFor } from "@testing-library/react"
 import { MemoryRouter, Route, Routes } from "react-router-dom"
-import { beforeEach, describe, expect, it, vi } from "vitest"
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest"
 
 // Mock del servicio de sesión: AuthProvider resuelve login con iniciarSesion.
 vi.mock("../../services/usuarioService", () => ({
-    iniciarSesion: vi.fn()
+    iniciarSesion: vi.fn(),
+    iniciarSesionGoogle: vi.fn(),
+    obtenerPerfil: vi.fn()
 }))
 
-import { iniciarSesion } from "../../services/usuarioService"
+import { iniciarSesion, iniciarSesionGoogle } from "../../services/usuarioService"
 import { Login } from "../../pages/Login"
 import { AuthProvider } from "../../context/AuthProvider"
 
@@ -37,6 +39,13 @@ describe("Login", () => {
     beforeEach(() => {
         localStorage.clear()
         vi.resetAllMocks()
+        vi.unstubAllEnvs()
+        delete window.google
+    })
+
+    afterEach(() => {
+        document.querySelector('script[src="https://accounts.google.com/gsi/client"]')?.remove()
+        delete window.google
     })
 
     it("Muestra el formulario de inicio de sesión", () => {
@@ -122,6 +131,69 @@ describe("Login", () => {
         entrar()
 
         expect(await screen.findByText("Correo o contraseña incorrectos.")).toBeInTheDocument()
+    })
+
+    it("Intercambia la credencial Google y guarda solo la sesión propia de la API", async () => {
+        vi.stubEnv("VITE_GOOGLE_CLIENT_ID", "google-client-id")
+        const renderButton = vi.fn()
+        let callbackGoogle
+        window.google = {
+            accounts: {
+                id: {
+                    initialize: vi.fn(({ callback }) => { callbackGoogle = callback }),
+                    renderButton
+                }
+            }
+        }
+        const script = document.createElement("script")
+        script.src = "https://accounts.google.com/gsi/client"
+        document.head.appendChild(script)
+        iniciarSesionGoogle.mockResolvedValue({
+            loggin: true,
+            token: "jwt-propio-api",
+            usuario: { id: 8, rol: "cliente", perfilCompleto: false }
+        })
+
+        renderLogin()
+
+        expect(window.google.accounts.id.initialize).toHaveBeenCalledWith(
+            expect.objectContaining({ client_id: "google-client-id" })
+        )
+        expect(renderButton).toHaveBeenCalled()
+
+        act(() => callbackGoogle({ credential: "google-id-token" }))
+
+        expect(await screen.findByText("Perfil cliente")).toBeInTheDocument()
+        expect(iniciarSesionGoogle).toHaveBeenCalledWith("google-id-token")
+        expect(localStorage.getItem("eSamToken")).toBe("jwt-propio-api")
+        expect(localStorage.getItem("eSamGoogleSession")).toBe("true")
+        expect(localStorage.getItem("eSamSession")).not.toContain("google-id-token")
+    })
+
+    it("Explica cuando Google no está configurado en el backend", async () => {
+        vi.stubEnv("VITE_GOOGLE_CLIENT_ID", "google-client-id")
+        let callbackGoogle
+        window.google = {
+            accounts: {
+                id: {
+                    initialize: vi.fn(({ callback }) => { callbackGoogle = callback }),
+                    renderButton: vi.fn()
+                }
+            }
+        }
+        const script = document.createElement("script")
+        script.src = "https://accounts.google.com/gsi/client"
+        document.head.appendChild(script)
+        const error = new Error("Error 503")
+        error.code = "GOOGLE_NO_CONFIGURADO"
+        iniciarSesionGoogle.mockRejectedValue(error)
+
+        renderLogin()
+        act(() => callbackGoogle({ credential: "google-id-token" }))
+
+        expect(await screen.findByText(
+            "El inicio de sesión con Google no está disponible. Puedes iniciar sesión con correo y contraseña."
+        )).toBeInTheDocument()
     })
 
     it("Muestra el mensaje del error ante una falla genérica", async () => {
