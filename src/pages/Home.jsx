@@ -1,4 +1,5 @@
 
+import { Link } from 'react-router-dom'
 import { Banner } from '../components/Banner'
 import { ProductCarousel } from '../components/ProductCarousel'
 import { Carousel } from '../components/Carousel'
@@ -24,9 +25,17 @@ export function Home(){
 
     return <>
         <Banner><Carousel/></Banner>
-        <div className='container p-0 mb-4'>
-            <h2 className='mb-4'>Productos destacados</h2>
-            <ProductCarousel products={products}/>
-        </div>
+        <section className='esam-section'>
+            <div className='container'>
+                <div className='esam-section-head'>
+                    <h2 className='esam-section-title'>Productos destacados</h2>
+                    <Link className='esam-section-link' to='/productos'>
+                        Ver todo el catálogo
+                        <i className='bi bi-arrow-right' aria-hidden='true'></i>
+                    </Link>
+                </div>
+                <ProductCarousel products={products}/>
+            </div>
+        </section>
     </>
 }

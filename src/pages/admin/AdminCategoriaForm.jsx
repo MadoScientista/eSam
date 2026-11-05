@@ -189,7 +189,7 @@ export function AdminCategoriaForm() {
         <div className="container" style={{ maxWidth: "40rem" }}>
             <h2 className="mb-4">{esEdicion ? `Editar categoría id: ${idCategoria}` : "Nueva Categoría"}</h2>
 
-            <form className="border border-black p-5 rounded-2 shadow-sm" onSubmit={handleSubmit}>
+            <form className="esam-form-card p-5" onSubmit={handleSubmit}>
                 <div className="mb-3">
                     <label htmlFor="nombre" className="form-label fw-bold">Nombre</label>
                     <input

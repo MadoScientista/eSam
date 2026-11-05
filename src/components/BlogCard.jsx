@@ -7,7 +7,7 @@ export function BlogCard({ entrada }) {
 
     return (
         <div
-            className="card h-100 border-0 shadow-sm blog-card"
+            className="card esam-blog-card h-100"
             onClick={handleClick}
             style={{ cursor: "pointer" }}
         >

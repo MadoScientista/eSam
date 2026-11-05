@@ -25,16 +25,16 @@ export function NavBar(){
     });
 
     return <>
-        <nav className="navbar navbar-expand-lg bg-black navbar-dark sticky-top">
+        <nav className="navbar navbar-expand-lg esam-navbar sticky-top">
             <div className="container">
-                <NavLink className="navbar-brand" to="/">ESam</NavLink>
+                <NavLink className="navbar-brand esam-brand" to="/">ESam</NavLink>
                 <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                 <span className="navbar-toggler-icon"></span>
                 </button>
                 <div className="collapse navbar-collapse" id="navbarNav">
                 <ul className="navbar-nav">
                     <li className="nav-item">
-                        <NavLink className="nav-link" aria-current="page" to="/">Inicio</NavLink>
+                        <NavLink className="nav-link" aria-current="page" end to="/">Inicio</NavLink>
                     </li>
                     <li className="nav-item">
                         <NavLink className="nav-link" to="productos">Productos</NavLink>
@@ -85,7 +85,7 @@ export function NavBar(){
                             <i className="bi bi-cart position-relative">
                                 {
                                     nProducts > 0 && 
-                                    <span className="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                                    <span className="position-absolute top-0 start-100 translate-middle badge rounded-pill esam-cart-badge">
                                         {nProducts}
                                     </span>
                                 }

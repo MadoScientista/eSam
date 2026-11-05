@@ -1,140 +1,38 @@
+/* ==========================================================================
+   Base del sitio
+   Los tokens de diseño viven en src/styles/theme.css. Aquí van únicamente
+   los alias heredados y los estilos estructurales que no son de Bootstrap.
+   ========================================================================== */
+
 :root {
-  --site-background: #fff;
-  --site-font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", "Noto Sans", "Liberation Sans", Arial, sans-serif;
-
-  --text: #6b6375;
-  --text-h: #08060d;
-  --bg: var(--site-background);
-  --border: #e5e4e7;
-  --code-bg: #f4f3ec;
-  --accent: #aa3bff;
-  --accent-bg: rgba(170, 59, 255, 0.1);
-  --accent-border: rgba(170, 59, 255, 0.5);
-  --social-bg: rgba(244, 243, 236, 0.5);
-  --shadow:
-    rgba(0, 0, 0, 0.1) 0 10px 15px -3px, rgba(0, 0, 0, 0.05) 0 4px 6px -2px;
-
-  --sans: var(--site-font-family);
-  --heading: var(--site-font-family);
+  --site-background: var(--esam-bg);
+  --site-font-family: var(--esam-font-body);
+  --sans: var(--esam-font-body);
+  --heading: var(--esam-font-display);
   --mono: ui-monospace, Consolas, monospace;
-
-  font: 18px/145% var(--sans);
-  letter-spacing: 0.18px;
-  color-scheme: light;
-  color: var(--text);
-  background: var(--bg);
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-
-  @media (max-width: 1024px) {
-    font-size: 16px;
-  }
 }
 
 html body {
-  background-color: var(--site-background);
-  font-family: var(--site-font-family);
-}
-
-.site-table-card {
-  overflow: hidden;
-  border: 1px solid var(--bs-border-color, #dee2e6);
-  border-radius: 8px;
-  background: var(--site-background);
-  box-shadow: 0 3px 12px rgba(0, 0, 0, 0.035);
-}
-
-.site-table-heading {
-  display: grid;
-  gap: 14px;
-  padding: 21px 23px 17px;
-  border-bottom: 1px solid var(--bs-border-color, #dee2e6);
-}
-
-.site-table-heading-copy > :first-child {
-  margin-top: 0;
-}
-
-.site-table-heading h2 {
   margin: 0;
-  color: var(--bs-body-color, #212529);
-  font-size: 1rem;
-  font-weight: 600;
+  min-height: 100vh;
+  background-color: var(--esam-bg);
+  color: #3f4b5f;
+  font-family: var(--esam-font-body);
 }
 
-.site-table-heading p {
-  margin: 4px 0 0;
-  color: var(--bs-secondary-color, #6c757d);
-  font-size: 0.8125rem;
-}
-
-.site-table-toolbar {
+#root {
   display: flex;
-  flex-wrap: wrap;
-  align-items: flex-end;
-  gap: 10px;
+  min-height: 100vh;
+  flex-direction: column;
 }
 
-.site-table {
-  min-width: 620px;
-  color: var(--bs-body-color, #212529);
-  font-size: inherit;
+#root > main {
+  flex: 1 0 auto;
 }
 
-.site-table thead th {
-  padding: 14px 22px;
-  border-bottom: 1px solid var(--bs-border-color, #dee2e6);
-  background: var(--site-background);
-  color: var(--bs-secondary-color, #6c757d);
-  font-size: 0.8125rem;
-  font-weight: 600;
-  white-space: nowrap;
-}
-
-.site-table tbody td {
-  padding: 16px 22px;
-  border-color: #f0f2f6;
-}
-
-.site-table-empty {
-  padding: 44px 20px !important;
-  color: var(--bs-secondary-color, #6c757d) !important;
-  text-align: center;
-}
-
-.blog-card {
-  transition: transform 0.15s ease, box-shadow 0.15s ease;
-}
-
-.blog-card:hover {
-  transform: translateY(-4px);
-  box-shadow:
-    rgba(0, 0, 0, 0.15) 0 12px 20px -4px, rgba(0, 0, 0, 0.1) 0 4px 8px -2px;
-}
-
-.card-hover {
-  transition: transform 0.15s ease, box-shadow 0.15s ease;
-}
-
-.card-hover:hover {
-  transform: translateY(-2px);
-  box-shadow:
-    rgba(0, 0, 0, 0.12) 0 8px 16px -4px, rgba(0, 0, 0, 0.08) 0 4px 6px -2px;
-}
-
-.qty-input {
-  -moz-appearance: textfield;
-  text-align: center;
-}
-
-.qty-input::-webkit-outer-spin-button,
-.qty-input::-webkit-inner-spin-button {
-  -webkit-appearance: none;
-  margin: 0;
-}
-
+/* --------------------------------------------------------------------------
+   Carrusel horizontal de productos
+   -------------------------------------------------------------------------- */
 .product-carousel {
   overflow-x: auto;
   scroll-snap-type: x mandatory;
@@ -146,8 +44,8 @@ html body {
 }
 
 .product-carousel-item {
-  scroll-snap-align: start;
   width: 70%;
+  scroll-snap-align: start;
 }
 
 @media (min-width: 576px) {
@@ -174,63 +72,16 @@ html body {
   }
 }
 
-.product-cart-btn {
-  position: absolute;
-  top: 0.5rem;
-  right: 0.5rem;
-  width: 2.5rem;
-  height: 2.5rem;
-  border: none;
-  border-radius: 5px;
-  background-color: #212529;
-  color: #fff;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  opacity: 0;
-  transition: opacity 0.2s ease, background-color 0.2s ease;
-  z-index: 2;
+/* --------------------------------------------------------------------------
+   Inputs de cantidad
+   -------------------------------------------------------------------------- */
+.qty-input {
+  text-align: center;
+  -moz-appearance: textfield;
 }
 
-.card-hover:hover .product-cart-btn {
-  opacity: 1;
-}
-
-.product-cart-btn:hover {
-  background-color: #0d6efd;
-}
-
-@media (hover: none) {
-  .product-cart-btn {
-    opacity: 1;
-  }
-}
-
-.carousel-arrow {
-  position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
-  width: 2.5rem;
-  height: 2.5rem;
-  border: none;
-  border-radius: 50%;
-  background-color: #fff;
-  color: #000;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 2;
-}
-
-.carousel-arrow:hover {
-  background-color: #f0f0f0;
-}
-
-.carousel-arrow-prev {
-  left: 0;
-}
-
-.carousel-arrow-next {
-  right: 0;
+.qty-input::-webkit-outer-spin-button,
+.qty-input::-webkit-inner-spin-button {
+  margin: 0;
+  -webkit-appearance: none;
 }

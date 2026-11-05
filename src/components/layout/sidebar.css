@@ -1,8 +1,8 @@
 .app-sidebar {
-    --side-ink: var(--bs-body-color, #212529);
-    --side-muted: var(--bs-secondary-color, #6c757d);
-    --side-line: var(--bs-border-color, #dee2e6);
-    --side-radius: 8px;
+    --side-ink: var(--esam-ink, #14213d);
+    --side-muted: var(--esam-ink-soft, #4f5d73);
+    --side-line: var(--esam-border, #e5ded2);
+    --side-radius: 12px;
     position: sticky;
     top: 0;
     display: flex;
@@ -10,7 +10,7 @@
     height: 100vh;
     min-height: 620px;
     padding: 28px 18px 18px;
-    background: var(--site-background);
+    background: var(--esam-surface, #fff);
     border-right: 1px solid var(--side-line);
 }
 
@@ -20,9 +20,10 @@
     gap: 11px;
     margin: 0 7px 42px;
     color: var(--side-ink);
-    font-size: 20px;
-    font-weight: 800;
-    letter-spacing: -.7px;
+    font-family: var(--esam-font-display, inherit);
+    font-size: 21px;
+    font-weight: 700;
+    letter-spacing: -.04em;
     text-decoration: none;
 }
 
@@ -30,8 +31,9 @@
 
 .app-brand small {
     display: block;
-    margin-top: -3px;
-    color: #8992a2;
+    margin-top: -1px;
+    color: var(--esam-muted, #6b7788);
+    font-family: var(--esam-font-body, inherit);
     font-size: 9px;
     font-weight: 700;
     letter-spacing: 1.6px;
@@ -43,14 +45,14 @@
     height: 42px;
     place-items: center;
     border-radius: var(--side-radius);
-    background: var(--side-ink);
+    background: var(--esam-ink, #16181d);
     color: #fff;
     font-size: 20px;
 }
 
 .app-sidebar-label {
     margin: 0 12px 12px;
-    color: #939cac;
+    color: var(--esam-muted, #6b7788);
     font-size: 10px;
     font-weight: 800;
     letter-spacing: 1.25px;
@@ -80,15 +82,15 @@
 }
 
 .app-nav-link > .bi { width: 18px; font-size: 17px; }
-.app-nav-link:hover { color: var(--side-ink); background: #f8f9fa; }
-.app-nav-link.is-active { color: #fff; background: var(--side-ink); }
-.app-nav-link.is-active:hover { color: #fff; background: var(--side-ink); }
+.app-nav-link:hover { color: var(--side-ink); background: var(--esam-surface-alt, #f4efe6); }
+.app-nav-link.is-active { color: #fff; background: var(--esam-primary, #1d4e89); }
+.app-nav-link.is-active:hover { color: #fff; background: var(--esam-primary-hover, #163c6b); }
 .app-nav-link.is-disabled { color: #aab1bd; cursor: not-allowed; }
 .app-nav-link.is-disabled:hover { color: #aab1bd; background: transparent; }
 
 .app-coming-soon {
     margin-left: auto;
-    color: #9aa2b0;
+    color: var(--esam-muted, #6b7788);
     font-size: 9px;
     font-weight: 600;
 }
@@ -115,8 +117,8 @@
     height: 36px;
     place-items: center;
     border-radius: 50%;
-    background: #f8f9fa;
-    color: var(--side-ink);
+    background: var(--esam-primary-soft, #e9f0f8);
+    color: var(--esam-primary, #1d4e89);
     font-size: 14px;
     font-weight: 800;
 }
@@ -141,7 +143,7 @@
     text-align: left;
 }
 
-.app-logout:hover { background: #fff1f0; color: #b02a37; }
+.app-logout:hover { background: #fbedef; color: var(--esam-danger, #b23a48); }
 .app-logout .bi { width: 18px; font-size: 17px; }
 
 @media (max-width: 760px) {

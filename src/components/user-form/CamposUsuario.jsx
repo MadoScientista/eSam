@@ -5,6 +5,10 @@ export function CamposUsuario({ formulario, handleChange, handleChangeRut, esEdi
 
     return (
         <div className={wideLayout ? "user-form-fields" : undefined}>
+            <div className={`user-form-section${wideLayout ? " user-form-field--full" : ""}`}>
+                <span className="user-form-section-title">Datos personales</span>
+            </div>
+
             <div className={`mb-3${wideLayout ? " user-form-field user-form-field--full" : ""}`}>
                 <label htmlFor="nombres" className="form-label">Nombres*</label>
                 <input
@@ -86,6 +90,10 @@ export function CamposUsuario({ formulario, handleChange, handleChangeRut, esEdi
                 </div>
             </div>
 
+            <div className={`user-form-section${wideLayout ? " user-form-field--full" : ""}`}>
+                <span className="user-form-section-title">Datos de acceso</span>
+            </div>
+
             <div className={`mb-3${wideLayout ? " user-form-field" : ""}`}>
                 <label htmlFor="correo" className="form-label">Correo*</label>
                 <input
@@ -145,6 +153,10 @@ export function CamposUsuario({ formulario, handleChange, handleChangeRut, esEdi
                     value={formulario.passwordConfirm}
                     onChange={handleChange}
                     required={!passwordOpcional}/>
+            </div>
+
+            <div className={`user-form-section${wideLayout ? " user-form-field--full" : ""}`}>
+                <span className="user-form-section-title">Dirección de despacho</span>
             </div>
 
             <div className={`row mb-3${wideLayout ? " user-form-field-pair" : ""}`}>

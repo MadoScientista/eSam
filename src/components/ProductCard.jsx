@@ -24,32 +24,18 @@ export function ProductCard({ product, handleClick }) {
 
     return (
         <div
-            className="card h-100 w-100 d-flex flex-column mb-4 p-3 card-hover"
+            className="card esam-product-card h-100 w-100 d-flex flex-column"
             id={product.idProducto}
             onClick={handleClick}
             style={{ cursor: "pointer" }}
         >
 
-            <div
-                className="product-image-wrap"
-                style={{
-                    height: "8rem",
-                    display: "flex",
-                    justifyContent: "center",
-                    alignItems: "center",
-                    position: "relative"
-                }}
-            >
+            <div className="product-image-wrap">
                 {
                     imagen
                     ? <img
                         src={imagen}
                         alt={product.nombre}
-                        style={{
-                            maxHeight: "100%",
-                            maxWidth: "100%",
-                            objectFit: "contain"
-                        }}
                     />
                     : <i className="bi bi-image fs-1 text-secondary"></i>
                 }
@@ -65,10 +51,13 @@ export function ProductCard({ product, handleClick }) {
             </div>
 
             <div className="card-body d-flex flex-column flex-grow-1">
-                <h6 className="card-title">{product.nombre}</h6>
-                <div className="mt-auto">
-                    <p className="card-text mb-0">{formatearPrecio(product.precio)}</p>
-                    <p className="card-text mb-0">Disponibles: {disponible}u</p>
+                <h6 className="card-title product-title">{product.nombre}</h6>
+                <div className="product-meta mt-auto">
+                    <p className="product-price">{formatearPrecio(product.precio)}</p>
+                    <span className={`product-stock${disponible === 0 ? " is-out" : ""}`}>
+                        <i className={`bi ${disponible > 0 ? "bi-check-circle" : "bi-x-circle"}`} aria-hidden="true"></i>
+                        Disponibles: {disponible}u
+                    </span>
                 </div>
             </div>
 

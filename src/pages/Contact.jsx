@@ -14,7 +14,7 @@ const redesSociales = [
 
 export function Contact(){
     return (
-        <div className="container pt-5 pb-5">
+        <div className="container esam-page">
             <div className="row g-5">
                 <div className="col-lg-6 order-lg-2">
                     <h2 className="mb-3 mt-5">Contáctanos</h2>

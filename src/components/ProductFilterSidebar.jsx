@@ -14,7 +14,7 @@ export function ProductFilterSidebar({ marcas, marcasSeleccionadas, onToggleMarc
     const listaCategorias = categorias.map((c) => ({ ...c, marcado: idsCategoria.includes(c.clave) }))
 
     return (
-        <div className="border rounded p-3">
+        <div className="esam-filters">
             <div className="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-3">
                 <h3 className="fs-6 mb-0">Filtros</h3>
                 <div className="d-flex align-items-center gap-2">

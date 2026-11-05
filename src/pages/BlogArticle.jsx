@@ -27,7 +27,7 @@ export function BlogArticle(){
     const otrasEntradas = entradasBlog.filter((eb) => eb.id != idEntrada)
 
     return (
-        <div className="container pt-5 pb-5">
+        <div className="container esam-page">
             <Link to="/blogs" className="btn btn-outline-dark btn-sm mb-4">
                 <i className="bi bi-arrow-left me-2"></i>
                 Volver al blog

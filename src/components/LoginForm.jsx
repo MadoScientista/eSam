@@ -150,38 +150,60 @@ export function LoginForm(){
     }
 
     return (
-        <div className="login-form border border-black p-5 rounded-2 mb-5 shadow-sm">
+        <div className="login-form mb-5">
             <form onSubmit={handleSubmit}>
-                <div className="h3">Inicio de Sesión</div>
+                <div className="form-card-head">
+                    <span className="form-card-icon" aria-hidden="true">
+                        <i className="bi bi-shield-lock"></i>
+                    </span>
+                    <div>
+                        <div className="h3">Inicio de Sesión</div>
+                        <p className="form-card-subtitle">Usa el correo con el que te registraste.</p>
+                    </div>
+                </div>
+
                 <div className="mb-3">
                     <label htmlFor="email" className="form-label">Correo</label>
-                    <input
-                        type="email"
-                        id="email"
-                        className="form-control border-black"
-                        name="email"
-                        maxLength={100} // Longitud máxma 100 caracteres
-                        required        // Correo requerido
-                        value={formulario.email}
-                        onChange={handleChange}/>
+                    <div className="input-group">
+                        <span className="input-group-text" aria-hidden="true">
+                            <i className="bi bi-envelope"></i>
+                        </span>
+                        <input
+                            type="email"
+                            id="email"
+                            className="form-control border-black"
+                            name="email"
+                            autoComplete="email"
+                            maxLength={100} // Longitud máxma 100 caracteres
+                            required        // Correo requerido
+                            value={formulario.email}
+                            onChange={handleChange}/>
+                    </div>
                 </div>
                 <div className="mb-3">
                     <label htmlFor="password" className="form-label">Contraseña</label>
-                    <input
-                        type="password"
-                        id="password"
-                        className="form-control border-black"
-                        name="password"
-                        minLength={8}   // El DTO exige entre 8 y 72 caracteres
-                        maxLength={72}
-                        required        // Contraseña requerida
-                        value={formulario.password}
-                        onChange={handleChange}/>
+                    <div className="input-group">
+                        <span className="input-group-text" aria-hidden="true">
+                            <i className="bi bi-lock"></i>
+                        </span>
+                        <input
+                            type="password"
+                            id="password"
+                            className="form-control border-black"
+                            name="password"
+                            autoComplete="current-password"
+                            minLength={8}   // El DTO exige entre 8 y 72 caracteres
+                            maxLength={72}
+                            required        // Contraseña requerida
+                            value={formulario.password}
+                            onChange={handleChange}/>
+                    </div>
                 </div>
-                <button type="submit" className="btn btn-dark" disabled={cargando}>Entrar</button>
+                <button type="submit" className="btn btn-dark w-100 mt-1" disabled={cargando}>Entrar</button>
 
-                <div className="mt-4 text-center">
-                    <div className="mb-3">o</div>
+                <div className="auth-divider"><span>o continúa con</span></div>
+
+                <div className="text-center">
                     {googleClientId
                         ? <div ref={googleButton} className="d-flex justify-content-center" aria-label="Iniciar sesión con Google" />
                         : <p className="text-secondary mb-0">El inicio de sesión con Google no está configurado.</p>

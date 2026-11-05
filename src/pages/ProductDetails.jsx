@@ -87,22 +87,27 @@ export function ProductDetails(){
     }
 
     return (
-    <div className="container mt-5">
-        <div className="row mb-4">
-            <div className="col border me-5" style={{maxWidth:'35rem', padding:'2rem'}}>
-                {
-                    imagen
-                    ? <img src={imagen} alt={product?.nombre ?? ""} style={{maxWidth:'30rem', maxHeight:"30rem", padding:'2rem'}} className="figure-img img-fluid rounded"/>
-                    : <i className="bi bi-image fs-1 text-secondary"></i>
-                }
+    <div className="container esam-page">
+        <div className="row g-5 align-items-start">
+            <div className="col-lg-6">
+                <div className="esam-detail-media">
+                    {
+                        imagen
+                        ? <img src={imagen} alt={product?.nombre ?? ""} className="esam-detail-img"/>
+                        : <i className="bi bi-image fs-1 text-secondary"></i>
+                    }
+                </div>
             </div>
-            <div className="col pt-5" style={{maxWidth:'30rem'}}>
-                <div className="h3">{product?.nombre}</div>
-                <p>{product?.descripcion}</p>
-                <p>{product ? formatearPrecio(product.precio) : ""}</p>
-                <p>Quedan: {product ? disponible : "—"} un</p>
+            <div className="col-lg-6">
+                <h1 className="esam-detail-title">{product?.nombre}</h1>
+                <p className="esam-detail-desc">{product?.descripcion}</p>
+                <p className="esam-detail-price">{product ? formatearPrecio(product.precio) : ""}</p>
+                <p className="esam-detail-stock">
+                    <i className="bi bi-box-seam me-1" aria-hidden="true"></i>
+                    Quedan: {product ? disponible : "—"} un
+                </p>
                 <div className="d-flex align-items-center gap-2 mb-3">
-                    <label htmlFor="cantidadProducto" className="mb-0">Cantidad</label>
+                    <label htmlFor="cantidadProducto" className="form-label mb-0">Cantidad</label>
                     <div className="input-group" style={{maxWidth:'9rem'}}>
                         <button
                             type="button"
@@ -134,12 +139,13 @@ export function ProductDetails(){
                         </button>
                     </div>
                 </div>
-                <button className="btn btn-dark" onClick={handleClick} disabled={sinStock}>
-                    <i className="bi bi-cart"></i> Añadir
+                <button className="btn btn-primary btn-lg" onClick={handleClick} disabled={sinStock}>
+                    <i className="bi bi-cart me-2" aria-hidden="true"></i>
+                    Añadir
                 </button>
             </div>
         </div>
-        <div className="container p-0 mb-5">
+        <div className="container p-0 mt-5 mb-5">
             <h3 className="mb-4">Productos relacionados</h3>
             {
                 relacionados.length > 0

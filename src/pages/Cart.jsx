@@ -74,14 +74,14 @@ export function Cart(){
 
 
     return (
-        <div className="container pt-5">
-            <div className="container mb-5" style={{minHeight:"60vh"}}>
-                <h2 className="mb-5">Carrito de compras</h2>
-                <div className="row">
-                    <div className="col border-end me-5">
+        <div className="container esam-page">
+            <div className="mb-5" style={{minHeight:"60vh"}}>
+                <h1 className="esam-page-title mb-4">Carrito de compras</h1>
+                <div className="row g-4">
+                    <div className="col-lg-8">
                         {cart.map((item)=>{
                             return (
-                                <div className="row" key={item.product.idProducto}>
+                                <div key={item.product.idProducto}>
                                     <ProductCardH 
                                         item={item}
                                         handleClickPlus={()=>{increaseUnits(item.product.idProducto)}}
@@ -89,36 +89,42 @@ export function Cart(){
                                         handleTrash={()=>{removeProduct(item.product.idProducto)}}
                                     />
                                     {item.units > stockDisponible(item.product) &&
-                                        <p className="text-danger">La cantidad supera el stock disponible actualizado.</p>
+                                        <p className="text-danger small">La cantidad supera el stock disponible actualizado.</p>
                                     }
                                 </div>)
                         })}
                     </div>
-                    <div className="col">
-                        <h3>Resumen</h3>
-                        <hr />
-                        <p>Productos en el carro: {nProducts}</p>
-                        {
-                            cart.map((item)=>{
-                                return <p key={item.product.idProducto}>
+                    <div className="col-lg-4">
+                        <div className="esam-summary-card">
+                            <h3>Resumen</h3>
+                            <p className="esam-summary-line mb-0">
+                                Productos en el carro: {nProducts}
+                            </p>
+                            {
+                                cart.map((item)=>{
+                                    return (
+                                        <p className="esam-summary-line mb-0" key={item.product.idProducto}>
                                             {item.units} x {item.product.nombre}
                                         </p>
-                            })
-                        }
-                        <hr />
-                        <p>Sub total: {formatearPrecio(subtotal)}</p>
-                        <AlertMessage type={mensaje?.type} message={mensaje?.message} />
-                        <button className="btn btn-dark" onClick={iniciarCheckout} disabled={cart.length === 0}>
-                            Pagar
-                        </button>
+                                    )
+                                })
+                            }
+                            <p className="esam-summary-total mt-3 mb-0">
+                                Sub total: {formatearPrecio(subtotal)}
+                            </p>
+                            <AlertMessage type={mensaje?.type} message={mensaje?.message} />
+                            <button className="btn btn-primary w-100 mt-3" onClick={iniciarCheckout} disabled={cart.length === 0}>
+                                Pagar
+                            </button>
+                        </div>
                     </div>
                 </div>
             </div>
             {
                 relacionados.length > 0
                 && <>
-                    <h3 className="mb-5">Productos relacionados</h3>
-                    <div className="container mb-5">
+                    <h3 className="mb-4">Productos relacionados</h3>
+                    <div className="mb-5">
                         <ProductCarousel products={relacionados}/>
                     </div>
                 </>

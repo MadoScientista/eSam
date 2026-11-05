@@ -1,0 +1,1621 @@
+/* ==========================================================================
+   ESam — Sistema visual
+   Regla base: el producto es lo único que debe llamar la atención.
+   Sin degradados, sin fondos tintados, sin sombras decorativas. El color se
+   usa para jerarquía y acción, no como adorno.
+   ========================================================================== */
+
+:root {
+  /* Neutros: gris de página, blanco de superficie */
+  --esam-ink: #101216;
+  --esam-ink-soft: #3c4149;
+  --esam-muted: #6d737c;
+  --esam-line: #e2e2dd;
+  --esam-line-strong: #c9c9c3;
+  --esam-bg: #ffffff;
+  --esam-surface: #ffffff;
+  --esam-surface-alt: #f7f7f5;
+
+  /* Campos de formulario: relleno suave + borde definido para que se lean
+     como superficies interactivas sobre el blanco de la página. */
+  --esam-field-bg: #f7f8fa;
+  --esam-field-bg-hover: #eef1f5;
+  --esam-field-border: #929ba7;
+  --esam-field-border-hover: #6f7a88;
+  --esam-field-placeholder: #969da8;
+  --esam-focus-ring: rgba(29, 78, 137, 0.16);
+
+  /* Acción */
+  --esam-primary: #1d4e89;
+  --esam-primary-rgb: 29, 78, 137;
+  --esam-primary-hover: #163c6b;
+  --esam-primary-soft: #eef3f9;
+
+  /* Estado */
+  --esam-success: #2c6e4f;
+  --esam-danger: #a8323f;
+  --esam-warning: #8a5a14;
+
+  /* Acento: cifras y detalles puntuales */
+  --esam-accent: #e9a23b;
+
+  --esam-footer: #101216;
+
+  /* Tipografía */
+  --esam-font-body: "Plus Jakarta Sans", system-ui, -apple-system, "Segoe UI", Roboto,
+    "Helvetica Neue", "Noto Sans", "Liberation Sans", Arial, sans-serif;
+  --esam-font-display: "Fraunces", "Iowan Old Style", Georgia, "Times New Roman", serif;
+
+  /* Forma */
+  --esam-radius-sm: 6px;
+  --esam-radius-md: 8px;
+  --esam-radius-lg: 10px;
+  --esam-radius-xl: 12px;
+  --esam-radius-pill: 999px;
+
+  /* Sombras: solo para capas flotantes (modales, menús, toasts) */
+  --esam-shadow-sm: 0 1px 2px rgba(16, 24, 40, 0.04);
+  --esam-shadow-md: 0 6px 16px -8px rgba(16, 24, 40, 0.16);
+  --esam-shadow-lg: 0 18px 40px -20px rgba(16, 24, 40, 0.3);
+  --esam-shadow-card: 0 1px 2px rgba(16, 18, 22, 0.05),
+    0 22px 46px -30px rgba(16, 18, 22, 0.28);
+
+  --esam-transition: 150ms ease;
+  --esam-container: 1200px;
+}
+
+/* --------------------------------------------------------------------------
+   Puente con Bootstrap 5.3
+   -------------------------------------------------------------------------- */
+:root,
+[data-bs-theme="light"] {
+  --bs-body-font-family: var(--esam-font-body);
+  --bs-body-font-size: 1rem;
+  --bs-body-font-weight: 400;
+  --bs-body-line-height: 1.55;
+  --bs-body-color: #3c4149;
+  --bs-body-color-rgb: 60, 65, 73;
+  --bs-body-bg: var(--esam-bg);
+  --bs-body-bg-rgb: 255, 255, 255;
+  --bs-emphasis-color: var(--esam-ink);
+  --bs-secondary-color: var(--esam-muted);
+  --bs-secondary-bg: var(--esam-surface-alt);
+  --bs-tertiary-bg: #fafaf8;
+  --bs-heading-color: var(--esam-ink);
+  --bs-border-color: var(--esam-line);
+  --bs-border-color-translucent: rgba(22, 24, 29, 0.08);
+  --bs-primary: var(--esam-primary);
+  --bs-primary-rgb: var(--esam-primary-rgb);
+  --bs-link-color: var(--esam-primary);
+  --bs-link-color-rgb: var(--esam-primary-rgb);
+  --bs-link-hover-color: var(--esam-primary-hover);
+  --bs-link-hover-color-rgb: 22, 60, 107;
+  --bs-border-radius: 8px;
+  --bs-border-radius-sm: var(--esam-radius-sm);
+  --bs-border-radius-lg: var(--esam-radius-lg);
+  --bs-border-radius-xl: var(--esam-radius-xl);
+  --bs-box-shadow: var(--esam-shadow-md);
+  --bs-box-shadow-sm: var(--esam-shadow-sm);
+  --bs-box-shadow-lg: var(--esam-shadow-lg);
+  --bs-focus-ring-color: rgba(29, 78, 137, 0.18);
+  --bs-form-valid-color: var(--esam-success);
+  --bs-form-invalid-color: var(--esam-danger);
+}
+
+/* --------------------------------------------------------------------------
+   Base
+   -------------------------------------------------------------------------- */
+html {
+  scroll-padding-top: 5.5rem;
+}
+
+body {
+  min-height: 100vh;
+  background: var(--esam-bg);
+  color: #3c4149;
+  font-family: var(--esam-font-body);
+  font-size: 1rem;
+  line-height: 1.55;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+::selection {
+  background: #e8eef6;
+  color: var(--esam-ink);
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+.h1,
+.h2,
+.h3,
+.h4,
+.h5,
+.h6 {
+  color: var(--esam-ink);
+  font-family: var(--esam-font-body);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  line-height: 1.25;
+}
+
+/* Los títulos grandes recuperan la serif: contraste de textura, no de color. */
+h1,
+.h1,
+h2,
+.h2 {
+  font-family: var(--esam-font-display);
+  font-weight: 600;
+  letter-spacing: -0.025em;
+}
+
+h1,
+.h1 {
+  font-size: clamp(2rem, 1.6rem + 1.4vw, 2.75rem);
+  line-height: 1.1;
+}
+
+h2,
+.h2 {
+  font-size: clamp(1.5rem, 1.3rem + 0.8vw, 1.875rem);
+  line-height: 1.15;
+}
+
+h3,
+.h3 {
+  font-size: 1.1875rem;
+  line-height: 1.3;
+}
+
+h4,
+.h4 {
+  font-size: 1.0625rem;
+}
+
+h5,
+.h5 {
+  font-size: 1rem;
+}
+
+h6,
+.h6 {
+  font-size: 0.9375rem;
+  line-height: 1.4;
+}
+
+p {
+  margin-top: 0;
+  margin-bottom: 1rem;
+}
+
+.lead {
+  color: var(--esam-ink-soft);
+  font-size: 1.0625rem;
+  font-weight: 400;
+  line-height: 1.6;
+}
+
+small,
+.small {
+  font-size: 0.8125rem;
+}
+
+strong,
+b {
+  font-weight: 700;
+}
+
+a {
+  text-underline-offset: 2px;
+  transition: color var(--esam-transition);
+}
+
+hr {
+  border-color: var(--esam-line);
+  opacity: 1;
+}
+
+.container {
+  --bs-gutter-x: 1.75rem;
+}
+
+@media (min-width: 1200px) {
+  .container {
+    max-width: var(--esam-container);
+  }
+}
+
+/* --------------------------------------------------------------------------
+   Botones
+   -------------------------------------------------------------------------- */
+.btn {
+  --bs-btn-font-family: var(--esam-font-body);
+  --bs-btn-font-size: 0.875rem;
+  --bs-btn-font-weight: 600;
+  --bs-btn-line-height: 1.2;
+  --bs-btn-padding-y: 0.6rem;
+  --bs-btn-padding-x: 1rem;
+  --bs-btn-border-radius: var(--esam-radius-md);
+  --bs-btn-focus-box-shadow: 0 0 0 3px rgba(29, 78, 137, 0.16);
+  min-height: 42px;
+  transition: color var(--esam-transition), background-color var(--esam-transition),
+    border-color var(--esam-transition), box-shadow var(--esam-transition);
+}
+
+.btn-lg {
+  --bs-btn-font-size: 0.9375rem;
+  --bs-btn-padding-y: 0.72rem;
+  --bs-btn-padding-x: 1.25rem;
+  --bs-btn-border-radius: var(--esam-radius-lg);
+  min-height: 48px;
+}
+
+.btn-sm {
+  --bs-btn-font-size: 0.8125rem;
+  --bs-btn-padding-y: 0.4rem;
+  --bs-btn-padding-x: 0.7rem;
+  --bs-btn-border-radius: var(--esam-radius-sm);
+  min-height: 34px;
+}
+
+.btn-primary {
+  --bs-btn-color: #fff;
+  --bs-btn-bg: var(--esam-primary);
+  --bs-btn-border-color: var(--esam-primary);
+  --bs-btn-hover-color: #fff;
+  --bs-btn-hover-bg: var(--esam-primary-hover);
+  --bs-btn-hover-border-color: var(--esam-primary-hover);
+  --bs-btn-active-color: #fff;
+  --bs-btn-active-bg: #12395f;
+  --bs-btn-active-border-color: #12395f;
+  --bs-btn-disabled-color: #fff;
+  --bs-btn-disabled-bg: #9aabc0;
+  --bs-btn-disabled-border-color: #9aabc0;
+}
+
+.btn-dark {
+  --bs-btn-color: #fff;
+  --bs-btn-bg: var(--esam-ink);
+  --bs-btn-border-color: var(--esam-ink);
+  --bs-btn-hover-color: #fff;
+  --bs-btn-hover-bg: #000000;
+  --bs-btn-hover-border-color: #000000;
+  --bs-btn-active-color: #fff;
+  --bs-btn-active-bg: #000000;
+  --bs-btn-active-border-color: #000000;
+  --bs-btn-disabled-color: #fff;
+  --bs-btn-disabled-bg: #8e929a;
+  --bs-btn-disabled-border-color: #8e929a;
+}
+
+.btn-outline-dark {
+  --bs-btn-color: var(--esam-ink);
+  --bs-btn-border-color: var(--esam-line-strong);
+  --bs-btn-hover-color: var(--esam-ink);
+  --bs-btn-hover-bg: var(--esam-surface-alt);
+  --bs-btn-hover-border-color: #b9b9b3;
+  --bs-btn-active-color: var(--esam-ink);
+  --bs-btn-active-bg: #efefec;
+  --bs-btn-active-border-color: #b9b9b3;
+  --bs-btn-disabled-color: var(--esam-muted);
+  --bs-btn-disabled-border-color: var(--esam-line);
+}
+
+.btn-outline-primary {
+  --bs-btn-color: var(--esam-primary);
+  --bs-btn-border-color: #bcccdd;
+  --bs-btn-hover-color: #fff;
+  --bs-btn-hover-bg: var(--esam-primary);
+  --bs-btn-hover-border-color: var(--esam-primary);
+  --bs-btn-active-color: #fff;
+  --bs-btn-active-bg: var(--esam-primary-hover);
+  --bs-btn-active-border-color: var(--esam-primary-hover);
+}
+
+.btn-outline-secondary {
+  --bs-btn-color: var(--esam-ink-soft);
+  --bs-btn-border-color: var(--esam-line-strong);
+  --bs-btn-hover-color: var(--esam-ink);
+  --bs-btn-hover-bg: var(--esam-surface-alt);
+  --bs-btn-hover-border-color: #b9b9b3;
+  --bs-btn-active-color: var(--esam-ink);
+  --bs-btn-active-bg: #efefec;
+  --bs-btn-active-border-color: #b9b9b3;
+}
+
+.btn-outline-danger {
+  --bs-btn-color: var(--esam-danger);
+  --bs-btn-border-color: #dfb8bd;
+  --bs-btn-hover-color: #fff;
+  --bs-btn-hover-bg: var(--esam-danger);
+  --bs-btn-hover-border-color: var(--esam-danger);
+}
+
+.btn-danger {
+  --bs-btn-bg: var(--esam-danger);
+  --bs-btn-border-color: var(--esam-danger);
+  --bs-btn-hover-bg: #8f2a35;
+  --bs-btn-hover-border-color: #8f2a35;
+  --bs-btn-active-bg: #7c242e;
+  --bs-btn-active-border-color: #7c242e;
+}
+
+.btn-link {
+  --bs-btn-color: var(--esam-primary);
+  --bs-btn-font-weight: 600;
+  text-decoration: none;
+}
+
+.btn-link:hover {
+  color: var(--esam-primary-hover);
+  text-decoration: underline;
+}
+
+.btn:focus-visible,
+.form-control:focus-visible,
+.form-select:focus-visible,
+.form-check-input:focus-visible {
+  outline: 0;
+  box-shadow: 0 0 0 3px rgba(29, 78, 137, 0.16);
+}
+
+/* --------------------------------------------------------------------------
+   Navbar
+   -------------------------------------------------------------------------- */
+.esam-navbar {
+  padding: 0.7rem 0;
+  border-bottom: 1px solid var(--esam-ink);
+  background: var(--esam-ink);
+}
+
+.esam-navbar .container {
+  align-items: center;
+}
+
+.esam-brand {
+  color: #fff !important;
+  font-family: var(--esam-font-display);
+  font-size: 1.45rem;
+  font-weight: 600;
+  letter-spacing: -0.03em;
+  line-height: 1;
+}
+
+.esam-navbar .navbar-nav {
+  gap: 0.25rem;
+}
+
+.esam-navbar .nav-link {
+  padding: 0.45rem 0.7rem !important;
+  color: rgba(255, 255, 255, 0.72);
+  font-size: 0.875rem;
+  font-weight: 500;
+  line-height: 1.3;
+  transition: color var(--esam-transition);
+}
+
+.esam-navbar .nav-link:hover,
+.esam-navbar .nav-link.active {
+  color: #fff;
+}
+
+.esam-navbar .nav-link .bi-cart {
+  font-size: 1.1rem;
+  vertical-align: -0.1em;
+}
+
+.esam-navbar .navbar-toggler {
+  padding: 0.4rem 0.55rem;
+  border-color: rgba(255, 255, 255, 0.28);
+  border-radius: var(--esam-radius-sm);
+}
+
+.esam-navbar .navbar-toggler-icon {
+  filter: invert(1) grayscale(1) brightness(2);
+}
+
+.esam-navbar .navbar-toggler:focus {
+  box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.18);
+}
+
+.esam-cart-badge {
+  padding: 0.25em 0.42em;
+  border-radius: var(--esam-radius-pill);
+  background: var(--esam-accent) !important;
+  color: var(--esam-ink) !important;
+  font-size: 0.65rem;
+  font-weight: 800;
+}
+
+@media (max-width: 991.98px) {
+  .esam-navbar .navbar-collapse {
+    padding-top: 0.75rem;
+  }
+
+  .esam-navbar .nav-link {
+    padding: 0.6rem 0.7rem !important;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   Footer
+   -------------------------------------------------------------------------- */
+.esam-footer {
+  margin-top: 4rem;
+  padding: 3.5rem 0 1.75rem;
+  border-top: 1px solid var(--esam-line);
+  background: var(--esam-footer);
+  color: rgba(255, 255, 255, 0.66);
+}
+
+.esam-footer h5 {
+  margin-bottom: 0.85rem;
+  color: #fff;
+  font-family: var(--esam-font-body);
+  font-size: 1.0625rem;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+
+.esam-footer h6 {
+  margin-bottom: 0.9rem;
+  color: rgba(255, 255, 255, 0.48);
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.esam-footer p {
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 0.9375rem;
+}
+
+.esam-footer ul {
+  display: grid;
+  gap: 0.4rem;
+  margin-bottom: 0;
+}
+
+.esam-footer .list-inline {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem;
+  margin-bottom: 0;
+}
+
+.esam-footer a {
+  color: rgba(255, 255, 255, 0.66);
+  font-size: 0.9375rem;
+  text-decoration: none;
+  transition: color var(--esam-transition);
+}
+
+.esam-footer a:hover {
+  color: #fff;
+}
+
+.esam-footer .text-secondary {
+  color: rgba(255, 255, 255, 0.6) !important;
+}
+
+.esam-footer hr {
+  margin: 2.25rem 0 1.25rem;
+  border-color: rgba(255, 255, 255, 0.12) !important;
+  opacity: 1;
+}
+
+.esam-footer .bi-credit-card-2-back,
+.esam-footer .bi-credit-card,
+.esam-footer .bi-bank {
+  font-size: 1.25rem;
+}
+
+/* --------------------------------------------------------------------------
+   Home / Hero
+   -------------------------------------------------------------------------- */
+.esam-hero {
+  padding: clamp(2rem, 3.5vw, 3rem) 0;
+  border-bottom: 1px solid var(--esam-line);
+  background: var(--esam-surface);
+}
+
+.esam-hero-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+  align-items: center;
+  gap: clamp(1.5rem, 3.5vw, 3rem);
+}
+
+.esam-hero-title {
+  margin: 0 0 0.9rem;
+  color: var(--esam-ink);
+  font-family: var(--esam-font-display);
+  font-size: clamp(2.4rem, 1.7rem + 2.8vw, 3.9rem);
+  font-weight: 600;
+  letter-spacing: -0.035em;
+  line-height: 1.04;
+}
+
+.esam-hero-lead {
+  max-width: 27rem;
+  margin-bottom: 1.6rem;
+  color: var(--esam-ink-soft);
+  font-size: 1.0625rem;
+  line-height: 1.6;
+}
+
+.esam-hero-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+}
+
+/* Imagen grande, alineada con el contenedor: sin marco ni caja. */
+.esam-hero-media {
+  height: clamp(360px, 34vw, 500px);
+}
+
+.esam-hero-carousel,
+.esam-hero-carousel .carousel-inner,
+.esam-hero-carousel .carousel-item {
+  height: 100%;
+}
+
+.esam-hero-carousel {
+  overflow: hidden;
+}
+
+.esam-hero-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.esam-hero-carousel .carousel-indicators {
+  margin-bottom: 1rem;
+}
+
+.esam-hero-carousel .carousel-indicators [data-bs-target] {
+  width: 26px;
+  height: 3px;
+  border: 0;
+  border-radius: var(--esam-radius-pill);
+  background: #fff;
+  box-shadow: 0 0 0 1px rgba(16, 18, 22, 0.12);
+  opacity: 0.6;
+}
+
+.esam-hero-carousel .carousel-indicators .active {
+  opacity: 1;
+}
+
+/* Sin flechas: los indicadores bastan y no compiten con la foto. */
+.esam-hero-carousel .carousel-control-prev,
+.esam-hero-carousel .carousel-control-next {
+  display: none;
+}
+
+@media (max-width: 991.98px) {
+  .esam-hero-grid {
+    grid-template-columns: 1fr;
+    gap: 1.75rem;
+  }
+
+  .esam-hero-media {
+    height: clamp(240px, 44vw, 360px);
+  }
+}
+
+/* --------------------------------------------------------------------------
+   Secciones y encabezados de página
+   -------------------------------------------------------------------------- */
+.esam-section {
+  padding: clamp(2.25rem, 4vw, 3.25rem) 0;
+}
+
+.esam-section-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.75rem;
+  margin-bottom: 1.5rem;
+  padding-bottom: 0.9rem;
+  border-bottom: 1px solid var(--esam-line-strong);
+}
+
+.esam-section-title {
+  margin: 0;
+  font-size: clamp(1.5rem, 1.3rem + 0.7vw, 1.875rem);
+  letter-spacing: -0.025em;
+}
+
+.esam-section-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  color: var(--esam-primary);
+  font-size: 0.875rem;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.esam-section-link:hover {
+  color: var(--esam-primary-hover);
+}
+
+.esam-page {
+  padding-top: clamp(2rem, 3.5vw, 3rem);
+  padding-bottom: clamp(2.5rem, 4.5vw, 4rem);
+}
+
+.esam-page-title {
+  margin: 0 0 1.25rem;
+}
+
+/* --------------------------------------------------------------------------
+   Tarjetas
+   -------------------------------------------------------------------------- */
+.card {
+  --bs-card-border-color: var(--esam-line);
+  --bs-card-border-radius: var(--esam-radius-lg);
+  --bs-card-inner-border-radius: calc(var(--esam-radius-lg) - 1px);
+  --bs-card-bg: #fff;
+  --bs-card-cap-bg: transparent;
+  background: #fff;
+}
+
+.card-body {
+  padding: 1rem 1rem 1.1rem;
+}
+
+.card-title {
+  color: var(--esam-ink);
+  font-family: var(--esam-font-body);
+  font-weight: 600;
+}
+
+.esam-product-card {
+  position: relative;
+  overflow: hidden;
+  padding: 0;
+  border: 1px solid var(--esam-line);
+  border-radius: var(--esam-radius-lg);
+  background: var(--esam-surface);
+  box-shadow: 0 1px 2px rgba(16, 18, 22, 0.06), 0 8px 20px -16px rgba(16, 18, 22, 0.2);
+  transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+}
+
+.esam-product-card:hover {
+  transform: translateY(-5px);
+  border-color: #cfcfc9;
+  box-shadow: 0 18px 34px -18px rgba(16, 18, 22, 0.38), 0 2px 4px rgba(16, 18, 22, 0.06);
+}
+
+.product-image-wrap {
+  position: relative;
+  display: flex;
+  overflow: hidden;
+  height: 220px;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+  background: #fff;
+}
+
+.product-image-wrap img {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+  transition: transform 0.3s ease;
+}
+
+.esam-product-card:hover .product-image-wrap img {
+  transform: scale(1.05);
+}
+
+.product-title {
+  display: -webkit-box;
+  overflow: hidden;
+  min-height: 2.8em;
+  margin: 0 0 0.5rem;
+  color: var(--esam-ink);
+  font-family: var(--esam-font-body);
+  font-size: 0.875rem;
+  font-weight: 600;
+  letter-spacing: 0;
+  line-height: 1.4;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+}
+
+.product-meta {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+}
+
+.product-price {
+  margin: 0;
+  color: var(--esam-ink);
+  font-size: 1.125rem;
+  font-variant-numeric: tabular-nums;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  line-height: 1.2;
+}
+
+.product-stock {
+  color: var(--esam-muted);
+  font-size: 0.75rem;
+  white-space: nowrap;
+}
+
+.product-stock.is-out {
+  color: var(--esam-danger);
+}
+
+.product-cart-btn {
+  position: absolute;
+  z-index: 2;
+  right: 0.5rem;
+  bottom: 0.5rem;
+  display: flex;
+  width: 2.25rem;
+  height: 2.25rem;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--esam-ink);
+  border-radius: var(--esam-radius-sm);
+  background: var(--esam-ink);
+  color: #fff;
+  transition: color var(--esam-transition), border-color var(--esam-transition),
+    background-color var(--esam-transition);
+}
+
+.product-cart-btn:hover {
+  border-color: var(--esam-primary);
+  background: var(--esam-primary);
+  color: #fff;
+}
+
+.product-cart-btn:disabled {
+  color: #b4b7bd;
+  cursor: not-allowed;
+}
+
+.product-cart-btn:disabled:hover {
+  border-color: var(--esam-line);
+  background: #b9babf;
+  color: #fff;
+}
+
+.esam-category-card {
+  padding: 0;
+  border: 1px solid var(--esam-line);
+  border-radius: var(--esam-radius-lg);
+  background: var(--esam-surface);
+  box-shadow: 0 1px 2px rgba(16, 18, 22, 0.06), 0 8px 20px -16px rgba(16, 18, 22, 0.2);
+  transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+}
+
+.esam-category-card:hover {
+  transform: translateY(-4px);
+  border-color: #cfcfc9;
+  box-shadow: 0 16px 30px -18px rgba(16, 18, 22, 0.35);
+}
+
+.category-image-wrap {
+  display: flex;
+  height: 120px;
+  align-items: center;
+  justify-content: center;
+  padding: 0.75rem;
+  background: #fff;
+}
+
+.category-image-wrap img {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+  transition: transform 0.3s ease;
+}
+
+.esam-category-card:hover .category-image-wrap img {
+  transform: scale(1.05);
+}
+
+.esam-category-card .card-body {
+  padding: 0.75rem 0.85rem 0.85rem;
+  text-align: center;
+}
+
+.esam-category-card .card-title {
+  margin: 0;
+  font-size: 0.875rem;
+  font-weight: 600;
+}
+
+/* --------------------------------------------------------------------------
+   Carrusel horizontal de productos
+   -------------------------------------------------------------------------- */
+.carousel-arrow {
+  position: absolute;
+  z-index: 2;
+  top: 40%;
+  display: flex;
+  width: 2.25rem;
+  height: 2.25rem;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--esam-line);
+  border-radius: 50%;
+  background: #fff;
+  color: var(--esam-ink);
+  transform: translateY(-50%);
+  transition: border-color var(--esam-transition), color var(--esam-transition);
+}
+
+.carousel-arrow:hover {
+  border-color: var(--esam-ink);
+  color: var(--esam-ink);
+}
+
+.carousel-arrow-prev {
+  left: -0.5rem;
+}
+
+.carousel-arrow-next {
+  right: -0.5rem;
+}
+
+@media (max-width: 575.98px) {
+  .carousel-arrow {
+    display: none;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   Formularios
+   -------------------------------------------------------------------------- */
+.form-label {
+  margin-bottom: 0.45rem;
+  color: var(--esam-ink);
+  font-size: 0.8125rem;
+  font-weight: 700;
+  letter-spacing: 0.01em;
+}
+
+.form-control,
+.form-select {
+  min-height: 44px;
+  padding: 0.55rem 0.75rem;
+  border: 1px solid var(--esam-field-border);
+  border-radius: var(--esam-radius-md);
+  background-color: var(--esam-field-bg);
+  box-shadow: inset 0 1px 2px rgba(16, 18, 22, 0.04);
+  color: var(--esam-ink);
+  font-size: 0.9375rem;
+  transition: border-color var(--esam-transition),
+    background-color var(--esam-transition), box-shadow var(--esam-transition);
+}
+
+.form-control:hover:not(:disabled):not(:focus),
+.form-select:hover:not(:disabled):not(:focus) {
+  border-color: var(--esam-field-border-hover);
+  background-color: var(--esam-field-bg-hover);
+}
+
+.form-control::placeholder {
+  color: var(--esam-field-placeholder);
+  opacity: 1;
+}
+
+.form-control:focus,
+.form-select:focus {
+  border-color: var(--esam-primary);
+  background-color: #fff;
+  box-shadow: 0 0 0 4px var(--esam-focus-ring),
+    inset 0 1px 1px rgba(16, 18, 22, 0.03);
+  color: var(--esam-ink);
+}
+
+.form-control:disabled,
+.form-select:disabled {
+  border-color: var(--esam-line);
+  background-color: #eef0f3;
+  box-shadow: none;
+  color: var(--esam-muted);
+}
+
+.form-control:disabled::placeholder {
+  color: var(--esam-muted);
+}
+
+.form-control-sm,
+.form-select-sm {
+  min-height: 36px;
+  padding: 0.35rem 0.6rem;
+  border-radius: var(--esam-radius-sm);
+  font-size: 0.875rem;
+}
+
+textarea.form-control {
+  min-height: 120px;
+}
+
+/* Iconos y textos anexos comparten el mismo lenguaje visual que el campo. */
+.input-group-text {
+  padding: 0 0.85rem;
+  border: 1px solid var(--esam-field-border);
+  background: var(--esam-field-bg);
+  color: var(--esam-muted);
+  font-size: 0.95rem;
+  transition: border-color var(--esam-transition),
+    background-color var(--esam-transition), color var(--esam-transition);
+}
+
+.input-group:focus-within .input-group-text {
+  border-color: var(--esam-primary);
+  background: #fff;
+  color: var(--esam-primary);
+}
+
+.input-group > .form-control:focus,
+.input-group > .form-select:focus {
+  z-index: 3;
+}
+
+.form-check-input {
+  border-color: var(--esam-field-border);
+}
+
+.form-check-input:hover {
+  border-color: var(--esam-field-border-hover);
+}
+
+.form-check-input:checked {
+  border-color: var(--esam-primary);
+  background-color: var(--esam-primary);
+}
+
+.form-check-input:focus {
+  border-color: var(--esam-primary);
+  box-shadow: 0 0 0 3px var(--esam-focus-ring);
+}
+
+.form-check-label {
+  font-size: 0.9375rem;
+}
+
+.form-text,
+.form-text.text-muted {
+  color: var(--esam-muted) !important;
+  font-size: 0.8125rem;
+}
+
+/* Los formularios usan border-black en el JSX: se normaliza al borde del tema. */
+.border-black {
+  border-color: var(--esam-field-border) !important;
+}
+
+/* --------------------------------------------------------------------------
+   Tarjetas de formulario
+   -------------------------------------------------------------------------- */
+.login-form,
+.register-form,
+.user-form-card,
+.esam-form-card {
+  position: relative;
+  overflow: hidden;
+  border: 1px solid var(--esam-line) !important;
+  border-radius: var(--esam-radius-xl) !important;
+  background: #fff;
+  box-shadow: var(--esam-shadow-card) !important;
+}
+
+.login-form::before,
+.register-form::before,
+.user-form-card::before,
+.esam-form-card::before {
+  position: absolute;
+  top: 0;
+  right: 0;
+  left: 0;
+  height: 3px;
+  background: var(--esam-primary);
+  content: "";
+}
+
+.form-card-head {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.9rem;
+  margin-bottom: 1.5rem;
+  padding-bottom: 1.1rem;
+  border-bottom: 1px solid var(--esam-line);
+}
+
+.form-card-icon {
+  display: grid;
+  flex: 0 0 auto;
+  width: 2.5rem;
+  height: 2.5rem;
+  place-items: center;
+  border-radius: var(--esam-radius-md);
+  background: var(--esam-primary-soft);
+  color: var(--esam-primary);
+  font-size: 1.1rem;
+}
+
+.form-card-head .h3,
+.form-card-head .user-form-title {
+  margin: 0 0 0.2rem;
+  font-size: 1.25rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  line-height: 1.3;
+}
+
+.form-card-subtitle {
+  margin: 0;
+  color: var(--esam-muted);
+  font-size: 0.875rem;
+  line-height: 1.45;
+}
+
+.user-form-card .form-label {
+  color: var(--esam-ink);
+}
+
+.user-form-card .form-control,
+.user-form-card .form-select {
+  border-color: var(--esam-field-border) !important;
+}
+
+.user-form-card .form-control:focus,
+.user-form-card .form-select:focus {
+  border-color: var(--esam-primary) !important;
+  box-shadow: 0 0 0 4px var(--esam-focus-ring) !important;
+}
+
+.user-form-title {
+  color: var(--esam-ink);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+.login-form .h3,
+.register-form .h3 {
+  margin-bottom: 1.25rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+/* Las tarjetas de autenticación tienen su propio encabezado. */
+.login-form .form-card-head .h3,
+.register-form .form-card-head .h3 {
+  margin-bottom: 0.2rem;
+}
+
+/* --------------------------------------------------------------------------
+   Páginas de autenticación (login y registro)
+   -------------------------------------------------------------------------- */
+.esam-auth-page {
+  padding: clamp(2.5rem, 5vw, 4.25rem) 0 clamp(3rem, 6vw, 4.75rem);
+  background-color: var(--esam-surface-alt);
+  background-image: radial-gradient(rgba(16, 18, 22, 0.045) 1px, transparent 1px);
+  background-size: 22px 22px;
+}
+
+.esam-auth-heading {
+  max-width: 34rem;
+  margin: 0 auto 1.75rem;
+  text-align: center;
+}
+
+.esam-auth-brand {
+  display: inline-block;
+  margin-bottom: 0.85rem;
+  padding: 0.3rem 0.7rem;
+  border: 1px solid var(--esam-line-strong);
+  border-radius: var(--esam-radius-pill);
+  background: #fff;
+  box-shadow: var(--esam-shadow-sm);
+  color: var(--esam-ink);
+  font-family: var(--esam-font-display);
+  font-size: 1rem;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  line-height: 1.2;
+}
+
+.esam-auth-title {
+  margin: 0;
+  color: var(--esam-ink);
+  font-size: clamp(1.65rem, 1.4rem + 1vw, 2.15rem);
+  letter-spacing: -0.03em;
+  line-height: 1.15;
+}
+
+.esam-auth-lead {
+  max-width: 30rem;
+  margin: 0.55rem auto 0;
+  color: var(--esam-muted);
+  font-size: 0.9375rem;
+}
+
+.login-form {
+  padding: clamp(1.6rem, 3.5vw, 2.25rem) !important;
+}
+
+.auth-divider {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin: 1.35rem 0;
+  color: var(--esam-muted);
+  font-size: 0.8125rem;
+  font-weight: 600;
+}
+
+.auth-divider::before,
+.auth-divider::after {
+  flex: 1;
+  height: 1px;
+  background: var(--esam-line);
+  content: "";
+}
+
+/* --------------------------------------------------------------------------
+   Alertas, toasts y badges
+   -------------------------------------------------------------------------- */
+.alert {
+  padding: 0.8rem 0.95rem;
+  border-width: 1px;
+  border-radius: var(--esam-radius-md);
+  font-size: 0.9375rem;
+}
+
+.alert-success {
+  --bs-alert-color: #1f5c41;
+  --bs-alert-bg: #f0f7f3;
+  --bs-alert-border-color: #cfe5da;
+}
+
+.alert-danger {
+  --bs-alert-color: #8b2a33;
+  --bs-alert-bg: #fbf1f2;
+  --bs-alert-border-color: #ebd0d3;
+}
+
+.alert-warning {
+  --bs-alert-color: #74500f;
+  --bs-alert-bg: #fdf7ec;
+  --bs-alert-border-color: #f0ddba;
+}
+
+.alert-info {
+  --bs-alert-color: #234f73;
+  --bs-alert-bg: #f1f6fa;
+  --bs-alert-border-color: #d3e2ee;
+}
+
+.toast {
+  overflow: hidden;
+  border: 1px solid var(--esam-line);
+  border-radius: var(--esam-radius-md);
+  box-shadow: var(--esam-shadow-md);
+  font-family: var(--esam-font-body);
+}
+
+.toast.text-bg-success {
+  border-left: 3px solid var(--esam-success);
+  background: #fff !important;
+  color: var(--esam-ink) !important;
+}
+
+.toast.text-bg-success .btn-close {
+  filter: none;
+}
+
+.badge {
+  padding: 0.35em 0.55em;
+  border-radius: var(--esam-radius-pill);
+  font-family: var(--esam-font-body);
+  font-weight: 600;
+  letter-spacing: 0;
+}
+
+.text-bg-light {
+  border-color: var(--esam-line) !important;
+  background: var(--esam-surface-alt) !important;
+  color: var(--esam-ink-soft) !important;
+}
+
+.text-bg-dark {
+  background: var(--esam-ink) !important;
+  color: #fff !important;
+}
+
+/* --------------------------------------------------------------------------
+   Tablas
+   -------------------------------------------------------------------------- */
+.table {
+  --bs-table-color: #3d4149;
+  --bs-table-border-color: #efefec;
+  --bs-table-hover-bg: #fafaf8;
+  --bs-table-hover-color: var(--esam-ink);
+  margin-bottom: 0;
+  font-size: 0.9375rem;
+}
+
+.table > thead th {
+  border-bottom-color: var(--esam-line);
+  background: var(--esam-surface-alt);
+  color: var(--esam-ink-soft);
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.table > tbody td {
+  vertical-align: middle;
+}
+
+.site-table-card {
+  overflow: hidden;
+  border: 1px solid var(--esam-line);
+  border-radius: var(--esam-radius-lg);
+  background: var(--esam-surface);
+  box-shadow: 0 1px 2px rgba(16, 18, 22, 0.05);
+}
+
+.site-table-heading {
+  display: grid;
+  gap: 12px;
+  padding: 18px 20px 15px;
+  border-bottom: 1px solid var(--esam-line);
+}
+
+.site-table-heading h2 {
+  margin: 0;
+  color: var(--esam-ink);
+  font-family: var(--esam-font-body);
+  font-size: 1rem;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+.site-table-heading p {
+  margin: 3px 0 0;
+  color: var(--esam-muted);
+  font-size: 0.8125rem;
+}
+
+.site-table thead th {
+  padding: 12px 20px;
+  background: var(--esam-surface-alt);
+  color: var(--esam-ink-soft);
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+}
+
+.site-table tbody td {
+  padding: 14px 20px;
+  border-color: #f2f2ef;
+}
+
+.site-table-empty {
+  padding: 40px 20px !important;
+  color: var(--esam-muted) !important;
+  text-align: center;
+}
+
+/* --------------------------------------------------------------------------
+   Modales, dropdowns y navegación secundaria
+   -------------------------------------------------------------------------- */
+.modal-content {
+  border: 1px solid var(--esam-line);
+  border-radius: var(--esam-radius-xl);
+  box-shadow: var(--esam-shadow-lg);
+}
+
+.modal-header,
+.modal-footer {
+  border-color: var(--esam-line);
+}
+
+.modal-title {
+  font-size: 1.125rem;
+  letter-spacing: -0.01em;
+}
+
+.dropdown-menu {
+  padding: 0.35rem;
+  border-color: var(--esam-line);
+  border-radius: var(--esam-radius-md);
+  box-shadow: var(--esam-shadow-md);
+  font-size: 0.9375rem;
+}
+
+.dropdown-item {
+  border-radius: var(--esam-radius-sm);
+  padding: 0.45rem 0.65rem;
+}
+
+.dropdown-item:hover,
+.dropdown-item:focus {
+  background: var(--esam-surface-alt);
+  color: var(--esam-ink);
+}
+
+.nav-tabs {
+  --bs-nav-tabs-border-color: var(--esam-line);
+  --bs-nav-tabs-link-active-bg: #fff;
+  --bs-nav-tabs-link-active-color: var(--esam-primary);
+  --bs-nav-tabs-link-hover-border-color: var(--esam-line);
+}
+
+/* --------------------------------------------------------------------------
+   Filtros del catálogo
+   -------------------------------------------------------------------------- */
+.esam-filters {
+  padding: 1.1rem;
+  border: 1px solid var(--esam-line);
+  border-radius: var(--esam-radius-lg);
+  background: var(--esam-surface);
+  box-shadow: 0 1px 2px rgba(16, 18, 22, 0.05);
+}
+
+.esam-filters legend,
+.esam-filters h3 {
+  color: var(--esam-ink);
+  font-family: var(--esam-font-body);
+  font-size: 0.875rem;
+  font-weight: 700;
+  letter-spacing: 0;
+}
+
+.esam-filters fieldset + fieldset {
+  padding-top: 0.9rem;
+  border-top: 1px solid #f2f2ef;
+}
+
+@media (min-width: 992px) {
+  .esam-filters {
+    position: sticky;
+    top: 5.5rem;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   Detalle de producto
+   -------------------------------------------------------------------------- */
+.esam-detail-media {
+  display: flex;
+  min-height: 26rem;
+  align-items: center;
+  justify-content: center;
+  padding: clamp(1.25rem, 3vw, 2.5rem);
+  border: 1px solid var(--esam-line);
+  border-radius: var(--esam-radius-xl);
+  background: #fff;
+}
+
+.esam-detail-img {
+  max-width: 100%;
+  max-height: 30rem;
+  object-fit: contain;
+}
+
+.esam-detail-title {
+  margin-bottom: 0.7rem;
+  font-size: clamp(1.5rem, 1.3rem + 0.9vw, 2rem);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  line-height: 1.2;
+}
+
+.esam-detail-desc {
+  color: var(--esam-ink-soft);
+  font-size: 0.9375rem;
+  line-height: 1.65;
+}
+
+.esam-detail-price {
+  margin: 1rem 0 0.35rem;
+  color: var(--esam-ink);
+  font-size: 1.75rem;
+  font-variant-numeric: tabular-nums;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  line-height: 1.2;
+}
+
+.esam-detail-stock {
+  margin-bottom: 1.5rem;
+  color: var(--esam-muted);
+  font-size: 0.875rem;
+}
+
+/* --------------------------------------------------------------------------
+   Carrito
+   -------------------------------------------------------------------------- */
+.esam-cart-item {
+  padding: 1rem;
+  border: 1px solid var(--esam-line);
+  border-radius: var(--esam-radius-lg);
+  background: var(--esam-surface);
+  box-shadow: 0 1px 2px rgba(16, 18, 22, 0.05);
+}
+
+.esam-cart-media {
+  display: flex;
+  height: 100%;
+  min-height: 8rem;
+  align-items: center;
+  justify-content: center;
+  padding: 0.75rem;
+  border: 1px solid var(--esam-line);
+  border-radius: var(--esam-radius-md);
+  background: #fff;
+}
+
+.esam-cart-media img {
+  max-height: 8rem;
+  max-width: 100%;
+  object-fit: contain;
+}
+
+.esam-summary-card {
+  padding: 1.35rem;
+  border: 1px solid var(--esam-line);
+  border-radius: var(--esam-radius-lg);
+  background: var(--esam-surface);
+  box-shadow: 0 1px 2px rgba(16, 18, 22, 0.05);
+}
+
+.esam-summary-card h3 {
+  margin-bottom: 0.9rem;
+  font-size: 1.0625rem;
+  font-weight: 700;
+}
+
+.esam-summary-line {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.45rem 0;
+  color: var(--esam-ink-soft);
+  font-size: 0.9375rem;
+}
+
+.esam-summary-total {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding-top: 0.9rem;
+  border-top: 1px solid var(--esam-line);
+  color: var(--esam-ink);
+  font-size: 1.0625rem;
+  font-weight: 700;
+}
+
+.esam-summary-total strong {
+  font-size: 1.375rem;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.01em;
+}
+
+@media (min-width: 992px) {
+  .esam-summary-card {
+    position: sticky;
+    top: 5.5rem;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   Blog
+   -------------------------------------------------------------------------- */
+.esam-blog-card {
+  overflow: hidden;
+  padding: 0;
+  border: 1px solid var(--esam-line);
+  border-radius: var(--esam-radius-lg);
+  background: var(--esam-surface);
+  box-shadow: 0 1px 2px rgba(16, 18, 22, 0.06), 0 8px 20px -16px rgba(16, 18, 22, 0.2);
+  transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+}
+
+.esam-blog-card:hover {
+  transform: translateY(-4px);
+  border-color: #cfcfc9;
+  box-shadow: 0 18px 34px -18px rgba(16, 18, 22, 0.38);
+}
+
+.esam-blog-card .card-title {
+  margin-bottom: 0.4rem;
+  font-family: var(--esam-font-body);
+  font-size: 1.0625rem;
+  font-weight: 600;
+  line-height: 1.35;
+}
+
+/* --------------------------------------------------------------------------
+   Utilidades
+   -------------------------------------------------------------------------- */
+.text-primary {
+  color: var(--esam-primary) !important;
+}
+
+.text-secondary {
+  color: var(--esam-muted) !important;
+}
+
+.text-esam-accent {
+  color: var(--esam-accent) !important;
+}
+
+.bg-esam-paper,
+.bg-esam-surface {
+  background: #fff !important;
+}
+
+.bg-esam-alt {
+  background: var(--esam-surface-alt) !important;
+}
+
+.bg-black {
+  background-color: var(--esam-ink) !important;
+}
+
+@media (max-width: 767.98px) {
+  .esam-hero {
+    padding: 2rem 0 2.5rem;
+  }
+
+  .esam-hero-lead {
+    font-size: 1rem;
+  }
+
+  .esam-footer {
+    margin-top: 3rem;
+    padding-top: 2.75rem;
+  }
+
+  .product-image-wrap {
+    height: 170px;
+  }
+
+  .esam-detail-media {
+    min-height: 18rem;
+  }
+}
+
+@media (max-width: 575.98px) {
+  .login-form,
+  .register-form {
+    padding: 1.5rem !important;
+  }
+
+  .esam-hero-carousel .carousel-control-prev,
+  .esam-hero-carousel .carousel-control-next {
+    width: 14%;
+  }
+}

@@ -124,7 +124,7 @@ export function Products(){
     const categoriasFiltro = useMemo(() => categoriasCatalogo(products, categories), [products, categories])
 
     return (
-    <div className='container mt-4'>
+    <div className='container esam-page'>
         <AlertMessage type={mensajeAlerta?.type} message={mensajeAlerta?.message} onClose={() => setMensajeAlerta(null)} />
 
         <div className='row g-4'>
@@ -154,8 +154,8 @@ export function Products(){
                     onOrdenChange={setOrden}
                 />
 
-                <div className='d-flex flex-wrap align-items-center justify-content-between mb-4'>
-                    <h2 className='fs-4 mb-0 text-capitalize'>
+                <div className='d-flex flex-wrap align-items-end justify-content-between gap-3 mb-4'>
+                    <h2 className='esam-page-title text-capitalize mb-0'>
                         {categoriaUnica ? categoriaUnica.nombre : "Productos"}
                     </h2>
                     {

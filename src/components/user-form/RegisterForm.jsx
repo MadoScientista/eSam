@@ -57,11 +57,29 @@ export function RegisterForm({ idUsuario, esAdmin = false, wideLayout = false })
     }
 
     return (
-        <div className={`register-form ${wideLayout ? "user-form-card" : "border border-black p-5 rounded-2 shadow-sm"}`}>
+        <div className={`register-form ${wideLayout ? "user-form-card" : "esam-form-card p-5"}`}>
             <form onSubmit={handleSubmit}>
-                <div className={`h3 ${wideLayout ? "user-form-title" : "mb-5 text-center"}`}>
-                    {esEdicion ? "Editar Perfil" : "Formulario de Registro"}
-                </div>
+                {wideLayout ? (
+                    <div className="form-card-head">
+                        <span className="form-card-icon" aria-hidden="true">
+                            <i className={`bi ${esEdicion ? "bi-person-gear" : "bi-person-plus"}`}></i>
+                        </span>
+                        <div>
+                            <div className="h3 user-form-title">
+                                {esEdicion ? "Editar Perfil" : "Formulario de Registro"}
+                            </div>
+                            <p className="form-card-subtitle">
+                                {esEdicion
+                                    ? "Revisa y actualiza tus datos. Los campos con * son obligatorios."
+                                    : "Completa tus datos para crear tu cuenta. Los campos con * son obligatorios."}
+                            </p>
+                        </div>
+                    </div>
+                ) : (
+                    <div className="h3 mb-5 text-center">
+                        {esEdicion ? "Editar Perfil" : "Formulario de Registro"}
+                    </div>
+                )}
 
                 <CamposUsuario
                     wideLayout={wideLayout}

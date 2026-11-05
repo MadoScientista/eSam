@@ -7,7 +7,7 @@ export function AboutUs(){
     ]
 
     return (
-        <div className="container pt-5 pb-5">
+        <div className="container esam-page">
             <div className="col-lg-8 mx-auto">
                 <h2 className="mb-4">Sobre nosotros</h2>
 

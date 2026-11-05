@@ -2,10 +2,9 @@
     max-width: 920px;
     margin: 0;
     padding: 32px;
-    border: 1px solid #4e4e4e;
-    border-radius: 15px;
+    border: 1px solid var(--esam-line, #e6e6e2);
+    border-radius: var(--esam-radius-xl, 12px);
     background: #fff;
-    box-shadow: 0 3px 12px rgba(0, 0, 0, .035);
 }
 
 .user-form-title {
@@ -41,20 +40,64 @@
     padding: 0;
 }
 
-.user-form-card .form-label { margin-bottom: 7px; color: #444; font-size: inherit; font-weight: 700; }
+/* Separadores de grupo dentro del formulario: ayudan a leer qué se está
+   completando (datos personales, acceso, dirección) sin recargar la tarjeta. */
+.user-form-section {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    margin: 6px 0 -2px;
+    padding-bottom: 0.6rem;
+    border-bottom: 1px solid var(--esam-line, #e6e6e2);
+}
+
+.user-form-section:first-child {
+    margin-top: 0;
+}
+
+.user-form-section::before {
+    width: 3px;
+    height: 14px;
+    border-radius: var(--esam-radius-pill, 999px);
+    background: var(--esam-primary, #1d4e89);
+    content: "";
+}
+
+.user-form-section-title {
+    color: var(--esam-muted, #6d737c);
+    font-size: 0.72rem;
+    font-weight: 800;
+    letter-spacing: 0.09em;
+    line-height: 1;
+    text-transform: uppercase;
+}
+
+.user-form-card .form-label { margin-bottom: 7px; color: #2b2f36; font-size: inherit; font-weight: 700; }
 .user-form-card .form-control,
-.user-form-card .form-select { min-height: 46px; border-color: #dedede !important; border-radius: 8px; font-size: inherit; }
+.user-form-card .form-select {
+    min-height: 46px;
+    border-color: var(--esam-field-border, #b8bfc9) !important;
+    border-radius: 8px;
+    background-color: var(--esam-field-bg, #f8f9fb);
+    font-size: inherit;
+}
 .user-form-card textarea.form-control { min-height: auto; }
 .user-form-card .form-control:focus,
-.user-form-card .form-select:focus { border-color: #888 !important; box-shadow: 0 0 0 .2rem rgba(0, 0, 0, .08); }
-.user-form-card small.text-secondary { color: #888 !important; font-size: 13px; }
+.user-form-card .form-select:focus {
+    border-color: var(--esam-primary, #1d4e89) !important;
+    background-color: #fff;
+    box-shadow: 0 0 0 4px var(--esam-focus-ring, rgba(29, 78, 137, 0.16)) !important;
+}
+.user-form-card small.text-secondary { color: var(--esam-muted, #6d737c) !important; font-size: 13px; }
 .user-form-card .btn-dark { min-width: 150px; padding: 11px 18px; border-radius: 8px; font-size: inherit; font-weight: 600; }
 .user-form-actions { grid-column: 1 / -1; }
 
 .public-register-page {
     min-height: 90vh;
-    padding: 48px 0;
-    background: var(--site-background);
+    padding: clamp(2.5rem, 5vw, 4.25rem) 0 clamp(3rem, 6vw, 4.75rem);
+    background-color: var(--esam-surface-alt, #f7f7f5);
+    background-image: radial-gradient(rgba(16, 18, 22, 0.045) 1px, transparent 1px);
+    background-size: 22px 22px;
 }
 
 .public-register-page .user-form-card {

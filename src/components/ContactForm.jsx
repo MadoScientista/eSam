@@ -37,13 +37,21 @@ export function ContactForm() {
     }
 
     return (
-        <form className="register-form border border-black p-5 rounded-2 shadow-sm" onSubmit={handleSubmit}>
-            <div className="h3 mb-5 text-center">Enviános un mensaje</div>
+        <form className="esam-form-card p-5" onSubmit={handleSubmit}>
+            <div className="form-card-head">
+                <span className="form-card-icon" aria-hidden="true">
+                    <i className="bi bi-chat-dots"></i>
+                </span>
+                <div>
+                    <div className="h3">Envíanos un mensaje</div>
+                    <p className="form-card-subtitle">Cuéntanos en qué te podemos ayudar y te responderemos pronto.</p>
+                </div>
+            </div>
 
             <div className="mb-3">
                 <label htmlFor="contactNombre" className="form-label">Nombre completo</label>
                 <div className="input-group">
-                    <span className="input-group-text bg-white border-black"><i className="bi bi-person"></i></span>
+                    <span className="input-group-text"><i className="bi bi-person"></i></span>
                     <input
                         type="text"
                         className="form-control border-black"
@@ -60,7 +68,7 @@ export function ContactForm() {
             <div className="mb-3">
                 <label htmlFor="contactCorreo" className="form-label">Correo</label>
                 <div className="input-group">
-                    <span className="input-group-text bg-white border-black"><i className="bi bi-envelope"></i></span>
+                    <span className="input-group-text"><i className="bi bi-envelope"></i></span>
                     <input
                         type="email"
                         className="form-control border-black"
@@ -77,7 +85,7 @@ export function ContactForm() {
             <div className="mb-3">
                 <label htmlFor="contactMotivo" className="form-label">Motivo</label>
                 <div className="input-group">
-                    <span className="input-group-text bg-white border-black"><i className="bi bi-tag"></i></span>
+                    <span className="input-group-text"><i className="bi bi-tag"></i></span>
                     <select
                         className="form-select border-black"
                         id="contactMotivo"

@@ -7,20 +7,22 @@ export function ProductCardH({item, handleClickPlus, handleClicklMinus, handleTr
     const disponible = stockDisponible(item.product)
 
     return (
-        <div className=" mb-3" id={`item-${item.product.idProducto}`}>
-            <div className="row g-0">
+        <div className="esam-cart-item mb-3" id={`item-${item.product.idProducto}`}>
+            <div className="row g-3 align-items-center">
                 <div className="col-md-4">
-                    {
-                        imagen
-                        ? <img src={imagen} alt={item.product.nombre} className="img-fluid" style={{maxHeight:"8rem", objectFit:"contain"}}/>
-                        : <i className="bi bi-image fs-2 text-secondary"></i>
-                    }
+                    <div className="esam-cart-media">
+                        {
+                            imagen
+                            ? <img src={imagen} alt={item.product.nombre} />
+                            : <i className="bi bi-image fs-2 text-secondary"></i>
+                        }
+                    </div>
                 </div>
                 <div className="col-md-8">
-                    <div className="card-body">
-                        <h6 className="card-title">{item.product.nombre}</h6>
-                        <p className="card-text">{formatearPrecio(item.product.precio)}</p>
-                        <p className="card-text">Disponibles ahora: {disponible}u</p>
+                    <div className="card-body p-0">
+                        <h6 className="card-title mb-1">{item.product.nombre}</h6>
+                        <p className="product-price mb-1">{formatearPrecio(item.product.precio)}</p>
+                        <p className="text-secondary small mb-3">Disponibles ahora: {disponible}u</p>
 
 
                         <div className="d-flex flex-row align-items-center gap-2">
@@ -48,7 +50,7 @@ export function ProductCardH({item, handleClickPlus, handleClicklMinus, handleTr
                                 >+</button>
                             </div>
 
-                            <button className="btn btn-danger btn-sm" onClick={handleTrash} aria-label={`Quitar ${item.product.nombre} del carrito`}>
+                            <button className="btn btn-outline-danger btn-sm" onClick={handleTrash} aria-label={`Quitar ${item.product.nombre} del carrito`}>
                                 <i className="bi bi-trash3-fill"></i>
                             </button>
                         </div>

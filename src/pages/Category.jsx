@@ -62,8 +62,8 @@ export function Category(){
 
     return (
         <>
-            <div className="container mt-5">
-                <h2>Categorías</h2>
+            <div className="container esam-page">
+                <h2 className="esam-page-title mb-4">Categorías</h2>
                 <AlertMessage type={mensajeAlerta?.type} message={mensajeAlerta?.message} onClose={() => setMensajeAlerta(null)} />
                 <CategoryBanner categories={raices}/>
 
@@ -71,7 +71,7 @@ export function Category(){
                     secciones.map((s) => {
                         return (
                             <section className="mb-5" key={s.categoria.idCategoria}>
-                                <div className="d-flex align-items-center justify-content-between mb-1">
+                                <div className="d-flex align-items-center justify-content-between mb-3">
                                     <h3 className="mb-0 text-capitalize">{s.categoria.nombre}</h3>
                                     <button
                                         type="button"

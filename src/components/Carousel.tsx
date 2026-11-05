@@ -17,7 +17,7 @@ export function Carousel(){
 
     return(
         <>
-        <div ref={carouselRef} id="carouselExampleIndicators" className="carousel slide">
+        <div ref={carouselRef} id="carouselExampleIndicators" className="carousel slide esam-hero-carousel">
         <div className="carousel-indicators">
             <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="0" className="active" aria-current="true" aria-label="Slide 1"></button>
             <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="1" aria-label="Slide 2"></button>
@@ -27,21 +27,18 @@ export function Carousel(){
             <div className="carousel-item active">
             <img 
                 src="https://www.papelaria.cl/cdn/shop/files/9781441321343_1800x1800_7ef6ffe9-83df-40a8-b6cd-193bd5d311f2.jpg" 
-                className="d-block w-100" 
-                style={{ height: "400px", objectFit: "cover" }}
-                alt="..."/>
+                className="d-block w-100 esam-hero-img" 
+                alt="Artículos de librería ESam"/>
             </div>
             <div className="carousel-item">
             <img src="https://www.ekiz.cl/cdn/shop/products/97.MLCuadernodeHarryPotter-CasadeRavenclaw_Separadoratono.jpg?v=1680060899" 
-                className="d-block w-100" 
-                style={{ height: "400px", objectFit: "cover" }}
-                alt="..."/>
+                className="d-block w-100 esam-hero-img" 
+                alt="Artículos de librería ESam"/>
             </div>
             <div className="carousel-item">
             <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRtjboPUMEqo9re7Hkk6YnT9uKxBIbNaPidtjvWarXtQCkhf1mAH84A2lDP&s=10" 
-                className="d-block w-100" 
-                style={{ height: "400px", objectFit: "cover" }}
-                alt="..."/>
+                className="d-block w-100 esam-hero-img" 
+                alt="Artículos de librería ESam"/>
             </div>
         </div>
         <button className="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="prev">

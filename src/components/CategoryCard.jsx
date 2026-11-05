@@ -3,31 +3,17 @@ export function CategoryCard({category, handleClick}){
     return(
         <>
             <div
-                className="card h-100 w-100 d-flex flex-column p-3 card-hover"
+                className="card esam-category-card h-100 w-100 d-flex flex-column"
                 onClick={handleClick}
                 style={{ cursor: "pointer" }}
             >
     
-                <div
-                    className="product-image-wrap"
-                    style={{
-                        height: "8rem",
-                        display: "flex",
-                        justifyContent: "center",
-                        alignItems: "center",
-                        position: "relative"
-                    }}
-                >
+                <div className="category-image-wrap">
 {
                     category.imagenUrl
                     ? <img
                             src={category.imagenUrl}
                             alt={category.nombre}
-                            style={{
-                                maxHeight: "100%",
-                                maxWidth: "100%",
-                                objectFit: "contain"
-                            }}
                         />
                     : <i className="bi bi-tags fs-1 text-secondary"></i>
                 }

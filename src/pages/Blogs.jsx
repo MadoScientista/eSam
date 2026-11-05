@@ -4,7 +4,7 @@ import { entradasBlog } from "../const/entradasBlog"
 
 export function Blogs(){
     return (
-        <div className="container pt-5 pb-5">
+        <div className="container esam-page">
             <div className="col-lg-8 mx-auto text-center mb-5">
                 <h2 className="mb-3">Blog</h2>
                 <p className="lead text-secondary mb-0">
