@@ -154,17 +154,19 @@ export function useUsuarioForm({ idUsuario, esAdmin = false, esPropio = false, e
             return null
         }
 
-        // RUN
-        const rutLimpio = formulario.rut.trim()
+        // RUN (opcional)
+        const rutLimpio = formulario.rut ? formulario.rut.trim() : ""
 
-        if(rutLimpio.length < 7 || rutLimpio.length > 9){
-            setMensajeAlerta({type: "danger", message: "El RUN debe tener entre 7 y 9 caracteres."})
-            return null
-        }
+        if(rutLimpio){
+            if(rutLimpio.length < 7 || rutLimpio.length > 9){
+                setMensajeAlerta({type: "danger", message: "El RUN debe tener entre 7 y 9 caracteres."})
+                return null
+            }
 
-        if(!validarRut(rutLimpio)){
-            setMensajeAlerta({type: "danger", message: "El RUN ingresado no es válido."})
-            return null
+            if(!validarRut(rutLimpio)){
+                setMensajeAlerta({type: "danger", message: "El RUN ingresado no es válido."})
+                return null
+            }
         }
 
         // Correo
@@ -230,7 +232,7 @@ export function useUsuarioForm({ idUsuario, esAdmin = false, esPropio = false, e
             return null
         }
 
-        const {rut, dv} = descomponerRut(rutLimpio)
+        const {rut, dv} = rutLimpio ? descomponerRut(rutLimpio) : { rut: null, dv: null }
         const correo = formulario.correo.trim()
 
         // UsuarioDTORequest exige nombre, apellido y email por validación, y el

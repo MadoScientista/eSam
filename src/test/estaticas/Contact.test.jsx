@@ -17,7 +17,7 @@ describe("Contact", () => {
         expect(screen.getByRole("heading", { name: "Contáctanos" })).toBeInTheDocument()
         expect(screen.getByText("(+56) 22554878")).toBeInTheDocument()
         expect(screen.getByText("hola@esam.com")).toBeInTheDocument()
-        expect(screen.getByText("Enviános un mensaje")).toBeInTheDocument()
+        expect(screen.getByText("Envíanos un mensaje")).toBeInTheDocument()
         expect(screen.getByRole("link", { name: "Instagram" })).toBeInTheDocument()
         expect(screen.getByRole("link", { name: "Facebook" })).toBeInTheDocument()
         expect(screen.getByRole("link", { name: "WhatsApp" })).toBeInTheDocument()

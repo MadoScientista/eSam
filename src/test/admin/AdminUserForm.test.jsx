@@ -55,7 +55,7 @@ const llenarFormulario = async () => {
 
     fireEvent.change(screen.getByLabelText("Nombres*"), { target: { value: "Ana" } })
     fireEvent.change(screen.getByLabelText("Apellido Paterno*"), { target: { value: "López" } })
-    fireEvent.change(screen.getByLabelText("RUN*"), { target: { value: "123456785" } })
+    fireEvent.change(screen.getByLabelText(/run/i), { target: { value: "123456785" } })
     fireEvent.change(screen.getByLabelText("Correo*"), { target: { value: "ana@duoc.cl" } })
     fireEvent.change(screen.getByLabelText("Confirme correo*"), { target: { value: "ana@duoc.cl" } })
     fireEvent.change(screen.getByLabelText("Contraseña*"), { target: { value: "clave1234" } })

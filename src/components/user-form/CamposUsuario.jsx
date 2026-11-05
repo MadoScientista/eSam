@@ -49,21 +49,19 @@ export function CamposUsuario({ formulario, handleChange, handleChangeRut, esEdi
             </div>
 
             <div className={`mb-3${wideLayout ? " user-form-field" : ""}`}>
-                <label htmlFor="rut" className="form-label">RUN*</label>
+                <label htmlFor="rut" className="form-label">RUN (opcional)</label>
                 <input
                     type="text"
                     id="rut"
                     className="form-control border-black"
                     name="rut"
                     placeholder="19011022K"
-                    minLength={7}
                     maxLength={9}
                     value={formulario.rut}
                     onChange={handleChangeRut}
-                    disabled={esEdicion}
-                    readOnly={esEdicion}
-                    required/>
-                <small className="text-secondary">{esEdicion ? "El RUN no es editable." : "Sin puntos ni guión."}</small>
+                    disabled={esEdicion && Boolean(formulario.rut)}
+                    readOnly={esEdicion && Boolean(formulario.rut)}/>
+                <small className="text-secondary">{esEdicion && Boolean(formulario.rut) ? "El RUN no es editable." : "Opcional. Sin puntos ni guión."}</small>
             </div>
 
             <div className={`row mb-3${wideLayout ? " user-form-field-pair" : ""}`}>

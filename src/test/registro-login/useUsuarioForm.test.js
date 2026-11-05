@@ -88,6 +88,18 @@ describe("useUsuarioForm", () => {
         expect(payload).not.toHaveProperty("idRolUsuario")
     })
 
+    it("permite registrar sin RUN (opcional)", async () => {
+        const { result } = await montarHook()
+
+        rellenar(result, { ...camposValidos, rut: "" })
+
+        const payload = construirPayload(result)
+
+        expect(payload).not.toBeNull()
+        expect(payload.rut).toBeNull()
+        expect(payload.dv).toBeNull()
+    })
+
     it("incluye idRolUsuario cuando esAdmin y trimea el teléfono", async () => {
         const { result } = await montarHook({ esAdmin: true })
 

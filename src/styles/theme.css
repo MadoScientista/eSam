@@ -12,7 +12,7 @@
   --esam-muted: #6d737c;
   --esam-line: #e2e2dd;
   --esam-line-strong: #c9c9c3;
-  --esam-bg: #ffffff;
+  --esam-bg: #fcfcfc;
   --esam-surface: #ffffff;
   --esam-surface-alt: #f7f7f5;
 
@@ -62,6 +62,8 @@
 
   --esam-transition: 150ms ease;
   --esam-container: 1200px;
+
+  --esam-card-bg: #fff;
 }
 
 /* --------------------------------------------------------------------------
@@ -689,7 +691,7 @@ hr {
   padding: 0;
   border: 1px solid var(--esam-line);
   border-radius: var(--esam-radius-lg);
-  background: var(--esam-surface);
+  background: var(--esam-card-bg);
   box-shadow: 0 1px 2px rgba(16, 18, 22, 0.06), 0 8px 20px -16px rgba(16, 18, 22, 0.2);
   transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
 }
@@ -708,7 +710,7 @@ hr {
   align-items: center;
   justify-content: center;
   padding: 1rem;
-  background: #fff;
+  background: var(--esam-card-bg);
 }
 
 .product-image-wrap img {
@@ -804,7 +806,7 @@ hr {
   padding: 0;
   border: 1px solid var(--esam-line);
   border-radius: var(--esam-radius-lg);
-  background: var(--esam-surface);
+  background: var(--esam-card-bg);
   box-shadow: 0 1px 2px rgba(16, 18, 22, 0.06), 0 8px 20px -16px rgba(16, 18, 22, 0.2);
   transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
 }
@@ -1397,7 +1399,7 @@ textarea.form-control {
 
 @media (min-width: 992px) {
   .esam-filters {
-    position: sticky;
+    /* position: sticky; */
     top: 5.5rem;
   }
 }

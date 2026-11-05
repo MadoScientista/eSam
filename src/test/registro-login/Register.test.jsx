@@ -45,7 +45,7 @@ const llenarFormulario = async (overrides = {}) => {
     const campos = {
         "Nombres*": "Ana",
         "Apellido Paterno*": "Pérez",
-        "RUN*": "123456785",
+        "RUN (opcional)": "123456785",
         "Correo*": "ana@duoc.cl",
         "Confirme correo*": "ana@duoc.cl",
         "Contraseña*": "clave-larga",

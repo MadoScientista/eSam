@@ -75,8 +75,8 @@ describe("CustomerProfile", () => {
         expect(await screen.findByDisplayValue("Ana")).toBeInTheDocument()
         expect(screen.getByLabelText("Correo*")).toHaveValue("ana@duoc.cl")
         expect(screen.getByLabelText("Dirección*")).toHaveValue("Av. Central 123")
-        // El RUN no es editable en modo edición.
-        expect(screen.getByLabelText("RUN*")).toBeDisabled()
+        // El RUN no es editable en modo edición si ya está definido.
+        expect(screen.getByLabelText(/run/i)).toBeDisabled()
         expect(screen.getByRole("button", { name: "Guardar Perfil" })).toBeInTheDocument()
     })
 

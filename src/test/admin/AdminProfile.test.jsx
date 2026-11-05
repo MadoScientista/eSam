@@ -69,7 +69,7 @@ describe("AdminProfile", () => {
         expect(await screen.findByText("Editar Perfil")).toBeInTheDocument()
         expect(await screen.findByDisplayValue("Carla")).toBeInTheDocument()
         expect(screen.getByLabelText("Correo*")).toHaveValue("carla@duoc.cl")
-        expect(screen.getByLabelText("RUN*")).toBeDisabled()
+        expect(screen.getByLabelText(/run/i)).toBeDisabled()
         expect(screen.getByRole("button", { name: "Guardar Perfil" })).toBeInTheDocument()
     })
 
