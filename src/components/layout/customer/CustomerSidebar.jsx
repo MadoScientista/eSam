@@ -55,6 +55,10 @@ export function CustomerSidebar() {
                         </NavLink>
                     </li>
                 </ul>
+                <button type="button" className="app-logout" onClick={handleLogout}>
+                    <i className="bi bi-box-arrow-left" aria-hidden="true" />
+                    <span>Cerrar sesión</span>
+                </button>
             </nav>
 
             <div className="app-sidebar-divider" />
@@ -69,10 +73,7 @@ export function CustomerSidebar() {
                     </div>
                 )}
                 <div className="app-sidebar-divider" />
-                <button type="button" className="app-logout" onClick={handleLogout}>
-                    <i className="bi bi-box-arrow-left" aria-hidden="true" />
-                    <span>Cerrar sesión</span>
-                </button>
+
             </div>
         </aside>
     );
