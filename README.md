@@ -42,7 +42,7 @@ Requisitos: Node.js (>= 20).
 # 1. Instalar dependencias
 npm install
 
-# 2. Levantar servidor de desarrollo (proxy /api → http://localhost:8080)
+# 2. Levantar servidor de desarrollo (proxy /api/v1 → http://localhost:8080)
 npm run dev
 
 # Otros comandos
@@ -51,7 +51,9 @@ npm run preview   # Previsualizar el build
 npm run lint      # Linting con ESLint
 ```
 
-> El backend debe estar en ejecución en `http://localhost:8080`; el proxy de Vite (`vite.config.js`) redirige las peticiones `/api/*`.
+> El backend debe estar en ejecución en `http://localhost:8080`; el proxy de Vite (`vite.config.js`) redirige las peticiones `/api/v1/*` sin cambiar la ruta.
+
+En desarrollo, Axios usa `/api/v1` como base y el proxy envía la solicitud al backend. Para otro entorno, configura `VITE_API_URL` con la URL base completa, incluido `/api/v1` (por ejemplo, `https://servidor.example/api/v1`).
 
 ### Inicio de sesión con Google
 
@@ -59,11 +61,13 @@ Configura `VITE_GOOGLE_CLIENT_ID` con el Client ID web de Google para el
 entorno. Este valor es público; no configures un `client_secret` en el frontend.
 Registra el origen del frontend en Google Cloud y configura el backend con el
 mismo Client ID mediante `GOOGLE_CLIENT_ID`. El backend valida el ID token en
-`POST /api/usuarios/oauth/google` y devuelve el JWT propio de la API; solo ese
+`POST /api/v1/usuarios/oauth/google` y devuelve el JWT propio de la API; solo ese
 JWT se guarda como sesión. También se requiere que CORS permita al frontend
 llamar a la API.
 
 ## API consumida
+
+Los endpoints de esta tabla son relativos a la base `/api/v1`.
 
 | Método | Endpoint | Función | Servicio |
 |---|---|---|---|

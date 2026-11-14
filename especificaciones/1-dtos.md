@@ -1,7 +1,7 @@
 # Ejemplos de solicitudes y respuestas para el frontend
 
 Esta guía muestra cómo consumir la API implementada actualmente. Las rutas y
-permisos se detallan en [3-endpoints.md](./3-endpoints.md). Cuando este documento
+permisos. Cuando este documento
 o `2-modeladoDtos.md` difiera de los controladores y DTOs actuales, los ejemplos
 de aquí describen el contrato que acepta o devuelve la aplicación hoy.
 
