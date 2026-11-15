@@ -62,7 +62,7 @@ export function AdminControlProduct(){
                 title="Todos los productos"
                 subtitle="Listado de productos de la tienda"
                 toolbar={
-                    <>
+                    <div className="admin-product-filters" role="group" aria-label="Filtros de productos">
                         <div className="input-group" style={{ maxWidth: "25rem" }}>
                             <span className="input-group-text border-black"><i className="bi bi-search"></i></span>
                             <input
@@ -99,7 +99,7 @@ export function AdminControlProduct(){
                                 ))}
                             </select>
                         </div>
-                    </>
+                    </div>
                 }
             >
                 <ProductTable products={productosOrdenados} handleClick={handleClick} editable={esAdmin}/>

@@ -40,14 +40,11 @@ export function Cart(){
         subtotal += (item.units * item.product.precio)
     })
 
-    // Los relacionados seguided desde la categoría que más se repite en el carrito.
+    // Los relacionados siguen la categoría que más se repite en el carrito.
     // Los productos que ya están en el carrito quedan excluidos y, si no llenan la
     // fila, el resto se completa con los primeros del catálogo (los destacados).
     const relacionados = useMemo(()=>{
         const enCarrito = cart.map((item)=>item.product)
-
-        if(enCarrito.length === 0) return []
-
         const idCategoria = categoriaMasPresente(enCarrito)
         const idsExcluidos = enCarrito.map((p)=>p.idProducto)
 
@@ -79,20 +76,22 @@ export function Cart(){
                 <h1 className="esam-page-title mb-4">Carrito de compras</h1>
                 <div className="row g-4">
                     <div className="col-lg-8">
-                        {cart.map((item)=>{
-                            return (
-                                <div key={item.product.idProducto}>
-                                    <ProductCardH 
-                                        item={item}
-                                        handleClickPlus={()=>{increaseUnits(item.product.idProducto)}}
-                                        handleClicklMinus={()=>{decreaseUnits(item.product.idProducto)}}
-                                        handleTrash={()=>{removeProduct(item.product.idProducto)}}
-                                    />
-                                    {item.units > stockDisponible(item.product) &&
-                                        <p className="text-danger small">La cantidad supera el stock disponible actualizado.</p>
-                                    }
-                                </div>)
-                        })}
+                        {cart.length === 0
+                            ? <p className="text-secondary">No hay productos en tu carrito.</p>
+                            : cart.map((item)=>{
+                                return (
+                                    <div key={item.product.idProducto}>
+                                        <ProductCardH
+                                            item={item}
+                                            handleClickPlus={()=>{increaseUnits(item.product.idProducto)}}
+                                            handleClicklMinus={()=>{decreaseUnits(item.product.idProducto)}}
+                                            handleTrash={()=>{removeProduct(item.product.idProducto)}}
+                                        />
+                                        {item.units > stockDisponible(item.product) &&
+                                            <p className="text-danger small">La cantidad supera el stock disponible actualizado.</p>
+                                        }
+                                    </div>)
+                            })}
                     </div>
                     <div className="col-lg-4">
                         <div className="esam-summary-card">
@@ -120,15 +119,14 @@ export function Cart(){
                     </div>
                 </div>
             </div>
-            {
-                relacionados.length > 0
-                && <>
-                    <h3 className="mb-4">Productos relacionados</h3>
-                    <div className="mb-5">
-                        <ProductCarousel products={relacionados}/>
-                    </div>
-                </>
-            }
+            {relacionados.length > 0 && <>
+                <h3 className="mb-4">
+                    {cart.length === 0 ? "Productos que podrían interesarte" : "Productos relacionados"}
+                </h3>
+                <div className="mb-5">
+                    <ProductCarousel products={relacionados}/>
+                </div>
+            </>}
         </div>
     )
 }

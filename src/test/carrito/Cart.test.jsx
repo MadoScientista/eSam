@@ -95,6 +95,21 @@ describe("Cart", () => {
         expect(screen.getByText("Sub total: $5.430")).toBeInTheDocument()
     })
 
+    it("Muestra un mensaje y productos del catálogo cuando el carrito está vacío", async () => {
+        obtenerProductos.mockResolvedValue([
+            product(1, "Cuaderno", 2490),
+            product(2, "Lápiz", 450)
+        ])
+
+        renderCart()
+
+        expect(screen.getByText("No hay productos en tu carrito.")).toBeInTheDocument()
+        expect(await screen.findByText("Productos que podrían interesarte")).toBeInTheDocument()
+        expect(screen.getByText("Cuaderno")).toBeInTheDocument()
+        expect(screen.getByText("Lápiz")).toBeInTheDocument()
+        expect(screen.getByRole("button", { name: "Pagar" })).toBeDisabled()
+    })
+
     it("Aumenta la cantidad con + y actualiza el subtotal", async () => {
         seedCart([item(product(1, "Cuaderno", 2490), 1)])
         obtenerProductos.mockResolvedValue([])

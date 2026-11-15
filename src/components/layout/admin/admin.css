@@ -136,6 +136,16 @@
 
 .admin-user-role { max-width: 50%; width: 100%; }
 
+.admin-product-filters {
+    display: flex;
+    flex-flow: row wrap;
+    align-items: flex-end;
+    gap: 1rem;
+}
+
+.admin-product-filters > .input-group { flex: 1 1 25rem; }
+.admin-product-filters > div:not(.input-group) { flex: 1 1 11rem; }
+
 @media (max-width: 1000px) {
     .admin-layout { grid-template-columns: 220px minmax(0, 1fr); }
     .admin-main { padding: 36px 25px; }

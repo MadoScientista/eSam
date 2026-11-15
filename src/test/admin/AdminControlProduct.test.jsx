@@ -65,6 +65,18 @@ describe("AdminControlProduct", () => {
         expect(screen.queryByText("Lápiz")).not.toBeInTheDocument()
     })
 
+    it("Agrupa los filtros de búsqueda en una fila horizontal", async () => {
+        renderControl(admin)
+        await screen.findByText("Lápiz")
+
+        const filtros = screen.getByRole("group", { name: "Filtros de productos" })
+
+        expect(filtros).toHaveClass("admin-product-filters")
+        expect(within(filtros).getByPlaceholderText("Buscar por nombre o ID")).toBeInTheDocument()
+        expect(within(filtros).getByLabelText("Ordenar por")).toBeInTheDocument()
+        expect(within(filtros).getByLabelText("Dirección")).toBeInTheDocument()
+    })
+
     it("Navega al formulario de nuevo producto", async () => {
         renderControl(admin)
         await screen.findByText("Lápiz")
