@@ -8,15 +8,13 @@ const CUSTOMER_MENU_ITEMS = [
 ];
 
 export function CustomerSidebar() {
-    const { logout, usuario } = useAuth();
+    const { logout } = useAuth();
     const navigate = useNavigate();
 
     const handleLogout = () => {
         logout();
         navigate("/");
     };
-
-    const nombre = [usuario?.nombres, usuario?.aPaterno].filter(Boolean).join(" ");
 
     return (
         <aside className="app-sidebar">
@@ -42,18 +40,6 @@ export function CustomerSidebar() {
                             </NavLink>
                         </li>
                     ))}
-                    <li>
-                        <NavLink
-                            to="/"
-                            end
-                            className={({ isActive }) =>
-                                `app-nav-link${isActive ? " is-active" : ""}`
-                            }
-                        >
-                            <i className="bi bi-arrow-left-circle" aria-hidden="true" />
-                            <span>Volver a la tienda</span>
-                        </NavLink>
-                    </li>
                 </ul>
                 <button type="button" className="app-logout" onClick={handleLogout}>
                     <i className="bi bi-box-arrow-left" aria-hidden="true" />
@@ -61,20 +47,6 @@ export function CustomerSidebar() {
                 </button>
             </nav>
 
-            <div className="app-sidebar-divider" />
-            <div className="app-sidebar-bottom">
-                {nombre && (
-                    <div className="app-account">
-                        <span className="app-avatar">{nombre.charAt(0).toUpperCase()}</span>
-                        <span className="app-account-copy">
-                            <strong>{nombre}</strong>
-                            <small>Cliente</small>
-                        </span>
-                    </div>
-                )}
-                <div className="app-sidebar-divider" />
-
-            </div>
         </aside>
     );
 }

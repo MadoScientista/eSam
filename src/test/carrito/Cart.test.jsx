@@ -56,13 +56,14 @@ const seedSesion = (usuario) => {
 
 // Renderiza Cart con los providers que necesita: AuthProvider (Cart desestructura
 // useAuth) y CartProvider, más rutas para los destinos del botón de pago.
-const renderCart = () =>
+const renderCart = (initialPath = "/carrito") =>
     render(
         <AuthProvider>
             <CartProvider>
-                <MemoryRouter initialEntries={["/carrito"]}>
+                <MemoryRouter initialEntries={[initialPath]}>
                     <Routes>
                         <Route path="/carrito" element={<Cart />} />
+                        <Route path="/usuario/carrito" element={<Cart />} />
                         <Route path="/usuario/checkout" element={<div>Página checkout</div>} />
                         <Route path="/login" element={<div>Página login</div>} />
                     </Routes>
@@ -82,17 +83,33 @@ describe("Cart", () => {
         seedCart([item(product(1, "Cuaderno", 2490), 2), item(product(2, "Lápiz", 450), 1)])
         obtenerProductos.mockResolvedValue([])
 
-        renderCart()
+        renderCart("/usuario/carrito")
 
         // Cada producto aparece como línea con su cantidad y en el desglose; el
         // total suma 2 x $2.490 + 1 x $450 = $5.430.
-        expect(screen.getByText("Carrito de compras")).toBeInTheDocument()
+        expect(screen.getByText("Carrito de Compras")).toBeInTheDocument()
         expect(screen.getByDisplayValue("2")).toBeInTheDocument()
         expect(screen.getByDisplayValue("1")).toBeInTheDocument()
         expect(screen.getByText("Productos en el carro: 3")).toBeInTheDocument()
         expect(screen.getByText("2 x Cuaderno")).toBeInTheDocument()
         expect(screen.getByText("1 x Lápiz")).toBeInTheDocument()
         expect(screen.getByText("Sub total: $5.430")).toBeInTheDocument()
+    })
+
+    it("muestra el estado vacío y recomendaciones al abrir el carrito autenticado sin productos", async () => {
+        seedSesion({ rol: "cliente", nombres: "Ana" })
+        obtenerProductos.mockResolvedValue([
+            product(1, "Cuaderno recomendado", 2490),
+            product(2, "Lápiz recomendado", 450)
+        ])
+
+        renderCart("/usuario/carrito")
+
+        expect(screen.getByText("No hay productos en el carrito.")).toBeInTheDocument()
+        expect(await screen.findByText("Productos relacionados")).toBeInTheDocument()
+        expect(screen.getByText("Cuaderno recomendado")).toBeInTheDocument()
+        expect(screen.getByText("Lápiz recomendado")).toBeInTheDocument()
+        expect(screen.getByRole("button", { name: "Pagar" })).toBeDisabled()
     })
 
     it("Aumenta la cantidad con + y actualiza el subtotal", async () => {

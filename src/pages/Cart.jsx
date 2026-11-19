@@ -45,9 +45,6 @@ export function Cart(){
     // fila, el resto se completa con los primeros del catálogo (los destacados).
     const relacionados = useMemo(()=>{
         const enCarrito = cart.map((item)=>item.product)
-
-        if(enCarrito.length === 0) return []
-
         const idCategoria = categoriaMasPresente(enCarrito)
         const idsExcluidos = enCarrito.map((p)=>p.idProducto)
 
@@ -76,10 +73,12 @@ export function Cart(){
     return (
         <div className="container esam-page">
             <div className="mb-5" style={{minHeight:"60vh"}}>
-                <h1 className="esam-page-title mb-4">Carrito de compras</h1>
+                <h1 className="esam-page-title mb-4">Carrito de Compras</h1>
                 <div className="row g-4">
                     <div className="col-lg-8">
-                        {cart.map((item)=>{
+                        {cart.length === 0 ? (
+                            <p>No hay productos en el carrito.</p>
+                        ) : cart.map((item)=>{
                             return (
                                 <div key={item.product.idProducto}>
                                     <ProductCardH 
