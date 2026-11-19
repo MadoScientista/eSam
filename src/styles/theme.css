@@ -1124,6 +1124,7 @@ textarea.form-control {
   background-color: var(--esam-surface-alt);
   background-image: radial-gradient(rgba(16, 18, 22, 0.045) 1px, transparent 1px);
   background-size: 22px 22px;
+  
 }
 
 .esam-auth-heading {

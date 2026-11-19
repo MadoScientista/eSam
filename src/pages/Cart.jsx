@@ -40,7 +40,7 @@ export function Cart(){
         subtotal += (item.units * item.product.precio)
     })
 
-    // Los relacionados seguided desde la categoría que más se repite en el carrito.
+    // Los relacionados siguen la categoría que más se repite en el carrito.
     // Los productos que ya están en el carrito quedan excluidos y, si no llenan la
     // fila, el resto se completa con los primeros del catálogo (los destacados).
     const relacionados = useMemo(()=>{
@@ -119,15 +119,14 @@ export function Cart(){
                     </div>
                 </div>
             </div>
-            {
-                relacionados.length > 0
-                && <>
-                    <h3 className="mb-4">Productos relacionados</h3>
-                    <div className="mb-5">
-                        <ProductCarousel products={relacionados}/>
-                    </div>
-                </>
-            }
+            {relacionados.length > 0 && <>
+                <h3 className="mb-4">
+                    {cart.length === 0 ? "Productos que podrían interesarte" : "Productos relacionados"}
+                </h3>
+                <div className="mb-5">
+                    <ProductCarousel products={relacionados}/>
+                </div>
+            </>}
         </div>
     )
 }

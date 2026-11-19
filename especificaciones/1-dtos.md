@@ -33,16 +33,16 @@ de aquí describen el contrato que acepta o devuelve la aplicación hoy.
 Estas consultas no requieren token. Entre las disponibles están:
 
 ```http
-GET /api/productos
-GET /api/productos/24
-GET /api/productos/marca/Staedtler
-GET /api/productos/precio?min=1000&max=8000
-GET /api/productos/nombre?nombre=cuaderno
-GET /api/productos/24/imagenes
-GET /api/marcas
-GET /api/regiones/comunas
-GET /api/comunas
-GET /api/roles
+GET /api/v1/productos
+GET /api/v1/productos/24
+GET /api/v1/productos/marca/Staedtler
+GET /api/v1/productos/precio?min=1000&max=8000
+GET /api/v1/productos/nombre?nombre=cuaderno
+GET /api/v1/productos/24/imagenes
+GET /api/v1/marcas
+GET /api/v1/regiones/comunas
+GET /api/v1/comunas
+GET /api/v1/roles
 ```
 
 Ejemplo de respuesta de `GET /api/productos/24`:
@@ -83,7 +83,7 @@ Ejemplo de respuesta de `GET /api/productos/24`:
 ```
 
 Las imágenes son públicas; para conocer una URL se usa el listado
-`GET /api/productos/{idProducto}/imagenes`. El formato para subir imágenes está en la
+`GET /api/v1/productos/{idProducto}/imagenes`. El formato para subir imágenes está en la
 sección de vendedor.
 
 El campo `stock` es la cantidad total del producto; `stockReservado` es la parte
@@ -92,11 +92,11 @@ comprometida por pedidos creados y aún no entregados ni cancelados. El stock
 pedidos es la resta `stock - stockReservado` y lo calcula el frontend a partir
 de ambos campos.
 
-La respuesta de `GET /api/regiones` es una lista de objetos con
-`idRegion` y `nombre`. `GET /api/comunas` devuelve `idComuna`, `nombre` e
+La respuesta de `GET /api/v1/regiones` es una lista de objetos con
+`idRegion` y `nombre`. `GET /api/v1/comunas` devuelve `idComuna`, `nombre` e
 `idRegion`; este último contiene el ID de la región asociada. Las respuestas de
-`GET /api/regiones/comunas` usan también `nombre` para el nombre de la región.
-`GET /api/roles` devuelve objetos como:
+`GET /api/v1/regiones/comunas` usan también `nombre` para el nombre de la región.
+`GET /api/v1/roles` devuelve objetos como:
 
 ```json
 [
@@ -110,14 +110,14 @@ Consultar roles es público, pero no permite escoger el rol al registrarse.
 
 ### Registrar cliente
 
-`POST /api/usuarios` es público y el servidor asigna el rol `cliente`.
+`POST /api/v1/usuarios` es público y el servidor asigna el rol `cliente`.
 El cuerpo actual de `UsuarioDTORequest` requiere los dos grupos de datos
 identificatorios que aparecen aquí. `nombre`, `apellido` y `email` son
 obligatorios por validación, aunque el servicio persiste `nombres`,
 `aPaterno`, `aMaterno`, `rut`, `dv` y `correo`.
 
 ```http
-POST /api/usuarios
+POST /api/v1/usuarios
 Content-Type: application/json
 ```
 
@@ -171,7 +171,7 @@ Respuesta `201 Created`, ejemplo abreviado:
 ### Iniciar sesión
 
 ```http
-POST /api/usuarios/login
+POST /api/v1/usuarios/login
 Content-Type: application/json
 ```
 
@@ -243,7 +243,7 @@ otra persona.
 ### Perfil
 
 ```http
-GET /api/usuarios/perfil
+GET /api/v1/usuarios/perfil
 Authorization: Bearer <JWT>
 ```
 
@@ -280,16 +280,16 @@ por la enviada en el cuerpo.
 Consultar las direcciones del usuario autenticado:
 
 ```http
-GET /api/direcciones
+GET /api/v1/direcciones
 Authorization: Bearer <JWT>
 ```
 
-También existen `GET /api/direcciones/usuario/{idUsuario}`,
-`GET /api/direcciones/usuario/{idUsuario}/activas` y
-`GET /api/direcciones/{id}`. El ID de usuario debe corresponder al principal
+También existen `GET /api/v1/direcciones/usuario/{idUsuario}`,
+`GET /api/v1/direcciones/usuario/{idUsuario}/activas` y
+`GET /api/v1/direcciones/{id}`. El ID de usuario debe corresponder al principal
 autenticado; si no, se deniega el acceso.
 
-Crear una dirección con `POST /api/direcciones`:
+Crear una dirección con `POST /api/v1/direcciones`:
 
 ```json
 {
@@ -324,19 +324,19 @@ usar el ID propio en la solicitud. La respuesta devuelve un objeto
 }
 ```
 
-Editar usa `PUT /api/direcciones/{id}` con el mismo cuerpo. Eliminar usa
-`DELETE /api/direcciones/{id}`. Ambos operan solo sobre una dirección propia.
+Editar usa `PUT /api/v1/direcciones/{id}` con el mismo cuerpo. Eliminar usa
+`DELETE /api/v1/direcciones/{id}`. Ambos operan solo sobre una dirección propia.
 
 ### Carrito propio
 
 Obtener el carrito:
 
 ```http
-GET /api/carrito
+GET /api/v1/carrito
 Authorization: Bearer <JWT>
 ```
 
-Agregar un producto con `POST /api/carrito/items`:
+Agregar un producto con `POST /api/v1/carrito/items`:
 
 ```json
 {
@@ -345,7 +345,7 @@ Agregar un producto con `POST /api/carrito/items`:
 }
 ```
 
-Cambiar cantidad con `PUT /api/carrito/items/{idProducto}`:
+Cambiar cantidad con `PUT /api/v1/carrito/items/{idProducto}`:
 
 ```json
 {
@@ -353,7 +353,8 @@ Cambiar cantidad con `PUT /api/carrito/items/{idProducto}`:
 }
 ```
 
-Quitar un producto: `DELETE /api/carrito/items/{idProducto}`. Vaciar el carrito:
+Quitar un producto: `DELETE /api/v1/carrito/items/{idProducto}`. Vaciar el carrito:
+POST /api/pedidos
 `DELETE /api/carrito`.
 
 Las operaciones que devuelven el carrito responden, por ejemplo. Cada
@@ -417,7 +418,7 @@ Errores posibles al crear:
 | `409` | `CONFLICTO_STOCK` | No alcanza el stock disponible de uno de los productos. |
 
 ```http
-POST /api/pedidos
+POST /api/v1/pedidos
 Authorization: Bearer <JWT>
 Content-Type: application/json
 ```
@@ -538,12 +539,12 @@ Ciclo de stock por estado del pedido:
 Consulta del historial y del detalle propio:
 
 ```http
-GET /api/pedidos
-GET /api/pedidos/{idPedido}
+GET /api/v1/pedidos
+GET /api/v1/pedidos/{idPedido}
 Authorization: Bearer <JWT>
 ```
 
-`GET /api/pedidos` devuelve una lista de resúmenes (`PedidoResumenDTOResponse`)
+`GET /api/v1/pedidos` devuelve una lista de resúmenes (`PedidoResumenDTOResponse`)
 ordenada por `creadoEn` descendente, sin paginación:
 
 ```json
@@ -559,7 +560,7 @@ ordenada por `creadoEn` descendente, sin paginación:
 ]
 ```
 
-`GET /api/pedidos/{idPedido}` devuelve el `PedidoDTOResponse` completo (el
+`GET /api/v1/pedidos/{idPedido}` devuelve el `PedidoDTOResponse` completo (el
 mismo formato del `201 Created` de arriba), también sin paginación. Si el
 pedido no existe o pertenece a otro usuario responde `404` (code
 `PEDIDO_NO_ENCONTRADO`); no se distingue entre ambos casos.
@@ -568,20 +569,20 @@ pedido no existe o pertenece a otro usuario responde `404` (code
 
 El vendedor puede leer el catálogo público y, con JWT, crear, editar, eliminar
 productos y mantener sus imágenes. No puede modificar categorías, marcas,
-geografía, roles ni usuarios; los pedidos de administración (`/api/pedidos/admin...`)
+geografía, roles ni usuarios; los pedidos de administración (`/api/v1/pedidos/admin...`)
 sí puede consultarlos y actualizar su estado, igual que admin.
 
 ### Crear o editar producto
 
 El DTO actual requiere `sku`, `nombre`, `precio`, `stock`, `idMarca` e
-`idCategorias`. La creación usa `POST /api/productos`; la edición usa
-`POST /api/productos/{idProducto}` (no `PUT`). Aunque algunos nombres de
+`idCategorias`. La creación usa `POST /api/v1/productos`; la edición usa
+`POST /api/v1/productos/{idProducto}` (no `PUT`). Aunque algunos nombres de
 parámetros del controlador dicen `sku`, las rutas de producto reciben un número
 y el servicio busca el registro por su ID primario. Para las rutas de stock e
 imágenes se debe usar también ese ID numérico.
 
 ```http
-POST /api/productos
+POST /api/v1/productos
 Authorization: Bearer <JWT de vendedor>
 Content-Type: application/json
 ```
@@ -605,7 +606,7 @@ Respuesta `201 Created`: producto con campos como `idProducto`, `sku`, `nombre`,
 Cambiar el stock:
 
 ```http
-PUT /api/productos/24/stock/setear?stock=18
+PUT /api/v1/productos/24/stock/setear?stock=18
 Authorization: Bearer <JWT de vendedor>
 ```
 
@@ -632,11 +633,11 @@ En todas, un producto inexistente responde `404 PRODUCTO_NO_ENCONTRADO`.
 
 ### Subir imagen
 
-`POST /api/productos/{idProducto}/imagenes` recibe `multipart/form-data` con el
+`POST /api/v1/productos/{idProducto}/imagenes` recibe `multipart/form-data` con el
 campo `file`:
 
 ```bash
-curl -X POST http://localhost:8080/api/productos/24/imagenes \
+curl -X POST http://localhost:8080/api/v1/productos/24/imagenes \
   -H "Authorization: Bearer <JWT de vendedor>" \
   -F "file=@<ruta-local-de-la-imagen>"
 ```
@@ -647,18 +648,18 @@ La respuesta incluye `idImagenProducto`, `url`, `textoAlternativo`, `orden` y
 configurables desde esta operación.
 
 Eliminar una imagen usa
-`DELETE /api/productos/{idProducto}/imagenes/{idImagenProducto}` y eliminar
+`DELETE /api/v1/productos/{idProducto}/imagenes/{idImagenProducto}` y eliminar
 todas las imágenes de un producto usa
-`DELETE /api/productos/{idProducto}/imagenes`.
+`DELETE /api/v1/productos/{idProducto}/imagenes`.
 
 Solo admin puede elegir la imagen principal de un producto mediante
-`PUT /api/productos/{sku}/imagenes/{idImagenProducto}/principal`. No requiere
+`PUT /api/v1/productos/{sku}/imagenes/{idImagenProducto}/principal`. No requiere
 cuerpo: el ID de la imagen seleccionada va en la ruta. El servidor marca esa
 imagen como `principal: true` y desmarca las demás imágenes del producto en
 una sola operación. Devuelve `200 OK` con el `ImagenProductoResponse` actualizado:
 
 ```http
-PUT /api/productos/24/imagenes/11/principal
+PUT /api/v1/productos/24/imagenes/11/principal
 Authorization: Bearer <JWT de admin>
 ```
 
@@ -681,14 +682,14 @@ listado y detalle de productos reflejan después la selección en `principal` y
 
 Todas las rutas de esta sección requieren JWT con rol `admin`, con una única
 excepción: las rutas de administración de pedidos (`GET` y `PUT`
-`/api/pedidos/admin...`) también las puede usar el rol `vendedor`, como se
+`/api/v1/pedidos/admin...`) también las puede usar el rol `vendedor`, como se
 detalla más abajo. El listado de roles puede consultarse públicamente, pero
 solo admin puede mutarlos o asignar un rol al crear una cuenta.
 
 ### Crear usuario con rol
 
-Usar `POST /api/usuarios/admin` con los mismos campos de registro y agregar
-`idRolUsuario`. El ID se obtiene de `GET /api/roles`.
+Usar `POST /api/v1/usuarios/admin` con los mismos campos de registro y agregar
+`idRolUsuario`. El ID se obtiene de `GET /api/v1/roles`.
 
 ```json
 {
@@ -710,18 +711,18 @@ Usar `POST /api/usuarios/admin` con los mismos campos de registro y agregar
 ```
 
 En el ejemplo, `idRolUsuario` debe ser el ID que corresponde a `vendedor` en la
-respuesta actual de `GET /api/roles`; no asumir que los IDs serán iguales en
-todos los ambientes. Admin también puede listar usuarios con `GET /api/usuarios`,
-consultar `GET /api/usuarios/{id}`, filtrar por
-`GET /api/usuarios/rol/{idRolUsuario}`, editar con `PUT /api/usuarios/{id}` y
-eliminar con `DELETE /api/usuarios/{id}`.
+respuesta actual de `GET /api/v1/roles`; no asumir que los IDs serán iguales en
+todos los ambientes. Admin también puede listar usuarios con `GET /api/v1/usuarios`,
+consultar `GET /api/v1/usuarios/{id}`, filtrar por
+`GET /api/v1/usuarios/rol/{idRolUsuario}`, editar con `PUT /api/v1/usuarios/{id}` y
+eliminar con `DELETE /api/v1/usuarios/{id}`.
 
 ### Mantener datos maestros y categorías
 
 Ejemplo para crear una marca:
 
 ```http
-POST /api/marcas
+POST /api/v1/marcas
 Authorization: Bearer <JWT de admin>
 Content-Type: application/json
 ```
@@ -744,7 +745,7 @@ Respuesta `201 Created`, por ejemplo:
 Otros cuerpos:
 
 ```json
-// CategoriaDTORequest: POST /api/categorias y PUT /api/categorias/{id}
+// CategoriaDTORequest: POST /api/v1/categorias y PUT /api/v1/categorias/{id}
 {
   "nombre": "<categoría>",
   "idCategoriaPadre": null
@@ -775,14 +776,14 @@ el cliente envía solo los campos de `CategoriaDTORequest`. `imagenUrl` será
 `null` si aún no se ha cargado una imagen.
 
 ```json
-// POST /api/regiones
+// POST /api/v1/regiones
 {
   "nombre": "<región>"
 }
 ```
 
 ```json
-// POST /api/comunas
+// POST /api/v1/comunas
 {
   "nombre": "<comuna>",
   "idRegion": 7
@@ -790,33 +791,33 @@ el cliente envía solo los campos de `CategoriaDTORequest`. `imagenUrl` será
 ```
 
 ```json
-// POST /api/roles
+// POST /api/v1/roles
 {
   "nombre": "<rol>"
 }
 ```
 
 `PUT` usa la misma estructura con el ID en la ruta. `DELETE` se envía sin cuerpo.
-Las consultas de categorías (`GET /api/categorias`, `/raiz`,
+Las consultas de categorías (`GET /api/v1/categorias`, `/raiz`,
 `/padre/{idPadre}` y `/{id}`) son públicas y no requieren token. Sus escrituras
 son exclusivas de admin.
 
 Para subir o reemplazar la imagen de portada, admin envía `multipart/form-data`
-con el campo `file` a `POST /api/categorias/{id}/imagen`. Se aceptan JPEG, PNG y
+con el campo `file` a `POST /api/v1/categorias/{id}/imagen`. Se aceptan JPEG, PNG y
 WebP hasta 5 MB. La respuesta de categoría incluye `imagenUrl`; se elimina la
-imagen con `DELETE /api/categorias/{id}/imagen`.
+imagen con `DELETE /api/v1/categorias/{id}/imagen`.
 
 ### Consultar y actualizar pedidos
 
-Las rutas `/api/pedidos/admin...` están disponibles para **admin y vendedor**.
+Las rutas `/api/v1/pedidos/admin...` están disponibles para **admin y vendedor**.
 El rol `cliente` no puede usarlas: recibe `403` (code `ACCESO_DENEGADO`), y sin
 token recibe `401`.
 
 | Método | Ruta | Qué hace | Respuesta |
 |---|---|---|---|
-| `GET` | `/api/pedidos/admin` | Lista todos los pedidos, de más reciente a más antiguo, sin paginación. | `200`, lista de `PedidoAdminDTOResponse`. |
-| `GET` | `/api/pedidos/admin/{idPedido}` | Detalle de un pedido, sea de quien sea. | `200`, `PedidoAdminDTOResponse`. `404 PEDIDO_NO_ENCONTRADO` si no existe. |
-| `PUT` | `/api/pedidos/admin/{idPedido}/estado` | Cambia el estado. | `200`, el pedido actualizado. |
+| `GET` | `/api/v1/pedidos/admin` | Lista todos los pedidos, de más reciente a más antiguo, sin paginación. | `200`, lista de `PedidoAdminDTOResponse`. |
+| `GET` | `/api/v1/pedidos/admin/{idPedido}` | Detalle de un pedido, sea de quien sea. | `200`, `PedidoAdminDTOResponse`. `404 PEDIDO_NO_ENCONTRADO` si no existe. |
+| `PUT` | `/api/v1/pedidos/admin/{idPedido}/estado` | Cambia el estado. | `200`, el pedido actualizado. |
 
 `PedidoAdminDTOResponse` es el `PedidoDTOResponse` de la sección del cliente
 (con `tipoEntrega`, `envio`, `detalles` e `historialEstados`) más dos campos
@@ -873,7 +874,7 @@ Para un pedido de retiro en tienda, `envio` es `null`. El campo
 Cambio de estado:
 
 ```http
-PUT /api/pedidos/admin/101/estado
+PUT /api/v1/pedidos/admin/101/estado
 Authorization: Bearer <JWT de admin o vendedor>
 Content-Type: application/json
 ```
@@ -911,7 +912,7 @@ endpoint de pago ni endpoint para que un cliente confirme su propio pedido. El
 pedido nace `PENDIENTE`; el frontend del cliente puede simular la pasarela de
 pago en su interfaz, pero eso no cambia nada en el servidor. Quien registra el
 pago aceptado es un **admin o un vendedor** desde el panel, mediante
-`PUT /api/pedidos/admin/{idPedido}/estado` con `{"estado": "CONFIRMADO"}`.
+`PUT /api/v1/pedidos/admin/{idPedido}/estado` con `{"estado": "CONFIRMADO"}`.
 Solo admin o vendedor pueden hacerlo; el cliente no tiene acceso a esa ruta.
 
 Efecto sobre el stock de cada transición (ver detalle en la sección de
@@ -922,10 +923,10 @@ y se libera sin tocar el total al pasar a `CANCELADO` (solo posible desde
 
 ### Resumen del dashboard
 
-Admin y vendedor pueden consultar `GET /api/dashboard/resumen` con un JWT:
+Admin y vendedor pueden consultar `GET /api/v1/dashboard/resumen` con un JWT:
 
 ```http
-GET /api/dashboard/resumen
+GET /api/v1/dashboard/resumen
 Authorization: Bearer <JWT de admin o vendedor>
 ```
 
@@ -963,9 +964,9 @@ La respuesta de error usa `ApiErrorResponse`. Ejemplo:
   "error": "Forbidden",
   "code": "ACCESO_DENEGADO",
   "message": "No tiene permiso para realizar esta operación",
-  "path": "/api/categorias",
+  "path": "/api/v1/categorias",
   "mensaje": "No tiene permiso para realizar esta operación",
-  "ruta": "/api/categorias",
+  "ruta": "/api/v1/categorias",
   "errores": []
 }
 ```
@@ -975,7 +976,7 @@ La respuesta de error usa `ApiErrorResponse`. Ejemplo:
   acceder a un recurso propio de otro usuario.
 - `400 Bad Request`: el cuerpo o los parámetros no pasan validación.
 - `404 Not Found`: recurso inexistente cuando la ruta responde con ese estado.
-- `GET /api/productos/{id}` devuelve `404` con `code` `PRODUCTO_NO_ENCONTRADO`
+- `GET /api/v1/productos/{id}` devuelve `404` con `code` `PRODUCTO_NO_ENCONTRADO`
   cuando no existe el producto.
 - `409 Conflict`: conflicto de negocio, como stock insuficiente o recursos con
   dependencias.
@@ -1011,7 +1012,7 @@ concatenado para clientes que aún no consumen ese arreglo.
   `correo`, `rolDetalle`, entre otras); no asumir que solo existen `idUsuario`,
   `nombre`, `email` y `rol`.
 - La creación de producto exige SKU y categorías; la edición de producto usa
-  `POST /api/productos/{idProducto}`. Las rutas que nombran el parámetro `{sku}`
+  `POST /api/v1/productos/{idProducto}`. Las rutas que nombran el parámetro `{sku}`
   reciben en realidad el ID numérico del producto. Esto difiere de contratos
   REST más convencionales y del ejemplo simplificado de la documentación general.
 - No existe un endpoint público de categorías en la configuración actual.

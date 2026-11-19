@@ -3,8 +3,7 @@ import { LoginForm } from "../components/LoginForm";
 
 export function Login(){
     return(
-        <section className="esam-auth-page">
-            <div className="container">
+            <div className="container mt-5">
                 <div className="esam-auth-heading">
                     {/* <span className="esam-auth-brand">ESam</span> */}
                     <h1 className="esam-auth-title">Ingresa a tu cuenta</h1>
@@ -14,6 +13,5 @@ export function Login(){
                 </div>
                 <LoginForm/>
             </div>
-        </section>
     )
 }
