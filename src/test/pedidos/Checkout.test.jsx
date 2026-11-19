@@ -1,5 +1,5 @@
 import { fireEvent, render, screen, waitFor } from "@testing-library/react"
-import { MemoryRouter, Route, Routes } from "react-router-dom"
+import { MemoryRouter, Route, Routes, useLocation } from "react-router-dom"
 import { beforeEach, describe, expect, it, vi } from "vitest"
 
 // Mock de servicios: Checkout consume varios servicios en montaje y al completar pedido.
@@ -53,6 +53,11 @@ const seedSesionCliente = () => {
     localStorage.setItem("eSamSession", JSON.stringify({ id: 1, rol: "cliente", nombres: "Ana", aPaterno: "López" }))
 }
 
+const PerfilRoute = () => {
+    const location = useLocation()
+    return <div>{location.state?.completarPerfilParaCompra ? "Completar perfil" : "Perfil"}</div>
+}
+
 // Render con providers y rutas para destinos de navegación.
 const renderCheckout = () =>
     render(
@@ -61,7 +66,7 @@ const renderCheckout = () =>
                 <MemoryRouter initialEntries={["/usuario/checkout"]}>
                     <Routes>
                         <Route path="/usuario/checkout" element={<Checkout />} />
-                        <Route path="/usuario" element={<div>Completar perfil</div>} />
+                        <Route path="/usuario" element={<PerfilRoute />} />
                         <Route path="/" element={<div>Página inicio</div>} />
                         <Route path="/productos" element={<div>Página productos</div>} />
                         <Route path="/usuario/pedidos" element={<div>Página mis pedidos</div>} />

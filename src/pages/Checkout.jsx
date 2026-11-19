@@ -96,7 +96,7 @@ export function Checkout() {
                 numero: formularioDireccion.numero.trim(),
                 complemento: formularioDireccion.complemento.trim(),
                 predeterminada: direcciones.length === 0,
-                idUsuario: usuario.id,
+                idUsuario: usuario?.id ?? usuario?.idUsuario,
                 idComuna: Number(formularioDireccion.idComuna)
             })
 
@@ -143,7 +143,7 @@ export function Checkout() {
             const conflictoStock = error?.status === 409 && error?.code === "CONFLICTO_STOCK"
 
             if (error?.status === 409 && error?.code === "PERFIL_INCOMPLETO") {
-                navigate("/usuario")
+                navigate("/usuario", { state: { completarPerfilParaCompra: true } })
                 return
             }
 

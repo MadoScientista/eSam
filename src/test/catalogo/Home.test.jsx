@@ -1,4 +1,4 @@
-import { render, screen, waitFor } from "@testing-library/react"
+import { render, screen, waitFor, within } from "@testing-library/react"
 import { MemoryRouter } from "react-router-dom"
 import { beforeEach, describe, expect, it, vi } from "vitest"
 
@@ -25,7 +25,12 @@ vi.mock("../../services/productoService", () => ({
     obtenerProductos: vi.fn()
 }))
 
+vi.mock("../../services/categoriaService", () => ({
+    obtenerCategorias: vi.fn()
+}))
+
 import { obtenerProductos } from "../../services/productoService"
+import { obtenerCategorias } from "../../services/categoriaService"
 import { Home } from "../../pages/Home"
 import { CartProvider } from "../../context/CartProvider"
 
@@ -40,6 +45,13 @@ const product = (id, nombre, precio, stock = 5) => ({
     sku: `SKU-${id}`,
     categorias: [],
     imagenes: [{ url: `img-${id}.jpg`, principal: true }]
+})
+
+const category = (id, nombre, idCategoriaPadre = null) => ({
+    idCategoria: id,
+    nombre,
+    idCategoriaPadre,
+    imagenUrl: null
 })
 
 // Renderiza Home dentro de los providers que necesita: CartProvider (usado por
@@ -58,6 +70,7 @@ describe("Home", () => {
     beforeEach(() => {
         localStorage.clear()
         vi.resetAllMocks()
+        obtenerCategorias.mockResolvedValue([])
     })
 
     it("Renderiza el banner de bienvenida con el acceso al catálogo", () => {
@@ -73,16 +86,59 @@ describe("Home", () => {
     })
 
     it("Carga los productos destacados con obtenerProductos", async () => {
-        obtenerProductos.mockResolvedValue([product(1, "Cuaderno", 2490), product(2, "Lápiz", 450)])
+        obtenerProductos.mockResolvedValue([
+            { ...product(1, "Cuaderno", 2490), marcaDetalle: { nombre: "Artel" } },
+            { ...product(2, "Lápiz", 450), marca: "Torre" },
+            { ...product(3, "Cuaderno Artel alternativo", 1890), marcaDetalle: { nombre: "artel" } },
+            product(4, "Goma sin marca", 250)
+        ])
 
         renderHome()
 
         // El título de la sección aparece de inmediato; las tarjetas dependen de
         // la promesa resuelta de obtenerProductos, por eso se espera con findBy.
         expect(screen.getByText("Productos destacados")).toBeInTheDocument()
-        expect(await screen.findByText("Cuaderno")).toBeInTheDocument()
-        expect(screen.getByText("Lápiz")).toBeInTheDocument()
+        const featuredSection = screen.getByRole("heading", { level: 2, name: "Productos destacados" }).closest("section")
+        expect(await within(featuredSection).findByText("Cuaderno")).toBeInTheDocument()
+        expect(within(featuredSection).getByText("Lápiz")).toBeInTheDocument()
+        expect(within(featuredSection).queryByText("Cuaderno Artel alternativo")).not.toBeInTheDocument()
+        expect(within(featuredSection).queryByText("Goma sin marca")).not.toBeInTheDocument()
         expect(obtenerProductos).toHaveBeenCalledTimes(1)
+    })
+
+    it("Muestra los productos Artel en su carrusel y conserva Cuadernos debajo", async () => {
+        obtenerProductos.mockResolvedValue([
+            { ...product(1, "Cuaderno universitario", 2490), categorias: [{ idCategoria: 5 }] },
+            { ...product(2, "Lápices Artel", 450), marcaDetalle: { nombre: "Artel" } },
+            { ...product(3, "Témperas Artel", 890), marca: "artel" },
+            { ...product(4, "Pinceles Torre", 650), marcaDetalle: { nombre: "Torre" } }
+        ])
+        obtenerCategorias.mockResolvedValue([
+            category(1, "Escritura"),
+            category(2, "Lápices", 1),
+            category(3, "Arte"),
+            category(4, "Cuadernos"),
+            category(5, "Universitarios", 4),
+            category(6, "Escolar")
+        ])
+
+        renderHome()
+
+        const artelHeading = await screen.findByRole("heading", { level: 2, name: "Productos Artel" })
+        const artelSection = artelHeading.closest("section")
+        expect(within(artelSection).getByText("Lápices Artel")).toBeInTheDocument()
+        expect(within(artelSection).getByText("Témperas Artel")).toBeInTheDocument()
+        expect(within(artelSection).queryByText("Pinceles Torre")).not.toBeInTheDocument()
+        expect(within(artelSection).queryByText("Cuaderno universitario")).not.toBeInTheDocument()
+
+        const cuadernosSection = screen.getByRole("heading", { level: 2, name: "Cuadernos" }).closest("section")
+        expect(within(cuadernosSection).getByText("Cuaderno universitario")).toBeInTheDocument()
+        expect(within(cuadernosSection).queryByText("Lápices Artel")).not.toBeInTheDocument()
+        expect(screen.getAllByRole("heading", { level: 2 }).map((heading) => heading.textContent)).toEqual([
+            "Productos destacados",
+            "Productos Artel",
+            "Cuadernos"
+        ])
     })
 
     it("No muestra el carrusel cuando no hay productos", async () => {

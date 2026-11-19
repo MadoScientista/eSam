@@ -78,7 +78,7 @@ const renderPerfil = () =>
 
 const abrirEdicionPerfil = async () => {
     fireEvent.click(await screen.findByRole("button", { name: /editar perfil/i }))
-    await screen.findByText("Editar Perfil")
+    await screen.findByText("Editar perfil")
 }
 
 describe("CustomerProfile", () => {
@@ -120,45 +120,122 @@ describe("CustomerProfile", () => {
         expect(screen.getByRole("link", { name: /pedido #5/i })).toHaveAttribute("href", "/usuario/pedidos/5")
     })
 
-    it("abre el formulario de perfil existente y guarda cambios", async () => {
+    it("abre el formulario de comprador y guarda sólo sus datos de perfil", async () => {
         actualizarPerfil.mockResolvedValue({ idUsuario: 1 })
 
         renderPerfil()
         await abrirEdicionPerfil()
         await screen.findByDisplayValue("Ana")
 
-        expect(screen.getByLabelText("Correo*")).toHaveValue("ana@duoc.cl")
-        expect(screen.getByLabelText("Dirección*")).toHaveValue("Av. Central 123")
-        expect(screen.getByLabelText(/run/i)).toBeDisabled()
-
-        fireEvent.change(screen.getByLabelText("Contraseña*"), { target: { value: "nueva-clave" } })
-        fireEvent.change(screen.getByLabelText("Confirme Contraseña*"), { target: { value: "nueva-clave" } })
-        fireEvent.click(screen.getByRole("button", { name: "Guardar Perfil" }))
+        expect(screen.getByLabelText("Apellido paterno*")).toHaveValue("López")
+        expect(screen.getByLabelText("Apellido materno")).toHaveValue("Soto")
+        expect(screen.getByLabelText("Fecha de nacimiento*")).toHaveValue("1990-01-01")
+        expect(screen.getByLabelText("Teléfono (opcional)")).toHaveValue("569123456")
+        expect(screen.queryByLabelText("Correo*")).not.toBeInTheDocument()
+        expect(screen.queryByLabelText("Dirección*")).not.toBeInTheDocument()
+        fireEvent.click(screen.getByRole("button", { name: "Guardar perfil" }))
 
         await waitFor(() => expect(actualizarPerfil).toHaveBeenCalledTimes(1))
-        expect(actualizarPerfil.mock.calls[0][0]).toMatchObject({
+        expect(actualizarPerfil.mock.calls[0][0]).toEqual({
             nombres: "Ana",
-            correo: "ana@duoc.cl",
-            password: "nueva-clave"
+            aPaterno: "López",
+            aMaterno: "Soto",
+            fechaNacimiento: "1990-01-01",
+            telefono: "569123456"
         })
-        expect(await screen.findByText("Usuario actualizado correctamente.")).toBeInTheDocument()
+        expect(await screen.findByText("Perfil actualizado correctamente.")).toBeInTheDocument()
     })
 
-    it("permite completar el perfil de una cuenta Google sin contraseña", async () => {
+    it("permite guardar el perfil de Google sin teléfono", async () => {
         seedSesion({ esGoogle: true })
+        obtenerPerfil.mockResolvedValue({ ...perfil, telefono: null })
         actualizarPerfil.mockResolvedValue({ idUsuario: 1 })
 
         renderPerfil()
         await abrirEdicionPerfil()
         await screen.findByDisplayValue("Ana")
 
-        expect(screen.getByLabelText("Contraseña (opcional)")).not.toBeRequired()
-        fireEvent.click(screen.getByRole("button", { name: "Guardar Perfil" }))
+        expect(screen.getByLabelText("Teléfono (opcional)")).not.toBeRequired()
+        fireEvent.click(screen.getByRole("button", { name: "Guardar perfil" }))
 
         await waitFor(() => expect(actualizarPerfil).toHaveBeenCalledTimes(1))
-        expect(actualizarPerfil.mock.calls[0][0]).not.toHaveProperty("password")
+        expect(actualizarPerfil.mock.calls[0][0]).not.toHaveProperty("telefono")
         await waitFor(() => expect(obtenerPerfil).toHaveBeenCalledTimes(2))
-        expect(await screen.findByText("Usuario actualizado correctamente.")).toBeInTheDocument()
+        expect(await screen.findByText("Perfil actualizado correctamente.")).toBeInTheDocument()
+    })
+
+    it("abre el formulario de perfil incompleto desde checkout y vuelve al guardar", async () => {
+        seedSesion({ esGoogle: true })
+        obtenerPerfil.mockResolvedValue({ ...perfil, perfilCompleto: true })
+        actualizarPerfil.mockResolvedValue({ idUsuario: 1 })
+
+        render(
+            <AuthProvider>
+                <MemoryRouter initialEntries={[{
+                    pathname: "/usuario",
+                    state: { completarPerfilParaCompra: true }
+                }]}>
+                    <Routes>
+                        <Route path="/usuario" element={<CustomerProfile />} />
+                        <Route path="/usuario/checkout" element={<div>Volver a finalizar compra</div>} />
+                    </Routes>
+                </MemoryRouter>
+            </AuthProvider>
+        )
+
+        expect(await screen.findByText("Completa tus datos para continuar con tu compra")).toBeInTheDocument()
+        expect(await screen.findByLabelText("Fecha de nacimiento*")).toBeRequired()
+        fireEvent.click(screen.getByRole("button", { name: "Guardar perfil" }))
+
+        await waitFor(
+            () => expect(screen.getByText("Volver a finalizar compra")).toBeInTheDocument(),
+            { timeout: 3000 }
+        )
+        expect(actualizarPerfil).toHaveBeenCalledTimes(1)
+    })
+
+    it("muestra un aviso para el comprador si el backend conserva perfilCompleto en false", async () => {
+        seedSesion({ esGoogle: true })
+        obtenerPerfil.mockResolvedValue({ ...perfil, perfilCompleto: false })
+        actualizarPerfil.mockResolvedValue({ idUsuario: 1 })
+
+        render(
+            <AuthProvider>
+                <MemoryRouter initialEntries={[{
+                    pathname: "/usuario",
+                    state: { completarPerfilParaCompra: true }
+                }]}>
+                    <Routes>
+                        <Route path="/usuario" element={<CustomerProfile />} />
+                        <Route path="/usuario/checkout" element={<div>Volver a finalizar compra</div>} />
+                    </Routes>
+                </MemoryRouter>
+            </AuthProvider>
+        )
+
+        await screen.findByLabelText("Fecha de nacimiento*")
+        await waitFor(() => expect(screen.getByRole("button", { name: "Guardar perfil" })).not.toBeDisabled())
+        fireEvent.click(screen.getByRole("button", { name: "Guardar perfil" }))
+
+        expect(await screen.findByText(
+            "Tus datos se guardaron, pero aún no podemos continuar con tu compra. Contacta a soporte si el problema continúa."
+        )).toBeInTheDocument()
+        expect(screen.queryByText("Volver a finalizar compra")).not.toBeInTheDocument()
+    })
+
+    it("permite guardar sin apellido materno", async () => {
+        obtenerPerfil.mockResolvedValue({ ...perfil, aMaterno: "" })
+        actualizarPerfil.mockResolvedValue({ idUsuario: 1 })
+
+        renderPerfil()
+        await abrirEdicionPerfil()
+        await screen.findByDisplayValue("Ana")
+
+        expect(screen.getByLabelText("Apellido materno")).not.toBeRequired()
+        fireEvent.click(screen.getByRole("button", { name: "Guardar perfil" }))
+
+        await waitFor(() => expect(actualizarPerfil).toHaveBeenCalledTimes(1))
+        expect(actualizarPerfil.mock.calls[0][0]).not.toHaveProperty("aMaterno")
     })
 
     it("muestra error si falla la actualización del perfil", async () => {
@@ -168,9 +245,7 @@ describe("CustomerProfile", () => {
         await abrirEdicionPerfil()
         await screen.findByDisplayValue("Ana")
 
-        fireEvent.change(screen.getByLabelText("Contraseña*"), { target: { value: "nueva-clave" } })
-        fireEvent.change(screen.getByLabelText("Confirme Contraseña*"), { target: { value: "nueva-clave" } })
-        fireEvent.click(screen.getByRole("button", { name: "Guardar Perfil" }))
+        fireEvent.click(screen.getByRole("button", { name: "Guardar perfil" }))
 
         expect(await screen.findByText("No se pudo actualizar el perfil")).toBeInTheDocument()
     })

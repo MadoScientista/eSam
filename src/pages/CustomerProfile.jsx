@@ -1,9 +1,9 @@
 import { useEffect, useMemo, useState } from "react"
-import { Link } from "react-router-dom"
+import { Link, useLocation, useNavigate } from "react-router-dom"
 import { AlertMessage } from "../components/AlertMessage"
 import { ConfirmModal } from "../components/ConfirmModal"
 import { EstadoPedidoBadge } from "../components/EstadoPedidoBadge"
-import { RegisterForm } from "../components/user-form/RegisterForm"
+import { PerfilCompradorForm } from "../components/user-form/PerfilCompradorForm"
 import { useAuth } from "../context/authContext"
 import { crearDireccion, actualizarDireccion, eliminarDireccion, obtenerDirecciones } from "../services/direccionService"
 import { obtenerMiPedido, obtenerMisPedidos } from "../services/pedidoService"
@@ -46,7 +46,11 @@ function textoDireccion(direccion) {
 
 export function CustomerProfile() {
     const { usuario } = useAuth()
-    const [editandoPerfil, setEditandoPerfil] = useState(false)
+    const location = useLocation()
+    const navigate = useNavigate()
+    const [editandoPerfil, setEditandoPerfil] = useState(
+        () => Boolean(location.state?.completarPerfilParaCompra)
+    )
     const [pedidos, setPedidos] = useState([])
     const [cargandoPedidos, setCargandoPedidos] = useState(true)
     const [errorPedidos, setErrorPedidos] = useState(null)
@@ -288,9 +292,17 @@ export function CustomerProfile() {
                 >
                     <i className="bi bi-arrow-left" aria-hidden="true" /> Volver al perfil
                 </button>
-                <RegisterForm
-                    idUsuario={usuario?.id ?? usuario?.idUsuario}
-                    wideLayout
+                {location.state?.completarPerfilParaCompra && (
+                    <AlertMessage
+                        type="warning"
+                        message="Completa tus datos para continuar con tu compra"
+                    />
+                )}
+                <PerfilCompradorForm
+                    paraCompra={Boolean(location.state?.completarPerfilParaCompra)}
+                    onSuccess={location.state?.completarPerfilParaCompra
+                        ? () => navigate("/usuario/checkout", { replace: true })
+                        : undefined}
                 />
             </section>
         )

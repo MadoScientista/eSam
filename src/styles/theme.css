@@ -623,6 +623,14 @@ hr {
   padding: clamp(2.25rem, 4vw, 3.25rem) 0;
 }
 
+.esam-home-section {
+  padding: 1rem 0;
+}
+
+.esam-home-section .esam-section-head {
+  margin-bottom: 1rem;
+}
+
 .esam-section-head {
   display: flex;
   flex-wrap: wrap;
@@ -630,8 +638,6 @@ hr {
   justify-content: space-between;
   gap: 0.75rem;
   margin-bottom: 1.5rem;
-  padding-bottom: 0.9rem;
-  border-bottom: 1px solid var(--esam-line-strong);
 }
 
 .esam-section-title {
